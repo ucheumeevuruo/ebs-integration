@@ -28,6 +28,9 @@ public class Location extends ASqlObj
 
     /**
      *
+     * @param account
+     * @throws com.siebel.eai.SiebelBusinessServiceException
+     * @throws java.io.IOException
      */
     
     public Location (Account account) throws SiebelBusinessServiceException, IOException

@@ -3,7 +3,6 @@ package com.plexadasi.invoice;
 import com.plexadasi.ebs.build.objects.CreateInvoiceSQL;
 import com.plexadasi.ebs.Helper.DataConverter;
 import com.plexadasi.build.EBSSql;
-import com.plexadasi.ebs.SiebelApplication.bin.InvoiceObject;
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.bin.Order;
@@ -45,8 +44,6 @@ public class CreateInvoice
             
             EBSSql ebsSql = new EBSSql(EBS_CONN);
             EBSSqlData ebsSqlData = new EBSSqlData(EBS_CONN);
-            input.setTrxHeader(ebsSqlData.getTrxInvoiceHeader());
-            input.setTrxLineId(ebsSqlData.getTrxLineId());
             Product product = null;
             // Check if the user type is an individual or an organization
             // If the type is neither, throw an exception back to siebel
@@ -68,7 +65,7 @@ public class CreateInvoice
                 throw new SiebelBusinessServiceException("NO_SUCH_METHOD", "Method not found");
             }   
             
-            CreateInvoiceSQL createSql = new CreateInvoiceSQL(product);
+            CreateInvoiceSQL createSql = new CreateInvoiceSQL(EBS_CONN, product);
             createSql.setProperty(input);
             ebsSql.createInvoiceQuote(createSql);
             // Let use setup the account location

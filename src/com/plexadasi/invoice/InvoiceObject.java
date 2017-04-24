@@ -3,34 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.plexadasi.ebs.SiebelApplication.bin;
+package com.plexadasi.invoice;
 
 /**
  *
  * @author SAP Training
  */
 public class InvoiceObject {
-    private String trx_header;
     private String v_customer_id;
     private String cust_trx_type_id; 
     private String v_date;       
     private String v_pri_salesrepid;
     private String v_curr;
     private String v_termId;
-    private String v_legalid;
     private String v_siebelquote;
-    private String trx_dist_id_v;
-    private String line_id;
+    private String lotId;
     
     /**
      * 
      * @param value 
      */
-    public void setTrxHeader(String value)
-    {
-       this.trx_header = value;
-    }
-    
     
     public void setBillToId(String value)
     {
@@ -62,11 +54,6 @@ public class InvoiceObject {
         this.v_termId = value;
     }
     
-    public void setLegalEntityId(String value)
-    {
-        this.v_legalid = value;
-    }
-    
     public void setCtRef(String value)
     {
         this.v_siebelquote = value;
@@ -75,21 +62,6 @@ public class InvoiceObject {
     public void setTrxDistId(String value)
     {
         this.v_siebelquote = value;
-    }
-    
-    public void setCodeCombinationId(String value)
-    {
-        this.v_siebelquote = value;
-    }
-    
-    public void setTrxLineId(String value)
-    {
-        this.line_id = value;
-    }
-    
-    public String getTrxHeader()
-    {
-       return this.trx_header;
     }
     
     public String getBillToId()
@@ -122,28 +94,8 @@ public class InvoiceObject {
         return this.v_termId;
     }
     
-    public String getLegalEntityId()
-    {
-        return this.v_legalid;
-    }
-    
     public String getCtRef()
     {
         return this.v_siebelquote;
-    }
-    
-    public String getTrxDistId()
-    {
-        return this.trx_dist_id_v;
-    }
-    
-    public String getCodeCombinationId()
-    {
-        return this.v_siebelquote;
-    }
-
-    public String geTrxLineId() 
-    {
-        return this.line_id;
     }
 }

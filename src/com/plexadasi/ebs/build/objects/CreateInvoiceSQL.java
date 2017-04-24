@@ -1,10 +1,12 @@
 package com.plexadasi.ebs.build.objects;
 
 
+import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ASqlExtObj;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.IOException;
+import java.sql.Connection;
 
 
 
@@ -25,14 +27,15 @@ public class CreateInvoiceSQL extends ASqlExtObj
     
     /**
      *
+     * @param ebs_conn
      * @param item
      * @throws com.siebel.eai.SiebelBusinessServiceException
      * @throws java.io.IOException
      */
     
-    public CreateInvoiceSQL (Product item) throws SiebelBusinessServiceException, IOException
+    public CreateInvoiceSQL (Connection ebs_conn, Product item) throws SiebelBusinessServiceException, IOException
     {
-        super(item);
+        super(ebs_conn, item);
         output = "";
     }
     

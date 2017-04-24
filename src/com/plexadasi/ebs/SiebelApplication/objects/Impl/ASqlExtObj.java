@@ -3,12 +3,14 @@ package com.plexadasi.ebs.SiebelApplication.objects.Impl;
 
 
 
+import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.Helper.DataConverter;
 import java.util.Map;
 import com.plexadasi.ebs.Helper.HelperAP;
-import com.plexadasi.ebs.SiebelApplication.bin.InvoiceObject;
+import com.plexadasi.invoice.InvoiceObject;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.siebel.eai.SiebelBusinessServiceException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,6 +33,7 @@ abstract public class ASqlExtObj implements ImplSql
      */
     protected static String output = null;
     protected InvoiceObject property = new InvoiceObject();
+    protected EBSSqlData ebsSqlData = null;
 
     /**
      *
@@ -48,6 +51,7 @@ abstract public class ASqlExtObj implements ImplSql
     protected static final String X_MSG_D     = "x_msg_data";
     protected static final String L_TRX_HEADER = "l_trx_header_tbl";
     protected static final String L_TRX_LINES  = "l_trx_lines_tbl";
+    protected static final String L_TRX_DIST  = "l_trx_dist_tbl";
     
     protected static final String APPEND      = " => ";
     protected static final String NEXT_LINE_COMMA   = ",\n";
@@ -68,12 +72,16 @@ abstract public class ASqlExtObj implements ImplSql
     protected static String legalEntity = "";
     
     protected List<Map<String, String>> List;
-    private String trxHeaderId;
-    private String trxLineId;
-    private String trxDistId;
+    
+    private final String trxHeaderId;
+    
+    private final String trxLineId;
+    
+    private final String trxDistId;
+    
     private final int lineNumber = 1;
     
-    public ASqlExtObj(Product item) throws SiebelBusinessServiceException
+    public ASqlExtObj(Connection ebs_conn, Product item) throws SiebelBusinessServiceException
     {
        userId = HelperAP.getEbsUserId();
        respId = HelperAP.getEbsUserResp();
@@ -82,14 +90,15 @@ abstract public class ASqlExtObj implements ImplSql
        List = new ArrayList();
        item.doTrigger();
        List = item.getList();
+       ebsSqlData = new EBSSqlData(ebs_conn);
+       trxHeaderId = ebsSqlData.getTrxInvoiceHeader();
+       trxLineId = ebsSqlData.getTrxLineId();
+       trxDistId = ebsSqlData.getTrxDistId();
     }
     
     @Override
     public void secondCall()
     {
-       trxHeaderId = property.getTrxHeader();
-       trxLineId = property.geTrxLineId();
-       trxDistId = property.getTrxDistId();
         output += BEGIN;
         output += "-- Setting the Context --\n";
         output += "fnd_global.apps_initialize(" + userId + "," + respId + ",222, 0)" + NEXT_LINE_COL;
@@ -111,6 +120,7 @@ abstract public class ASqlExtObj implements ImplSql
         output += L_TRX_HEADER + "(1).printing_option := 'PRI'" + NEXT_LINE_COL;
         output += L_TRX_HEADER + "(1).primary_salesrep_id := " + DataConverter.toInt(property.getPrimarySalesId()) + NEXT_LINE_COL;
         //output += L_TRX_HEADER + "(1).ct_reference := '" + property.getCtRef() + "'" + NEXT_LINE_COL;
+        output += L_TRX_HEADER + "(1).ct_reference := '1-6555'" + NEXT_LINE_COL;
         //output += L_TRX_HEADER + "(1).complete_flag := 'N'" + NEXT_LINE_COL;
     }
     
@@ -119,9 +129,10 @@ abstract public class ASqlExtObj implements ImplSql
     
     /**
      * @param addNum
+     * @throws com.siebel.eai.SiebelBusinessServiceException
      */
     @Override
-    public final void thirdCall(Boolean addNum)
+    public final void thirdCall(Boolean addNum) throws SiebelBusinessServiceException
     {
         
         String invoiceItemsBody = "", finvoiceItemsBody = "";
@@ -132,47 +143,31 @@ abstract public class ASqlExtObj implements ImplSql
         int line_number = lineNumber;
         for(int i = 0; i < List.size(); i++)
         {
-            
             int num = addNum == true ? i + 1 : 1;
             Map<String, String> item = List.get(i);
-            
-            if(DataConverter.toInt(item.get("Inventory Id")) <= 0)
+            int inventoryId = DataConverter.toInt(item.get("Product Inventory Item Id"));
+            if(inventoryId <= 0)
             {
-                //throw new SiebelBusinessServiceException("NO_INVENTORY", "Inventory cannot be empty. Please check and try again.");
+                MyLogging.log(Level.SEVERE, "Inventory cannot be empty. Please check and try again.");
+                throw new SiebelBusinessServiceException("NO_INVENTORY_ID", "Inventory cannot be empty. Please check and try again.");
             }
+            int org_id = DataConverter.toInt(item.get("Lot#"));
+            int codeCombinationId = DataConverter.toInt(ebsSqlData.getCombinationId(inventoryId, org_id));
             invoiceItemsBody += "-- Initializing the Mandatory API parameters" + NEXT_LINE_COL;
-            
-            invoiceItemsBody += "l_trx_lines_tbl(" + num + ").trx_header_id := " + trx_header_id + NEXT_LINE_COL;
-
+            invoiceItemsBody += L_TRX_LINES + "(" + num + ").trx_header_id := " + trx_header_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
-
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").line_number := " + line_number + NEXT_LINE_COL;
-
-            invoiceItemsBody += L_TRX_LINES + "(" + num + ").inventory_item_id := " + /*DataConverter.toInt(item.get("Inventory Id"))*/14 + NEXT_LINE_COL;
-
+            invoiceItemsBody += L_TRX_LINES + "(" + num + ").inventory_item_id := " + inventoryId + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").quantity_invoiced := " + DataConverter.toInt(item.get("Quantity")) + NEXT_LINE_COL;
-
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").unit_selling_price := " + DataConverter.toInt(item.get("Item Price")) + NEXT_LINE_COL;
-
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").line_type := 'LINE'" + NEXT_LINE_COL;
-            
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").TAX_RATE := " + DataConverter.toInt(item.get("Discount Amount")) + NEXT_LINE_COL;
-            
-            invoiceItemsBody += "l_trx_dist_tbl (" + num + ").trx_dist_id := " + trx_dist_id + NEXT_LINE_COL;
-
-            invoiceItemsBody += "l_trx_dist_tbl(" + num + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
-            
-            invoiceItemsBody += "l_trx_dist_tbl (" + num + ").account_class := 'REV'" + NEXT_LINE_COL;
-            
-            invoiceItemsBody += "l_trx_dist_tbl (" + num + ").PERCENT := 100" + NEXT_LINE_COL;
-            
-            invoiceItemsBody += "l_trx_dist_tbl (" + num + ").code_combination_id := " + property.getCodeCombinationId() + NEXT_LINE_COL;
-            
-           // if(i == 0){
-                finvoiceItemsBody = invoiceItemsBody;                   
-            //}else{
-               // finvoiceItemsBody = finvoiceItemsBody.concat(invoiceItemsBody);
-           // }
+            invoiceItemsBody += L_TRX_DIST + "(" + num + ").trx_dist_id := " + trx_dist_id + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_DIST + "(" + num + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_DIST + "(" + num + ").account_class := 'REV'" + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_DIST + " (" + num + ").PERCENT := 100" + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_DIST + " (" + num + ").code_combination_id := " + codeCombinationId + NEXT_LINE_COL;
+            finvoiceItemsBody = invoiceItemsBody;
             trx_line_id++;
             trx_dist_id++;
             line_number++;
@@ -200,6 +195,7 @@ abstract public class ASqlExtObj implements ImplSql
         output += X_MSG_D + APPEND + L_MSG_D + NEXT_LINE;
         output += CLOSE_BRACE;
         output += NEXT_LINE;
+        output += "COMMIT" + NEXT_LINE_COL;
     }
     
     

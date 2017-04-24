@@ -5,6 +5,8 @@
  */
 package com.plexadasi.ebs.SiebelApplication.objects.Impl;
 
+import com.siebel.eai.SiebelBusinessServiceException;
+
 /**
  *
  * @author SAP Training
@@ -16,7 +18,7 @@ public interface ImplSql {
     
     public void thirdCall();
     
-    public void thirdCall(Boolean trueOrFalse);
+    public void thirdCall(Boolean trueOrFalse) throws SiebelBusinessServiceException;
     
     public void fourthCall();
     

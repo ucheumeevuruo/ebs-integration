@@ -12,7 +12,6 @@ package com.plexadasi.ebs.Helper;
  */
 public class DataConverter {
     public static Integer toInt(String value) {
-        System.out.println(value != (null));
         if (value != (null) && !"".equals(value)) {
             return Integer.parseInt(value);
         } else {

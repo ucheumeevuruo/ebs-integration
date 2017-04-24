@@ -2,7 +2,6 @@ package com.plexadasi.build;
 
 
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
-import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.util.logging.Level;
 
@@ -29,7 +28,7 @@ public class Context {
         obj.thirdCall();
         obj.fourthCall();
         obj.lastCall();
-        MyLogging.log(Level.INFO, "Creating Sql Object : " + obj);
+       // MyLogging.log(Level.INFO, "Creating Sql Object : " + obj);
         return getOutput();
     }
     
@@ -41,7 +40,7 @@ public class Context {
         obj.thirdCall(trueOrFalse);
         obj.fourthCall();
         obj.lastCall();
-        MyLogging.log(Level.INFO, "Creating Sql Object : " + obj);
+        //MyLogging.log(Level.INFO, "Creating Sql Object : " + obj);
         return getOutput();
     }
     

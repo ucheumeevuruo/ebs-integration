@@ -30,22 +30,26 @@ public class Quote extends Product implements Impl
     /**
      * 
      */
-    private static final String PLX_PRODUCT = "Product";
+    public static final String PLX_PRODUCT = "Product";
     
     /**
      * 
      */
-    private static final String PLX_QUANTITY = "Quantity";
+    public static final String PLX_QUANTITY = "Quantity";
     
     /**
      * 
      */
-    private static final String PLX_ITEM_PRICE = "Item Price";
+    public static final String PLX_ITEM_PRICE = "Item Price";
     
     /**
      * 
      */
-    private static final String PLX_INVENTORY = "Product Inventory Item Id";
+    public static final String PLX_INVENTORY = "Product Inventory Item Id";
+    /**
+     * 
+     */
+    public static final String PLX_LOT_ID  = "Lot#";
     /**
      * 
      */
@@ -76,13 +80,15 @@ public class Quote extends Product implements Impl
             
             set.setProperty(PLX_ITEM_PRICE, PLX_ITEM_PRICE);
             
+            set.setProperty(PLX_LOT_ID, PLX_LOT_ID);
+            
             s.setSField(set);
             
             setList = s.getSField(BUS_OBJ, BUS_COMP, this);
             
             MyLogging.log(Level.INFO, "Creating Objects: " + setList.toString());
             
-            MyLogging.log(Level.INFO, set.toString());
+            //MyLogging.log(Level.INFO, set.toString());
         } catch (SiebelException ex) {
             ex.printStackTrace(new PrintWriter(error));
             MyLogging.log(Level.SEVERE, "Caught Siebel Exception Line in doTrigger: " + error.toString());

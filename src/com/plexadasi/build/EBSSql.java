@@ -14,7 +14,6 @@ package com.plexadasi.build;
  */
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
-import com.plexadasi.ebs.build.objects.PartySite;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -43,7 +42,7 @@ public class EBSSql {
         try {
             obj = method;
             sqlContext = Context.call(obj);
-            MyLogging.log(Level.INFO, "SQL for Location :" + sqlContext);
+            MyLogging.log(Level.INFO, "SQL for InvoiceOrder :" + sqlContext);
             cs = CONN.prepareCall(sqlContext);
             cs.registerOutParameter(1, java.sql.Types.INTEGER);
             cs.execute();
@@ -59,7 +58,7 @@ public class EBSSql {
         try {
             obj = method;
             sqlContext = Context.call(obj, true);
-            MyLogging.log(Level.INFO, "SQL For PartySite :" + sqlContext);
+            MyLogging.log(Level.INFO, "SQL For InvoiceQuote :" + sqlContext);
             cs = CONN.prepareCall(sqlContext);
             cs.registerOutParameter(1, java.sql.Types.INTEGER);
             cs.execute();

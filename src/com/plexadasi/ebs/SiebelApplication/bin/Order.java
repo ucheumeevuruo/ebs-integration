@@ -82,7 +82,7 @@ public class Order extends Product implements Impl
             
             MyLogging.log(Level.INFO, "Creating Objects: " + setList.get(0));
             
-            MyLogging.log(Level.INFO, set.toString());
+            //MyLogging.log(Level.INFO, set.toString());
         } catch (SiebelException ex) {
             ex.printStackTrace(new PrintWriter(error));
             MyLogging.log(Level.SEVERE, "Caught Siebel Exception Line in doTrigger: " + error.toString());

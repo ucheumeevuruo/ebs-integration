@@ -74,7 +74,7 @@ abstract public class ASqlObj implements ImplSql {
     abstract public void thirdCall();
     
     @Override
-    public void thirdCall(Boolean trueOrFalse){};
+    public void thirdCall(Boolean trueOrFalse) throws SiebelBusinessServiceException{};
     /**
      *
      */
