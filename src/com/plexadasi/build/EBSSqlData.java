@@ -165,7 +165,7 @@ public class EBSSqlData
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
         }
-        MyLogging.log(Level.INFO, "Check if update is successful: " + output);
+        MyLogging.log(Level.INFO, "Check if update on ct_ref is successful: " + output);
         return output;
     }
 }
