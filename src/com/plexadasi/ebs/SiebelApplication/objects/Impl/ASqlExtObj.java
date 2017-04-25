@@ -120,7 +120,6 @@ abstract public class ASqlExtObj implements ImplSql
         output += L_TRX_HEADER + "(1).printing_option := 'PRI'" + NEXT_LINE_COL;
         output += L_TRX_HEADER + "(1).primary_salesrep_id := " + DataConverter.toInt(property.getPrimarySalesId()) + NEXT_LINE_COL;
         //output += L_TRX_HEADER + "(1).ct_reference := '" + property.getCtRef() + "'" + NEXT_LINE_COL;
-        output += L_TRX_HEADER + "(1).ct_reference := '1-6555'" + NEXT_LINE_COL;
         //output += L_TRX_HEADER + "(1).complete_flag := 'N'" + NEXT_LINE_COL;
     }
     

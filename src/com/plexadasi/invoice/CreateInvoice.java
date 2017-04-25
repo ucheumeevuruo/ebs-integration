@@ -68,9 +68,15 @@ public class CreateInvoice
             CreateInvoiceSQL createSql = new CreateInvoiceSQL(EBS_CONN, product);
             createSql.setProperty(input);
             ebsSql.createInvoiceQuote(createSql);
-            // Let use setup the account location
-            //int location_id = ebsSql.getInt(1);
-            output = DataConverter.toInt(ebsSqlData.getTrxNumber(ebsSql.getInt(1)));
+            int cust_trx_id = ebsSql.getInt(1);
+            if(ebsSqlData.setCustReference(cust_trx_id, acc_id))
+            {
+                output = DataConverter.toInt(ebsSqlData.getTrxNumber(cust_trx_id));
+            }
+            else
+            {
+                throw new SiebelBusinessServiceException("UPD_ERROR", "Could not set customer ref for RA_CUSTOMER_TRX_ALL table.");
+            }
             SIEBEL_CONN.logoff();
             EBS_CONN.close();
         }

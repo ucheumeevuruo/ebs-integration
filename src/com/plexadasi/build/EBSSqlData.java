@@ -143,4 +143,29 @@ public class EBSSqlData
         }
         return output;
     }
+    
+    public Boolean setCustReference(int cust_trx_id, String quote_id) throws SiebelBusinessServiceException
+    {
+        Boolean output = false;
+        try{
+            String sql = "UPDATE RA_CUSTOMER_TRX_ALL SET CT_REFERENCE=? WHERE CUSTOMER_TRX_ID=?";
+            preparedStatement = CONN.prepareStatement(sql);
+            preparedStatement.setString(1, quote_id);
+            preparedStatement.setInt(2, cust_trx_id);
+            int rs = preparedStatement.executeUpdate();
+            if(rs > 0)
+            {
+                output = true;
+            }
+            preparedStatement.close();
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+        }
+        MyLogging.log(Level.INFO, "Check if update is successful: " + output);
+        return output;
+    }
 }
