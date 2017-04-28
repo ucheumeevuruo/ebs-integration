@@ -88,7 +88,8 @@ public class EBSAccount
             while (rs.next()) {
                 PartyId = rs.getString("party_id");
                 PartyName = rs.getString("party_name");
-            }   MyLogging.log(Level.INFO, "Get  : " + PartyId);
+            }   
+            MyLogging.log(Level.INFO, "Get  : " + PartyId);
             // Setting up properties for party site
             party.setProperty("party_id", String.valueOf(PartyId));
             party.setProperty("location_id", String.valueOf(location_id));
@@ -120,6 +121,11 @@ public class EBSAccount
             output = e.getInt(1);
             SIEBEL_CONN.logoff();
             EBS_CONN.close();
+            
+            if(output <= 0)
+            {
+                throw new SQLException("There was error in process. Final output returned is zero.");
+            }
         }
         catch (SQLException ex) 
         {
@@ -139,6 +145,7 @@ public class EBSAccount
             MyLogging.log(Level.SEVERE, "Caught Siebel Exception:"+ERROR.toString());
             throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ERROR.toString()); 
         }
+        
         return output;
     }
 }

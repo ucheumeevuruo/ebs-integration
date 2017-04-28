@@ -25,7 +25,7 @@ public interface IProperties {
     public static final String EBS_SOURCE_BATCH_ID  = "ebsbatchsourceid";
     public static final String EBS_LEGAL_ENTITY  = "ebslegaltrxid";
 
-    
+    public IProperties setProperties(String prop);
     /**
      *
      * @param nix

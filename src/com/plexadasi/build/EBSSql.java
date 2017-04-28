@@ -12,15 +12,24 @@ package com.plexadasi.build;
  *
  * @author SAP Training
  */
+import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
 import com.siebel.eai.SiebelBusinessServiceException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -153,6 +162,26 @@ public class EBSSql {
         }
     }
     
+    public void createPurchaseOrder()
+    {
+        try {
+            Scanner sc=new Scanner(new File("sql\\purchase_order.sql"));
+            sqlContext = "";
+            while(sc.hasNextLine()){
+                sqlContext += (sc.nextLine());
+            }
+            cs = CONN.prepareCall(sqlContext);
+            cs.setInt(1,1);
+            cs.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(EBSSql.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EBSSql.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EBSSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public String getString(int value) throws SQLException
     {
         return cs.getString(value);
@@ -166,5 +195,10 @@ public class EBSSql {
     public Date get(String value) throws SQLException
     {
         return cs.getDate(value);
+    }
+    
+     public static void main(String[] args) throws Exception {
+        EBSSql sql = new EBSSql(ApplicationsConnection.connectToEBSDatabase());
+        sql.createPurchaseOrder();
     }
 }

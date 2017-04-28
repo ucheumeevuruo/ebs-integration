@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,7 +20,8 @@ import java.util.logging.Logger;
  *
  * @author SAP Training
  */
-public class ApplicationProperties implements IProperties{
+public class ApplicationProperties implements IProperties
+{
        
     private static String propfilepath = "";
     private static String vlogFile = "";
@@ -30,11 +30,32 @@ public class ApplicationProperties implements IProperties{
     private static final StringWriter ERROR = new StringWriter();
     
     @Override
+    public IProperties setProperties(String prop)
+    {
+        if (OS.contains("nix") || OS.contains("nux")) 
+        {                
+            propfilepath = "/usr/app/siebel/intg/intg.properties";
+            vlogFile = "nix_logfile";
+        } 
+        else if (OS.contains("win")) 
+        {
+            propfilepath = "C:\\temp\\intg\\intg.properties";
+            vlogFile = "win_logfile";
+        }
+        else
+        {
+            throw new NullPointerException("Null pointer exception");
+        }
+        templateFile = prop;
+        return this;
+    }
+    
+    @Override
     public IProperties setProperties(String nix, String win)
     {
         if (OS.contains("nix") || OS.contains("nux")) 
         {                
-            propfilepath = "";
+            propfilepath = "/usr/app/siebel/intg/intg.properties";
             vlogFile = "nix_logfile";
             templateFile = nix;
         } 
@@ -59,6 +80,7 @@ public class ApplicationProperties implements IProperties{
         try 
         {
             Properties prop = new Properties();
+            MyLogging.log(Level.INFO, "Properties file path:" + propfilepath);
             input = new FileInputStream(propfilepath);
             prop.load(input);
             output = prop.getProperty(templateFile);

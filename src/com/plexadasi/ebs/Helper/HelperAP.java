@@ -25,14 +25,14 @@ public class HelperAP
     
     public static String getEbsUserId() throws SiebelBusinessServiceException 
     {
-        AP.setProperties(IProperties.EBS_USER_ID, IProperties.EBS_USER_ID);
+        AP.setProperties(IProperties.EBS_USER_ID);
         return AP.getProperty();
     }
     
     // Get the responsibility of the user in ebs
     public static String getEbsUserResp() throws SiebelBusinessServiceException
     {
-        AP.setProperties(IProperties.EBS_USER_RESP, IProperties.EBS_USER_RESP);
+        AP.setProperties(IProperties.EBS_USER_RESP);
         return AP.getProperty();
     }
 
@@ -44,13 +44,13 @@ public class HelperAP
     
     public static String getSourceBatchId() throws SiebelBusinessServiceException
     {
-        AP.setProperties(IProperties.EBS_SOURCE_BATCH_ID, IProperties.EBS_SOURCE_BATCH_ID);
+        AP.setProperties(IProperties.EBS_SOURCE_BATCH_ID);
         return AP.getProperty();
     }
     
     public static String getLegalEntity() throws SiebelBusinessServiceException
     {
-        AP.setProperties(IProperties.EBS_LEGAL_ENTITY, IProperties.EBS_LEGAL_ENTITY);
+        AP.setProperties(IProperties.EBS_LEGAL_ENTITY);
         return AP.getProperty();
     }
 }

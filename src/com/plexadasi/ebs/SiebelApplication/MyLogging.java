@@ -53,8 +53,9 @@ public class MyLogging {
     Date date = new Date();
     SimpleDateFormat app = new SimpleDateFormat("dd-MM-yyyy");
     String dateApp = app.format(date);
-    logFile = this.logFile + dateApp + ".log";
-    logger = Logger.getLogger(MyLogging.class.getName());
+    String file = "EbsLogger_";
+    logFile += file + dateApp + ".log";
+    logger = Logger.getLogger(MyLogging.class.getName() + "\n\n");
     
     this.fileHandler = new FileHandler(logFile, true);
     

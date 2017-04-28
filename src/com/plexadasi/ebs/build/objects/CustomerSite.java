@@ -20,6 +20,7 @@ public class CustomerSite extends ASqlObj
 
     /**
      *
+     * @throws com.siebel.eai.SiebelBusinessServiceException
      */
     
     public CustomerSite () throws SiebelBusinessServiceException
