@@ -10,7 +10,6 @@ import com.plexadasi.ebs.SiebelApplication.bin.Quote;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.build.EBSSqlData;
 import com.siebel.data.SiebelDataBean;
-import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,17 +30,18 @@ import java.util.logging.Level;
  */
 public class CreateInvoice 
 {
-    private static final Connection EBS_CONN = ApplicationsConnection.connectToEBSDatabase();
-    private static final SiebelDataBean SIEBEL_CONN = ApplicationsConnection.connectSiebelServer();
+    private static Connection EBS_CONN;
+    private static SiebelDataBean SIEBEL_CONN = ApplicationsConnection.connectSiebelServer();
     private static final StringWriter ERROR = new StringWriter();
     
     
-    public static Integer doInvoke(String acc_id, InvoiceObject input, String type) throws SiebelBusinessServiceException
+    public static Integer doInvoke(String acc_id, InvoiceObject input, String type, SiebelDataBean siebelConn, Connection ebsConn) throws SiebelBusinessServiceException
     {
         Integer output = null;
         try 
         {
-            
+            SIEBEL_CONN = siebelConn;
+            EBS_CONN = ebsConn;
             EBSSql ebsSql = new EBSSql(EBS_CONN);
             EBSSqlData ebsSqlData = new EBSSqlData(EBS_CONN);
             Product product = null;
@@ -77,8 +77,6 @@ public class CreateInvoice
             {
                 throw new SiebelBusinessServiceException("UPD_ERROR", "Could not set customer ref for RA_CUSTOMER_TRX_ALL table.");
             }
-            SIEBEL_CONN.logoff();
-            EBS_CONN.close();
         }
         catch (SQLException ex) 
         {
@@ -90,12 +88,6 @@ public class CreateInvoice
         {
             ex.printStackTrace(new PrintWriter(ERROR));
             MyLogging.log(Level.SEVERE, "Caught IO Exception:"+ERROR.toString());
-            throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ERROR.toString()); 
-        }
-        catch(SiebelException ex)
-        {
-            ex.printStackTrace(new PrintWriter(ERROR));
-            MyLogging.log(Level.SEVERE, "Caught Siebel Exception:"+ERROR.toString());
             throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ERROR.toString()); 
         }
         return output;

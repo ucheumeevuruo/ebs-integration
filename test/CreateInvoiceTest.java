@@ -1,8 +1,13 @@
 
+import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.invoice.CreateInvoice;
 import com.plexadasi.invoice.InvoiceObject;
+import com.siebel.data.SiebelDataBean;
+import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 /*
@@ -25,7 +30,7 @@ import java.util.logging.Level;
 public class CreateInvoiceTest 
 {
     
-    public static void main(String[] args) throws SiebelBusinessServiceException
+    public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException
     {
         InvoiceObject input = new InvoiceObject();
         input.setBillToId("28116");
@@ -36,7 +41,11 @@ public class CreateInvoiceTest
         input.setPrimarySalesId("100000040");
         input.setCustomerTrxTypeId("1003");
         input.setCtRef("1-10Z0T");
-        Integer output = CreateInvoice.doInvoke("1-21VDT", input, "Quote");
+        Connection ebs = ApplicationsConnection.connectToEBSDatabase();
+        SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
+        Integer output = CreateInvoice.doInvoke("1-21VDT", input, "Quote", sb, ebs);
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(output));
+        ebs.close();
+        sb.logoff();
     }
 }

@@ -6,13 +6,11 @@ import com.plexadasi.ebs.build.objects.PartySite;
 import com.plexadasi.ebs.build.objects.AccountSite;
 import com.plexadasi.ebs.build.objects.SiteUsage;
 import com.plexadasi.ebs.build.objects.Location;
-import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.bin.Individual;
 import com.plexadasi.ebs.SiebelApplication.bin.Organization;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Account;
 import com.siebel.data.SiebelDataBean;
-import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,19 +33,19 @@ import java.util.logging.Level;
  */
 public class EBSAccount 
 {
-    private static final Connection EBS_CONN = ApplicationsConnection.connectToEBSDatabase();
+    private static Connection EBS_CONN = null;
     private static SiebelDataBean SIEBEL_CONN = new SiebelDataBean();
     private static PreparedStatement preparedStatement = null;
     private static final StringWriter ERROR = new StringWriter();
     
     
-    public static Integer doInvoke(String acc_id, String ebs_id, String type) throws SiebelBusinessServiceException
+    public static Integer doInvoke(String acc_id, String ebs_id, String type, SiebelDataBean siebelConn, Connection ebsConn) throws SiebelBusinessServiceException
     {
         Integer output;
         try 
         {
-            
-            SIEBEL_CONN = ApplicationsConnection.connectSiebelServer();
+            SIEBEL_CONN = siebelConn;
+            EBS_CONN = ebsConn;
             EBSSql e;
             e = new EBSSql(EBS_CONN);
             Account account = null;
@@ -80,16 +78,23 @@ public class EBSAccount
             // Instanciate the party site class
             PartySite party = new PartySite();
             preparedStatement = EBS_CONN.prepareStatement(selectSQL);
-            preparedStatement.setString(1, ebs_id);
+            preparedStatement.setInt(1, Integer.valueOf(ebs_id));
             // execute select SQL stetement
             ResultSet rs = preparedStatement.executeQuery();
             String PartyId, PartyName;
             PartyId = PartyName = "";
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 PartyId = rs.getString("party_id");
                 PartyName = rs.getString("party_name");
             }   
-            MyLogging.log(Level.INFO, "Get  : " + PartyId);
+            
+            
+            MyLogging.log(Level.INFO, "Get SQL  : " + "SELECT hca.party_id, hp.party_name\n" +
+                    "FROM hz_cust_accounts hca, hz_parties hp\n" +
+                    "WHERE hca.party_id = hp.party_id\n" +
+                    "AND hca.cust_account_id = " + ebs_id);
+            MyLogging.log(Level.INFO, "Party Site Id = " + PartyId + " Party Name = " + PartyName);
             // Setting up properties for party site
             party.setProperty("party_id", String.valueOf(PartyId));
             party.setProperty("location_id", String.valueOf(location_id));
@@ -119,8 +124,6 @@ public class EBSAccount
             acc.setProperty("module", "HZ_CPUI");
             e.createAccountSite(acc);
             output = e.getInt(1);
-            SIEBEL_CONN.logoff();
-            EBS_CONN.close();
             
             if(output <= 0)
             {
@@ -137,12 +140,6 @@ public class EBSAccount
         {
             ex.printStackTrace(new PrintWriter(ERROR));
             MyLogging.log(Level.SEVERE, "Caught IO Exception:"+ERROR.toString());
-            throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ERROR.toString()); 
-        }
-        catch(SiebelException ex)
-        {
-            ex.printStackTrace(new PrintWriter(ERROR));
-            MyLogging.log(Level.SEVERE, "Caught Siebel Exception:"+ERROR.toString());
             throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ERROR.toString()); 
         }
         
