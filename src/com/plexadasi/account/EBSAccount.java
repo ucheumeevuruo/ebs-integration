@@ -39,7 +39,7 @@ public class EBSAccount
     private static final StringWriter ERROR = new StringWriter();
     
     
-    public static Integer doInvoke(String acc_id, String ebs_id, String type, SiebelDataBean siebelConn, Connection ebsConn) throws SiebelBusinessServiceException
+    public Integer doInvoke(String acc_id, String ebs_id, String type, SiebelDataBean siebelConn, Connection ebsConn) throws SiebelBusinessServiceException
     {
         Integer output;
         try 
@@ -129,6 +129,7 @@ public class EBSAccount
             {
                 throw new SQLException("There was error in process. Final output returned is zero.");
             }
+            e = null;
         }
         catch (SQLException ex) 
         {

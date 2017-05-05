@@ -38,6 +38,7 @@ public class Location extends ASqlObj
         super();
         account.doTrigger();
         property = account;
+        X_REC = "p_location_rec";
         HZ_CUST = "HZ_LOCATION_V2PUB.CREATE_LOCATION";
         output = "";
     }

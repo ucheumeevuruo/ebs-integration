@@ -1,8 +1,9 @@
-package com.plexadasi.ebs.build.objects;
+package com.plexadasi.build;
 
 
 import com.plexadasi.ebs.Helper.DataTypeCheck;
 import java.sql.SQLException;
+import java.util.Map;
 
 
 
@@ -30,17 +31,16 @@ public class PLXSqlBinder
     
     private static final String BIND_EXCEPTION = "Data type not supported.";
     
-    public void setInsertParamArray(String[] param) throws SQLException
+    public void setInsertParamArray(Map<String, String>  param) throws SQLException
     {
-        params = insertAutobindParam(param);
+        for (Map.Entry<String, String> entry : param.entrySet()) {
+            params += bindParam(entry.getValue());
+        }
     }
     
-    private String insertAutobindParam(String[] param) throws SQLException
+    public String insertAutobindParam(String param) throws SQLException
     {
-        for (String bind : param) {
-            stringOutput += bindParam(bind);
-        }
-        return stringOutput;
+        return bindParam(param);
     }
     
     private String bindParam(String bind) throws SQLException

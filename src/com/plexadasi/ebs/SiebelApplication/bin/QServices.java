@@ -20,9 +20,9 @@ import java.util.logging.Level;
  *
  * @author SAP Training
  */
-public class Quote extends Product implements Impl
+public class QServices extends Product implements Impl
 {
-    public Quote(SiebelDataBean CONN)
+    public QServices(SiebelDataBean CONN)
     {
         super(CONN);
     }
@@ -105,6 +105,7 @@ public class Quote extends Product implements Impl
     public void searchSpec(SiebelBusComp sbBC) throws SiebelException 
     {
         sbBC.setSearchSpec("Quote Id", this.siebelAccountId);  
+        sbBC.setSearchSpec(PRODUCT_TYPE_CODE, "Service");  
     }
 
     @Override

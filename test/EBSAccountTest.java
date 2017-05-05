@@ -24,7 +24,8 @@ public class EBSAccountTest
     {
         Connection ebs = ApplicationsConnection.connectToEBSDatabase();
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
-        Integer doInvoke = EBSAccount.doInvoke("1-1P76S", "33117", "account", sb, ebs);//1-1SC-78
+        EBSAccount ebsAccount = new EBSAccount();
+        Integer doInvoke = ebsAccount.doInvoke("1-1P76S", "33117", "account", sb, ebs);//1-1SC-78
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(doInvoke));
         ebs.close();
         sb.logoff();

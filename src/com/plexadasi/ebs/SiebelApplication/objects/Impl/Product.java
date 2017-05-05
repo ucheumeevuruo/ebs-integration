@@ -24,6 +24,9 @@ public abstract class Product
      */
     protected static final String BLANK = "";
     
+    protected static final String PRODUCT_TYPE = "Product Type";
+    
+    protected static final String PRODUCT_TYPE_CODE = "Product Type Code";
     /**
      * 
      */

@@ -6,9 +6,10 @@ import com.plexadasi.build.EBSSql;
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.bin.Order;
-import com.plexadasi.ebs.SiebelApplication.bin.Quote;
+import com.plexadasi.ebs.SiebelApplication.bin.QVehicle;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.build.EBSSqlData;
+import com.plexadasi.ebs.SiebelApplication.bin.QQuote;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.IOException;
@@ -49,11 +50,11 @@ public class CreateInvoice
             // If the type is neither, throw an exception back to siebel
             if(type.equalsIgnoreCase("quote"))
             {
-                product = new Quote(SIEBEL_CONN);
+                product = new QQuote(SIEBEL_CONN);
                 
                 product.setSiebelAccountId(acc_id);
             }
-            else if(type.equalsIgnoreCase("account"))
+            else if(type.equalsIgnoreCase("order"))
             {
                 product = new Order(SIEBEL_CONN);
                 

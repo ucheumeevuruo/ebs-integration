@@ -171,7 +171,7 @@ public class EBSSql {
                 sqlContext += (sc.nextLine());
             }
             cs = CONN.prepareCall(sqlContext);
-            cs.setInt(1,1);
+            //cs.setInt(1,1);
             cs.execute();
         } catch (SQLException ex) {
             Logger.getLogger(EBSSql.class.getName()).log(Level.SEVERE, null, ex);
