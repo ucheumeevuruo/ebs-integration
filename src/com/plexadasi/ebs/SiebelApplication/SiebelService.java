@@ -78,7 +78,6 @@ public class SiebelService {
     
     protected List<Map<String, String>> doTrigger(SiebelBusComp sbBC) throws SiebelException
     {
-        
         List<Map<String, String>> list = new ArrayList();
         boolean isRecord = sbBC.firstRecord();
         while (isRecord)

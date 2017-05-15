@@ -40,6 +40,7 @@ public class Location extends ASqlObj
         property = account;
         X_REC = "p_location_rec";
         HZ_CUST = "HZ_LOCATION_V2PUB.CREATE_LOCATION";
+        X_ID = "x_location_id";
         output = "";
     }
     

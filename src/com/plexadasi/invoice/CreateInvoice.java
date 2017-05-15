@@ -9,7 +9,7 @@ import com.plexadasi.ebs.SiebelApplication.bin.Order;
 import com.plexadasi.ebs.SiebelApplication.bin.QVehicle;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.SiebelApplication.bin.QQuote;
+import com.plexadasi.ebs.SiebelApplication.bin.Quote;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.IOException;
@@ -31,8 +31,8 @@ import java.util.logging.Level;
  */
 public class CreateInvoice 
 {
-    private static Connection EBS_CONN;
-    private static SiebelDataBean SIEBEL_CONN = ApplicationsConnection.connectSiebelServer();
+    private static Connection EBS_CONN = null;
+    private static SiebelDataBean SIEBEL_CONN = null;
     private static final StringWriter ERROR = new StringWriter();
     
     
@@ -41,6 +41,16 @@ public class CreateInvoice
         Integer output = null;
         try 
         {
+            if(siebelConn == null)
+            {
+                MyLogging.log(Level.SEVERE, "Connection to siebel cannot be established.");
+                throw new SiebelBusinessServiceException("NULL_DEF", "Connection to siebel cannot be established.");
+            }
+            else if(ebsConn == null)
+            {
+                MyLogging.log(Level.SEVERE, "Connection to ebs cannot be established.");
+                throw new SiebelBusinessServiceException("NULL_DEF", "Connection to ebs cannot be established.");
+            }
             SIEBEL_CONN = siebelConn;
             EBS_CONN = ebsConn;
             EBSSql ebsSql = new EBSSql(EBS_CONN);
@@ -50,7 +60,7 @@ public class CreateInvoice
             // If the type is neither, throw an exception back to siebel
             if(type.equalsIgnoreCase("quote"))
             {
-                product = new QQuote(SIEBEL_CONN);
+                product = new Quote(SIEBEL_CONN);
                 
                 product.setSiebelAccountId(acc_id);
             }

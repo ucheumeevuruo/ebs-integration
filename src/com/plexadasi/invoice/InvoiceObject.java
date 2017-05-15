@@ -17,7 +17,6 @@ public class InvoiceObject {
     private String v_curr;
     private String v_termId;
     private String v_siebelquote;
-    private String lotId;
     
     /**
      * 

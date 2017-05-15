@@ -12,8 +12,10 @@ package com.plexadasi.build;
  *
  * @author SAP Training
  */
+import com.plexadasi.ebs.Helper.FileToText;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.siebel.eai.SiebelBusinessServiceException;
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -26,14 +28,48 @@ import java.util.logging.Level;
 
 public class EBSSqlData 
 {
-    StringWriter errors = new StringWriter();
+    static StringWriter errors = new StringWriter();
     private static Connection CONN;
     private static Statement cs;
     private static PreparedStatement preparedStatement;
+    private static final String OS = System.getProperty("os.name").toLowerCase();
     
     public EBSSqlData(Connection connectObj)
     {
         CONN = connectObj;
+    }
+    
+    public String getPartySiteId(String ebs_id) throws SiebelBusinessServiceException
+    {
+        String output = "";
+        String sql = "SELECT hca.party_id, hp.party_name\n" +
+                    "FROM hz_cust_accounts hca, hz_parties hp\n" +
+                    "WHERE hca.party_id = hp.party_id\n" +
+                    "AND hca.cust_account_id = ?";
+        try 
+        {
+            MyLogging.log(Level.INFO, "SQL For Trx Invoice Header :" + sql);
+            preparedStatement = CONN.prepareCall(sql);
+            preparedStatement.setString(1, ebs_id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                output = rs.getString("party_id"); 
+                MyLogging.log(Level.INFO, "TRX_HEADER_ID:{0}"+ output);
+            } 
+            preparedStatement.close();
+        }  
+        catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        catch(NullPointerException ex)
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        return output;
     }
     
     public String getTrxInvoiceHeader() throws SiebelBusinessServiceException
@@ -49,10 +85,17 @@ public class EBSSqlData
                 MyLogging.log(Level.INFO, "TRX_HEADER_ID:{0}"+ output);
             } 
             cs.close();
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        catch(NullPointerException ex)
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
         return output;
     }
@@ -73,7 +116,7 @@ public class EBSSqlData
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
         return output;
     }
@@ -94,7 +137,7 @@ public class EBSSqlData
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
         return output;
     }
@@ -117,8 +160,40 @@ public class EBSSqlData
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
+        return output;
+    }
+    
+    public boolean updatePriceList(int item_price, int org_id, int inventory_id, int price_list) throws SiebelBusinessServiceException
+    {
+        boolean output = false;
+        try 
+        {
+            FileToText file = new FileToText();
+            String sqlContext = file.convertFileToText("sql" + File.separator + "update_price_list.sql").getStringOutput();
+            //MyLogging.log(Level.INFO, "SQL For Combination ID :" + sqlContext);
+            preparedStatement = CONN.prepareStatement(sqlContext);
+            preparedStatement.setInt(1, item_price);
+            preparedStatement.setInt(2, org_id);
+            preparedStatement.setInt(3, inventory_id);
+            preparedStatement.setInt(4, price_list);
+            int rs = preparedStatement.executeUpdate();
+            if(rs > 0)
+            {
+                CONN.commit();
+                output = true;
+            }
+            else
+            {
+                CONN.rollback();
+            }
+            preparedStatement.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        } 
         return output;
     }
     
@@ -138,7 +213,7 @@ public class EBSSqlData
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
         return output;
     }
@@ -162,7 +237,7 @@ public class EBSSqlData
         {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
         MyLogging.log(Level.INFO, "Check if update on ct_ref is successful: " + output);
         return output;

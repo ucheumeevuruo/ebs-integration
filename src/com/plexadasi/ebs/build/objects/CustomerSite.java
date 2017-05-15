@@ -69,6 +69,9 @@ public class CustomerSite extends ASqlObj
     public final void lastCall()
     {
         output += "?:=" + X_ID + NEXT_LINE;
+        output += "?:=" + X_RETURN + NEXT_LINE;
+        output += "?:=" + X_MSG_C + NEXT_LINE;
+        output += "?:=" + X_MSG_D + NEXT_LINE;
         output += END;
     }
 }

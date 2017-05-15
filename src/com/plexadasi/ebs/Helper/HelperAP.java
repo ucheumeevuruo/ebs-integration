@@ -53,4 +53,10 @@ public class HelperAP
         AP.setProperties(IProperties.EBS_LEGAL_ENTITY);
         return AP.getProperty();
     }
+    
+    public static String getPriceListID() throws SiebelBusinessServiceException
+    {
+        AP.setProperties(IProperties.PRICE_ID);
+        return AP.getProperty();
+    }
 }

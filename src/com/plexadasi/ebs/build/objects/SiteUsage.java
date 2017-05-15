@@ -66,6 +66,9 @@ public class SiteUsage extends ASqlObj
     {
         output += "?:=" + "p_party_site_use_rec.party_site_id" +NEXT_LINE;
         output += "?:=" + X_ID + NEXT_LINE;
+        output += "?:=" + X_RETURN + NEXT_LINE;
+        output += "?:=" + X_MSG_C + NEXT_LINE;
+        output += "?:=" + X_MSG_D + NEXT_LINE;
         output += END;
     }
 }

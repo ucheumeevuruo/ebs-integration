@@ -34,11 +34,10 @@ abstract public class ASqlExtObj implements ImplSql
     protected static String output = null;
     protected InvoiceObject property = new InvoiceObject();
     protected EBSSqlData ebsSqlData = null;
-
     /**
      *
      */
-    protected static final String AR_INVOICE_API = "AR_INVOICE_API_PUB.create_single_invoice";
+    protected String AR_INVOICE_API;
     protected static final String L_CUST_TRX_ID = "l_customer_trx_id";
     protected static final String L_RETURN    = "l_return_status";
     protected static final String L_MSG_D     = "l_msg_data";
@@ -49,8 +48,8 @@ abstract public class ASqlExtObj implements ImplSql
     protected static final String X_RETURN    = "x_return_status";
     protected static final String X_MSG_C     = "x_msg_count";
     protected static final String X_MSG_D     = "x_msg_data";
-    protected static final String L_TRX_HEADER = "l_trx_header_tbl";
-    protected static final String L_TRX_LINES  = "l_trx_lines_tbl";
+    protected String L_TRX_HEADER;
+    protected String L_TRX_LINES;
     protected static final String L_TRX_DIST  = "l_trx_dist_tbl";
     
     protected static final String APPEND      = " => ";
@@ -83,6 +82,9 @@ abstract public class ASqlExtObj implements ImplSql
     
     public ASqlExtObj(Connection ebs_conn, Product item) throws SiebelBusinessServiceException
     {
+        this.L_TRX_LINES = "l_trx_lines_tbl";
+        this.L_TRX_HEADER = "l_trx_header_tbl";
+       this.AR_INVOICE_API = "AR_INVOICE_API_PUB.create_single_invoice";
        userId = HelperAP.getEbsUserId();
        respId = HelperAP.getEbsUserResp();
        batchId = HelperAP.getSourceBatchId();
@@ -100,12 +102,7 @@ abstract public class ASqlExtObj implements ImplSql
     public void secondCall()
     {
         output += BEGIN;
-        output += "-- Setting the Context --\n";
-        output += "fnd_global.apps_initialize(" + userId + "," + respId + ",222, 0)" + NEXT_LINE_COL;
-        output += "mo_global.init('AR')" + NEXT_LINE_COL;
-        output += "mo_global.set_policy_context ('S', 101);\n" ;
-        output += "xla_security_pkg.set_security_context (222);\n" ;
-        
+        output += globalConn();
         output += "l_batch_source_rec.batch_source_id := " + batchId + NEXT_LINE_COL;
         output += L_TRX_HEADER + "(1).trx_header_id :=" + DataConverter.toInt(trxHeaderId) + NEXT_LINE_COL;
         //output += L_TRX_HEADER + "(1).trx_number :=" + trxHeaderId + NEXT_LINE_COL;
@@ -131,7 +128,7 @@ abstract public class ASqlExtObj implements ImplSql
      * @throws com.siebel.eai.SiebelBusinessServiceException
      */
     @Override
-    public final void thirdCall(Boolean addNum) throws SiebelBusinessServiceException
+    public void thirdCall(Boolean addNum) throws SiebelBusinessServiceException
     {
         
         String invoiceItemsBody = "", finvoiceItemsBody = "";
@@ -140,6 +137,11 @@ abstract public class ASqlExtObj implements ImplSql
         int trx_line_id = DataConverter.toInt(trxLineId);
         int trx_dist_id = DataConverter.toInt(trxDistId);
         int line_number = lineNumber;
+        if(List.size()<= 0)
+        {
+             MyLogging.log(Level.SEVERE, "Please add one or more item.");
+             throw new SiebelBusinessServiceException("NO_ITEM", "Please add one or more item.");
+        }
         for(int i = 0; i < List.size(); i++)
         {
             int num = addNum == true ? i + 1 : 1;
@@ -171,6 +173,7 @@ abstract public class ASqlExtObj implements ImplSql
             trx_dist_id++;
             line_number++;
         }
+        MyLogging.log(Level.INFO, finvoiceItemsBody);
         output += finvoiceItemsBody;
     }
     
@@ -216,4 +219,14 @@ abstract public class ASqlExtObj implements ImplSql
         return output;
     }
     
+    protected String globalConn()
+    {
+        String stringOutput = "";
+        stringOutput += "-- Setting the Context --\n";
+        stringOutput += "fnd_global.apps_initialize(" + userId + "," + respId + ",222, 0)" + NEXT_LINE_COL;
+        stringOutput += "mo_global.init('AR')" + NEXT_LINE_COL;
+        stringOutput += "mo_global.set_policy_context ('S', 101);\n" ;
+        stringOutput += "xla_security_pkg.set_security_context (222);\n" ;
+        return stringOutput;
+    }
 }
