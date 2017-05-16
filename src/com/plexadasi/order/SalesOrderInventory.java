@@ -29,7 +29,7 @@ public class SalesOrderInventory {
 
     private Integer orderId;
     private Integer soldToOrgId;
-    private Integer shipToOrgId;
+    private String shipToOrgId;
     private Integer invoiceId;
     private Integer soldFromId;
     private Integer salesRepId;
@@ -54,6 +54,11 @@ public class SalesOrderInventory {
     public void setSiebelOrderId(String orderId) 
     {
         siebelOrderId = orderId;
+    }
+    
+    public String getSiebelOrderId()
+    {
+        return siebelOrderId;
     }
     /**
      * @return the soldToOrgId
@@ -88,7 +93,7 @@ public class SalesOrderInventory {
     /**
      * @return the shipToOrgId
      */
-    public Integer getShipToOrgId() 
+    public String getShipToOrgId() 
     {
         return shipToOrgId;
     }
@@ -98,7 +103,7 @@ public class SalesOrderInventory {
      */
     public void setShipToOrgId(Integer shipToOrgId) 
     {
-        this.shipToOrgId = shipToOrgId;
+        //this.shipToOrgId = shipToOrgId;
     }
 
     /**
@@ -222,6 +227,7 @@ public class SalesOrderInventory {
     {
         SalesOrder sales = new SalesOrder(siebConn);
         sales.setSiebelAccountId(siebelOrderId);
+        shipToOrgId = ebsData.shipToAccount(soldToOrgId);
         sales.doTrigger();
         ArrayDescriptor desc = ArrayDescriptor.createDescriptor("PRODUCT", ebsConn);
         int toSize  = sales.getList().size();
@@ -236,7 +242,7 @@ public class SalesOrderInventory {
             priceId = DataConverter.toInt(HelperAP.getPriceListID());
             stringArray[i][0] = inventoryId;
             stringArray[i][1] = map.get(SalesOrder.PLX_QUANTITY);
-            stringArray[i][2] = String.valueOf(shipToOrgId);
+            stringArray[i][2] = shipToOrgId;
             boolean isUpdated = ebsData.updatePriceList(itemPrice, lot_id, DataConverter.toInt(inventoryId), priceId);
             if(isUpdated)
             {

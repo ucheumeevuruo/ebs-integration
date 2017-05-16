@@ -27,7 +27,6 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
 
 
@@ -45,17 +44,20 @@ public class EBSSql {
     
     public void createInvoiceOrder(ImplSql method) throws SiebelBusinessServiceException
     {
-        try {
+        try 
+        {
             obj = method;
             sqlContext = Context.call(obj);
             MyLogging.log(Level.INFO, "SQL for InvoiceOrder :" + sqlContext);
             cs = CONN.prepareCall(sqlContext);
             cs.registerOutParameter(1, java.sql.Types.INTEGER);
             cs.execute();
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) 
+        {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
@@ -71,11 +73,11 @@ public class EBSSql {
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
-     public void createLocation(ImplSql method) throws SQLException
+     public void createLocation(ImplSql method) throws SQLException, SiebelBusinessServiceException
     {
         try {
             obj = method;
@@ -87,8 +89,12 @@ public class EBSSql {
             cs.registerOutParameter(3, java.sql.Types.INTEGER);
             cs.registerOutParameter(4, java.sql.Types.VARCHAR);
             cs.execute();
-        } catch (SiebelBusinessServiceException ex) {
-            Logger.getLogger(EBSSql.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (SiebelBusinessServiceException ex) 
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
@@ -108,7 +114,7 @@ public class EBSSql {
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
@@ -128,7 +134,7 @@ public class EBSSql {
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
@@ -147,7 +153,7 @@ public class EBSSql {
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
@@ -167,7 +173,7 @@ public class EBSSql {
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
     
@@ -176,19 +182,24 @@ public class EBSSql {
         try 
         {
             cs = CONN.prepareCall("{CALL SALES_ORDER(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            EBSSqlData ebsData = new EBSSqlData(CONN);
+            Integer orgId = salesOrder.getSoldToOrgId();
+            String shipToOrgId = ebsData.shipToAccount(orgId);
+            String billToOrgId = ebsData.billToAccount(orgId);
+            MyLogging.log(Level.INFO, shipToOrgId);
             // Pass the in parameters to the procedure call
             cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
             cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
             cs.setInt(3, salesOrder.getOrderId());  
-            cs.setInt(4, salesOrder.getSoldToOrgId());
-            cs.setInt(5, salesOrder.getShipToOrgId()); 
-            cs.setInt(6, salesOrder.getInvoiceId());
+            cs.setInt(4, orgId);
+            cs.setInt(5, DataConverter.toInt(shipToOrgId)); 
+            cs.setInt(6, DataConverter.toInt(billToOrgId));
             cs.setInt(7, salesOrder.getSoldFromId());
             cs.setInt(8, salesOrder.getSalesRepId());
             cs.setInt(9, DataConverter.toInt(HelperAP.getPriceListID()));
             cs.setString(10, salesOrder.getTransactionCode());
             cs.setString(11, salesOrder.getStatusCode());
-            cs.setString(12, salesOrder.getPurchaseOrderNumber());
+            cs.setString(12, String.valueOf(salesOrder.getSiebelOrderId()));
             cs.setInt(13, salesOrder.getSourceId());
             cs.setArray(14, salesOrder.getInventoryItem());
             // Retrieve the out parameters from the procedure call
@@ -206,6 +217,7 @@ public class EBSSql {
         {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         } 
     }
     
@@ -232,11 +244,5 @@ public class EBSSql {
     public Array getArray(int value) throws SQLException
     {
         return cs.getArray(value);
-    }
-    
-     public static void main(String[] args) throws Exception {
-        EBSSql sql = new EBSSql(ApplicationsConnection.connectToEBSDatabase());
-       // sql.createPurchaseOrder();
-       // MyLogging.log(Level.INFO, "Result is : "+sql.getString(16));
     }
 }

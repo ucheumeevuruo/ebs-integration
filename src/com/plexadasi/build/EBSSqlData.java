@@ -165,6 +165,54 @@ public class EBSSqlData
         return output;
     }
     
+    public String billToAccount(int ebs_id) throws SiebelBusinessServiceException
+    {
+        String output = "";
+        try {
+            
+            String sql = "SELECT SITE_USE_ID FROM HZ_CUST_SITE_USES_ALL\n";
+            sql += "WHERE CUST_ACCT_SITE_ID = (SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND BILL_TO_FLAG = ?)";
+            MyLogging.log(Level.INFO, "SQL For Combination ID :" + sql);
+            preparedStatement = CONN.prepareStatement(sql);
+            preparedStatement.setInt(1, ebs_id);
+            preparedStatement.setString(2, "P");
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) 
+            {
+                output = String.valueOf(rs.getInt("SITE_USE_ID"));
+                MyLogging.log(Level.INFO, "Bill to id:{0}"+ output);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        return output;
+    }
+    
+    public String shipToAccount(int ebs_id) throws SiebelBusinessServiceException{
+        String output = "";
+        try {
+            
+            String sql = "SELECT SITE_USE_ID FROM HZ_CUST_SITE_USES_ALL\n";
+            sql += "WHERE CUST_ACCT_SITE_ID = (SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND SHIP_TO_FLAG = ?)";
+            MyLogging.log(Level.INFO, "SQL For Combination ID :" + sql);
+            preparedStatement = CONN.prepareStatement(sql);
+            preparedStatement.setInt(1, ebs_id);
+            preparedStatement.setString(2, "P");
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                output = String.valueOf(rs.getInt("SITE_USE_ID"));
+                MyLogging.log(Level.INFO, "Ship to id:{0}"+ output);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        return output;
+    }
+    
     public boolean updatePriceList(int item_price, int org_id, int inventory_id, int price_list) throws SiebelBusinessServiceException
     {
         boolean output = false;

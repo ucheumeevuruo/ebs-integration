@@ -12,6 +12,8 @@ import com.siebel.eai.SiebelBusinessServiceException;
 /**
  *
  * @author Adeyemi
+ * The property values can be found in the integration property files.
+ * 
  */
 public class HelperAP
 {

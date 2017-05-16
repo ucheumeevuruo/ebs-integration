@@ -32,12 +32,12 @@ public class SalesOrderTest
         SalesOrderInventory s = new SalesOrderInventory(sb, ebs);
         s.setSiebelOrderId("1-2994342");
         s.setOrderId(1001);//fixed
-        s.setSoldToOrgId(34126);//ebs customer id
+        s.setSoldToOrgId(35125);//ebs customer id
         s.setShipToOrgId(16165);// site use id
         s.setInvoiceId(16164);// site use id
         s.setSoldFromId(123);
         s.setSalesRepId(100000040);
-        s.setPriceId(9013);
+        //s.setPriceId(9013);
         s.setTransactionCode("NGN");
         s.setStatusCode("ENTERED");
         s.setPurchaseOrderNumber("Test VALUE 990");
