@@ -27,6 +27,93 @@ public abstract class Product
     protected static final String PRODUCT_TYPE = "Product Type";
     
     protected static final String PRODUCT_TYPE_CODE = "Product Type Code";
+    
+    /**
+     * 
+     */
+    public static final String PLX_PRODUCT = "Product";
+    
+    /**
+     * 
+     */
+    public static final String FIELD_QUANTITY = "Quantity";
+    
+    /**
+     * 
+     */
+    public static final String FIELD_LINE_NUMBER = "Line Number";
+    /**
+     * 
+     */
+    public static final String SHIPMENT_NUMBER = "Shipment Number";
+    /**
+     * 
+     */
+    public static final String PLX_LINE_TYPE = "";
+    /**
+     * 
+     */
+    public static final String PLX_LOT_ID  = "Lot#";
+    /**
+     * 
+     */
+    public static final String PLX_UNIT_OF_MEASURE = "Unit of Measure";
+    /**
+     * 
+     */
+    public static final String PLX_UNIT_PRICE = "Unit Price";
+    /**
+     * 
+     */
+    public static final String PLX_SHIP_TO_ORG_CODE = "Ship To Account Integration Id";
+    /**
+     * 
+     */
+    public static final String PLX_SHIP_TO_ORG_ID = "Ship To Account Id";
+    /**
+     * 
+     */
+    public static final String PLX_SHIP_TO_LOCATION_ID = "Ship To Address Id";
+    /**
+     * 
+     */
+    public static final String PLX_SHIP_TO_LOCATION = "Ship To Address";
+    /**
+     * 
+     */
+    public static final String PLX_ITEM_PRICE = "Item Price";
+    /**
+     * 
+     */
+    public static final String PLX_INVENTORY = "Product Inventory Item Id";
+    /**
+     * 
+     */
+    public static final String PLX_ORG_ID = "Organization Id";
+    /**
+     * 
+     */
+    public static final String PLX_QUANTITY_REQUESTED = "Quantity Requested";
+    /**
+     * 
+     */
+    public static final String PLX_PRIMARY_SALES_REP_ID = "PLX Primary Sales Rep Id";
+    /**
+     * 
+     */
+    public static final String PLX_CURRENCY_CODE = "Currency Code";
+    /**
+     * 
+     */
+    public static final String PLX_WAREHOUSE_ID = "PLX Warehouse Id";
+    /**
+     * 
+     */
+    public static final String PLX_AGENT_ID = "PLX Primary Sales Rep Id";
+    /**
+     * 
+     */
+    public static final String FIELD_ORDER_NUMBER = "Order Number";    
     /**
      * 
      */

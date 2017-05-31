@@ -14,9 +14,9 @@ package com.plexadasi.build;
  */
 import com.plexadasi.ebs.Helper.DataConverter;
 import com.plexadasi.ebs.Helper.HelperAP;
-import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
+import com.plexadasi.order.PurchaseOrderInventory;
 import com.plexadasi.order.SalesOrderInventory;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
@@ -210,7 +210,7 @@ public class EBSSql {
             // Bind the output array, this will contain any exception indexes.
             cs.registerOutParameter(18, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
             cs.registerOutParameter(19, java.sql .Types.VARCHAR);
-            cs.registerOutParameter(20, java.sql .Types.CHAR);
+            cs.registerOutParameter(20, OracleTypes.CHAR);
             cs.execute();
         } 
         catch (SQLException ex) 
@@ -219,6 +219,55 @@ public class EBSSql {
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         } 
+    }
+    
+    public void createOrderReservation(Integer order_number) throws SiebelBusinessServiceException
+    {
+        try 
+        {
+            sqlContext = "{CALL ORDER_MGMT_RESERVATION(?,?,?,?)}";
+            MyLogging.log(Level.INFO, "SQL :" + sqlContext);
+            cs = CONN.prepareCall(sqlContext);
+            cs.setInt(1, order_number);
+            cs.registerOutParameter(2, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(3, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(4, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
+            cs.execute();
+        } 
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+    }
+    
+    public void createPurchaseOrder(PurchaseOrderInventory poInventory) throws SiebelBusinessServiceException
+    {
+        sqlContext = "{CALL PURCHASE_ORDER(?,?,?,?,?,?)}";
+        try 
+        {
+            poInventory.triggers();
+            MyLogging.log(Level.INFO, "SQL :" + sqlContext);
+            cs = CONN.prepareCall(sqlContext);
+            cs.setInt(1, poInventory.getSourceId());
+            cs.setString(2, poInventory.getShipToLocation());
+            cs.setString(3, poInventory.getBillToLocation());
+            cs.setString(4, poInventory.getCurrencyCode());
+            cs.setInt(5, poInventory.getAgentCode());
+            cs.setArray(6, poInventory.getInventoryItem());
+            MyLogging.log(Level.INFO, sqlContext);
+            //cs.registerOutParameter(2, java.sql .Types.VARCHAR);
+            //cs.registerOutParameter(3, java.sql .Types.VARCHAR);
+            //cs.registerOutParameter(4, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
+            cs.execute();
+        } 
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }  
     }
     
     public String getString(int value) throws SQLException

@@ -3,6 +3,8 @@ CREATE TYPE array_table AS TABLE OF VARCHAR2 (50);
 TYPE product IS TABLE OF array_table INDEX BY PLS_INTEGER;
 
 CREATE OR REPLACE PROCEDURE salesOrder(
+	v_user IN NUMBER,
+	v_resp IN NUMBER,
 	order_id IN NUMBER,  
 	sold_to_id IN NUMBER,
 	ship_to_id IN NUMBER, 
@@ -15,6 +17,16 @@ CREATE OR REPLACE PROCEDURE salesOrder(
 	po_num IN NUMBER,
 	source_id IN NUMBER,
 	my_hmap IN product
+	l_return_status OUT VARCHAR2;
+	l_msg_data OUT VARCHAR2;
+	l_msg_count OUT NUMBER;
+	to_char(l_header_rec_out.order_number) OUT CHAR;
+	l_header_rec_out.return_status OUT VARCHAR2;
+	l_header_rec_out.booked_flag OUT VARCHAR2;
+	l_header_rec_out.header_id OUT INTEGER;
+	l_header_rec_out.order_source_id OUT INTEGER;
+	l_header_rec_out.flow_status_code OUT CHAR;
+end if;
 )
 AS
 DECLARE
@@ -59,6 +71,7 @@ l_debug_file VARCHAR2(200);
 b_return_status VARCHAR2(200);
 b_msg_count NUMBER;
 b_msg_data VARCHAR2(2000);
+
 BEGIN
 
 /*****************INITIALIZE DEBUG INFO*************************************/
@@ -72,14 +85,14 @@ END IF;
 /*****************INITIALIZE ENVIRONMENT*************************************/ 
 mo_global.init('ONT');
 mo_global.set_policy_context('S',101);
-fnd_global.apps_initialize (1187,50988,660);
+fnd_global.apps_initialize (v_user,v_resp,660);
 
 /*****************INITIALIZE HEADER RECORD******************************/
 l_header_rec := oe_order_pub.G_MISS_HEADER_REC;
 
 /***********POPULATE REQUIRED ATTRIBUTES **********************************/
 l_header_rec.operation := OE_GLOBALS.G_OPR_CREATE;
-l_header_rec.order_type_id := order_id;  
+l_header_rec.order_type_id12 := order_id;  
 l_header_rec.sold_to_org_id := sold_to_id; --7052;
 l_header_rec.ship_to_org_id := ship_to_id;  --123; 
 l_header_rec.invoice_to_org_id := invoice_to_id;  --1105;
@@ -90,7 +103,7 @@ l_header_rec.pricing_date := SYSDATE;
 l_header_rec.transactional_curr_code := trx_curr_code; --p_curr_code;--'USD';//string
 l_header_rec.flow_status_code := status_code; --p_flow_status_code;--//string
 l_header_rec.cust_po_number := po_num; -- p_po_num;--'06112009-08';
-l_header_rec.order_source_id := source_id; --p_order_source_id;--0 ;
+l_header_rec.order_source_id := source_id; --p_order_source_id;--0;
 -- To BOOK the Sales Order
 l_action_request_tbl(1) := oe_order_pub.G_MISS_REQUEST_REC;
 l_action_request_tbl(1).request_type := oe_globals.g_book_order;
@@ -143,6 +156,15 @@ x_action_request_tbl => l_action_request_tbl_out,
 x_return_status => l_return_status,
 x_msg_count => l_msg_count,
 x_msg_data => l_msg_data);
-
-z:=l_return_status;
+if (l_debug_level > 0) then
+	dbms_output.put_line('success');
+end if;
+COMMIT;
+ELSE
+dbms_output.put_line('Return status failure ');
+if (l_debug_level > 0) then
+	dbms_output.put_line('failure');
+end if;
+ROLLBACK;
+END IF
 END;

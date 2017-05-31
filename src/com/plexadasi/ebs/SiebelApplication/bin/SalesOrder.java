@@ -30,31 +30,6 @@ public class SalesOrder extends Product implements Impl
     /**
      * 
      */
-    public static final String PLX_PRODUCT = "Product";
-    
-    /**
-     * 
-     */
-    public static final String PLX_QUANTITY = "Quantity";
-    
-    /**
-     * 
-     */
-    public static final String PLX_ITEM_PRICE = "Item Price";
-    
-    /**
-     * 
-     */
-    public static final String PLX_INVENTORY = "Product Inventory Item Id";
-    
-    /**
-     * 
-     */
-    public static final String PLX_LOT_ID = "Lot#";
-    
-    /**
-     * 
-     */
     private static final String BUS_OBJ = "Order Entry (Sales)";
     
     /**
@@ -78,7 +53,7 @@ public class SalesOrder extends Product implements Impl
             
             set.setProperty(PLX_INVENTORY, PLX_INVENTORY);
             
-            set.setProperty(PLX_QUANTITY, PLX_QUANTITY);
+            set.setProperty(FIELD_QUANTITY, FIELD_QUANTITY);
             
             set.setProperty(PLX_ITEM_PRICE, PLX_ITEM_PRICE);
             

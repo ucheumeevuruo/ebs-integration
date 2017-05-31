@@ -31,29 +31,6 @@ public class Quote extends Product implements Impl
     /**
      * 
      */
-    public static final String PLX_PRODUCT = "Product";
-    
-    /**
-     * 
-     */
-    public static final String PLX_QUANTITY = "Quantity";
-    
-    /**
-     * 
-     */
-    public static final String PLX_ITEM_PRICE = "Item Price";
-    
-    /**
-     * 
-     */
-    public static final String PLX_INVENTORY = "Product Inventory Item Id";
-    /**
-     * 
-     */
-    public static final String PLX_LOT_ID  = "Lot#";
-    /**
-     * 
-     */
     private static final String BUS_OBJ = "Quote";
     
     /**

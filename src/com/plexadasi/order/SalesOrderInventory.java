@@ -241,7 +241,7 @@ public class SalesOrderInventory {
             String product = map.get(SalesOrder.PLX_PRODUCT);
             priceId = DataConverter.toInt(HelperAP.getPriceListID());
             stringArray[i][0] = inventoryId;
-            stringArray[i][1] = map.get(SalesOrder.PLX_QUANTITY);
+            stringArray[i][1] = map.get(SalesOrder.FIELD_QUANTITY);
             stringArray[i][2] = shipToOrgId;
             boolean isUpdated = ebsData.updatePriceList(itemPrice, lot_id, DataConverter.toInt(inventoryId), priceId);
             if(isUpdated)

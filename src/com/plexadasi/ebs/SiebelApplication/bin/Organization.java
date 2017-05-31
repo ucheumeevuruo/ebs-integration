@@ -25,30 +25,6 @@ public class Organization extends Account implements Impl
     {
         super(CONN);
     }
-    /**
-     * 
-     */
-    private static final String ACC_COUNTRY_CODE_FIELD = "PLX Country Code";
-    
-    /**
-     * 
-     */
-    private static final String ACC_ADDRESS_FIELD = "Street Address";
-    
-    /**
-     * 
-     */
-    private static final String ACC_POSTAL_FIELD = "Postal Code";
-    
-    /**
-     * 
-     */
-    private static final String ACC_CITY_FIELD = "City";
-    
-    /**
-     * 
-     */
-    private static final String ACC_STATE_FIELD = "State";
     
     /**
      * 
@@ -68,7 +44,7 @@ public class Organization extends Account implements Impl
     @Override
     public void doTrigger() throws SiebelBusinessServiceException
     {
-        SiebelSearch s = new SiebelSearch(CONN);
+         SiebelSearch s = new SiebelSearch(CONN);
         
         s.setSField(ACC_COUNTRY_CODE_FIELD, BLANK);
         

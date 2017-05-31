@@ -15,6 +15,44 @@ import com.siebel.eai.SiebelBusinessServiceException;
  */
 public abstract class Account 
 {
+    
+    /**
+     * 
+     */
+    public static final String ACC_COUNTRY_CODE_FIELD = "PLX Country Code";
+    
+    /**
+     * 
+     */
+    public static final String ACC_ADDRESS_FIELD = "Street Address";
+    /**
+     * 
+     */
+    public static final String ACC_CURRENCY_CODE = "Currency Code";
+    /**
+     * 
+     */
+    public static final String ACC_PRI_SHIP_TO_ADDR = "Primary Ship To Street Address";
+    /**
+     * 
+     */
+    public static final String ACC_PRI_BILL_TO_ADDR = "Primary Bill To Street Address";
+    /**
+     * 
+     */
+    public static final String ACC_POSTAL_FIELD = "Postal Code";
+    /**
+     * 
+     */
+    public static final String ACC_CITY_FIELD = "City";
+    /**
+     * 
+     */
+    public static final String ACC_ORG_ID = "Org Id";
+    /**
+     * 
+     */
+    public static final String ACC_STATE_FIELD = "State";
     /**
      * 
      */
@@ -164,6 +202,11 @@ public abstract class Account
     public String getModule() 
     {
         return this.module;
+    }
+    
+    public String getProperty(String property)
+    {
+        return set.getProperty(property);
     }
 
     abstract public void doTrigger() throws SiebelBusinessServiceException;

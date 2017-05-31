@@ -25,6 +25,7 @@ public interface IProperties {
     public static final String EBS_SOURCE_BATCH_ID  = "ebsbatchsourceid";
     public static final String EBS_LEGAL_ENTITY  = "ebslegaltrxid";
     public static final String PRICE_ID = "wst_price_id";
+    public static final String LINE_TYPE = "line_type";
 
     public IProperties setProperties(String prop);
     /**

@@ -28,8 +28,8 @@ public class SiebelSearch {
      *
      */
     protected static SiebelDataBean sdb = new SiebelDataBean();
-    private StringWriter errors = new StringWriter();
-    protected static SiebelPropertySet properties, values;
+    private final StringWriter errors = new StringWriter();
+    protected SiebelPropertySet properties, values;
     protected Integer beginCount = 1;
     public SiebelBusComp sbBC;
     

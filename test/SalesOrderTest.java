@@ -20,8 +20,8 @@ import java.util.List;
 
 /**
  *
- * @author SAP Training
- */
+ * @author SAP Training//3053495
+ *///bpms //154760
 public class SalesOrderTest 
 {
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException, PropertyVetoException 
@@ -30,9 +30,9 @@ public class SalesOrderTest
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
         SalesOrder ebsAccount = new SalesOrder();
         SalesOrderInventory s = new SalesOrderInventory(sb, ebs);
-        s.setSiebelOrderId("1-2994342");
+        s.setSiebelOrderId("1-3129373");
         s.setOrderId(1001);//fixed
-        s.setSoldToOrgId(35125);//ebs customer id
+        s.setSoldToOrgId(35125);//ebs customer id 35113
         s.setShipToOrgId(16165);// site use id
         s.setInvoiceId(16164);// site use id
         s.setSoldFromId(123);
@@ -40,7 +40,7 @@ public class SalesOrderTest
         //s.setPriceId(9013);
         s.setTransactionCode("NGN");
         s.setStatusCode("ENTERED");
-        s.setPurchaseOrderNumber("Test VALUE 990");
+        s.setPurchaseOrderNumber("1-3129373");
         s.setSourceId(0);
         // To print out the values passed to the object Sales Order Inventory
         // I created an output that writes the object as string.

@@ -20,9 +20,9 @@ import java.util.logging.Level;
  *
  * @author SAP Training
  */
-public class QExpenses extends Product implements Impl
+public class PurchaseOrder extends Product implements Impl
 {
-    public QExpenses(SiebelDataBean CONN)
+    public PurchaseOrder(SiebelDataBean CONN)
     {
         super(CONN);
     }
@@ -30,14 +30,11 @@ public class QExpenses extends Product implements Impl
     /**
      * 
      */
-    private static final String BUS_OBJ = "Quote";
-    
+    private static final String BUS_OBJ = "Order Entry";
     /**
      * 
      */
-    private static final String BUS_COMP = "Quote Item";
-    
-    
+    private static final String BUS_COMP = "Order Entry - Line Items";
     
     /**
      * 
@@ -49,21 +46,25 @@ public class QExpenses extends Product implements Impl
         try {
             SiebelService s = new SiebelService(CONN);
             
+            set.setProperty(FIELD_LINE_NUMBER, FIELD_LINE_NUMBER);
+            
+            set.setProperty(SHIPMENT_NUMBER, SHIPMENT_NUMBER);
+            
+            //set.setProperty(PLX_LINE_TYPE, PLX_LINE_TYPE);
+            
             set.setProperty(PLX_PRODUCT, PLX_PRODUCT);
+            
+            set.setProperty(PLX_UNIT_OF_MEASURE, PLX_UNIT_OF_MEASURE);
             
             set.setProperty(FIELD_QUANTITY, FIELD_QUANTITY);
             
-            set.setProperty(PLX_INVENTORY, PLX_INVENTORY);
-            
-            set.setProperty(PLX_ITEM_PRICE, PLX_ITEM_PRICE);
-            
-            set.setProperty(PLX_LOT_ID, PLX_LOT_ID);
+            set.setProperty(PLX_UNIT_PRICE, PLX_UNIT_PRICE);
             
             s.setSField(set);
             
             setList = s.getSField(BUS_OBJ, BUS_COMP, this);
             
-            MyLogging.log(Level.INFO, "Creating Objects: " + setList.toString());
+            MyLogging.log(Level.INFO, "Creating Objects: " + setList);
             
             //MyLogging.log(Level.INFO, set.toString());
         } catch (SiebelException ex) {
@@ -81,8 +82,8 @@ public class QExpenses extends Product implements Impl
     @Override
     public void searchSpec(SiebelBusComp sbBC) throws SiebelException 
     {
-        sbBC.setSearchSpec("Quote Id", this.siebelAccountId);   
-        sbBC.setSearchSpec(PRODUCT_TYPE, "Travel Expense");  
+        MyLogging.log(Level.INFO, siebelAccountId);
+        sbBC.setSearchSpec("Order Number", this.siebelAccountId);  
     }
 
     @Override

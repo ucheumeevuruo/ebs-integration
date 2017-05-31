@@ -7,12 +7,11 @@ package com.plexadasi.ebs.SiebelApplication.bin;
 
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.SiebelSearch;
-import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
+import com.plexadasi.ebs.SiebelApplication.objects.Impl.Account;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Impl;
 import com.siebel.data.SiebelBusComp;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
-import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.util.logging.Level;
 
@@ -20,32 +19,24 @@ import java.util.logging.Level;
  *
  * @author SAP Training
  */
-public class Order extends Product implements Impl
+public class PurchaseOrderIndividual extends Account implements Impl
 {
-    private SiebelSearch siebelSearch = null;
-    
-    private SiebelPropertySet setProp;
-    
-    public Order(SiebelDataBean CONN)
+    public PurchaseOrderIndividual(SiebelDataBean CONN)
     {
         super(CONN);
-        siebelSearch = new SiebelSearch(CONN);
     }
     
     /**
      * 
      */
-    private static final String BUS_OBJ = "Order Entry";
+    private static final String BUS_COMP = "Contact";
     
     /**
      * 
      */
-    private static final String BUS_COMP = "Order Entry - Orders";
+    private static final String BUS_OBJ = "Contact";
     
-    public void setPropertySet(String key, String value)
-    {
-        siebelSearch.setSField(key, value);
-    }
+    
     /**
      * 
      * @throws com.siebel.eai.SiebelBusinessServiceException
@@ -53,14 +44,19 @@ public class Order extends Product implements Impl
     @Override
     public void doTrigger() throws SiebelBusinessServiceException
     {
-        setProp = siebelSearch.getSField(BUS_OBJ, BUS_COMP, this);
-
-        MyLogging.log(Level.INFO, "Creating Objects: " + setProp);
-    }
-    
-    public String getProperty(String property)
-    {
-        return setProp.getProperty(property);
+        SiebelSearch s = new SiebelSearch(CONN);
+        
+        s.setSField(ACC_CURRENCY_CODE, BLANK);
+        
+        s.setSField(ACC_PRI_SHIP_TO_ADDR, BLANK);
+        
+        s.setSField(ACC_PRI_BILL_TO_ADDR, BLANK);
+        
+        s.setSField(ACC_ORG_ID, BLANK);
+        
+        set = s.getSField(BUS_OBJ, BUS_COMP, this);
+        
+        MyLogging.log(Level.INFO, set.toString());
     }
     
     /**
@@ -75,5 +71,7 @@ public class Order extends Product implements Impl
     }
 
     @Override
-    public void getExtraParam(SiebelBusComp sbBC) {}
+    public void getExtraParam(SiebelBusComp sbBC) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

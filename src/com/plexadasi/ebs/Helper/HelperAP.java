@@ -61,4 +61,9 @@ public class HelperAP
         AP.setProperties(IProperties.PRICE_ID);
         return AP.getProperty();
     }
+
+    public static String getLineType() throws SiebelBusinessServiceException {
+        AP.setProperties(IProperties.LINE_TYPE);
+        return AP.getProperty();
+    }
 }
