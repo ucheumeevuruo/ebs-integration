@@ -12,11 +12,9 @@ package com.plexadasi.build;
  *
  * @author SAP Training
  */
-import com.plexadasi.ebs.Helper.FileToText;
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.siebel.eai.SiebelBusinessServiceException;
-import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -25,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class EBSSqlData 
@@ -34,12 +33,12 @@ public class EBSSqlData
     private static Statement cs;
     private static PreparedStatement preparedStatement;
     private static final String OS = System.getProperty("os.name").toLowerCase();
-    private static SqlPreparedStatement sql;
+    private static SqlPreparedStatement stmt = null;
     
     public EBSSqlData(Connection connectObj)
     {
         CONN = connectObj;
-        sql = new SqlPreparedStatement(CONN);
+        stmt = new SqlPreparedStatement(CONN);
     }
     
     public String getPartySiteId(String ebs_id) throws SiebelBusinessServiceException
@@ -176,18 +175,20 @@ public class EBSSqlData
         String output = "";
         try {
             
-            String sql = "SELECT SITE_USE_ID FROM HZ_CUST_SITE_USES_ALL\n";
-            sql += "WHERE CUST_ACCT_SITE_ID = (SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND BILL_TO_FLAG = ?)";
-            MyLogging.log(Level.INFO, "SQL For Combination ID :" + sql);
-            preparedStatement = CONN.prepareStatement(sql);
-            preparedStatement.setInt(1, ebs_id);
-            preparedStatement.setString(2, "P");
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) 
-            {
+            stmt.select("SITE_USE_ID").from("HZ_CUST_SITE_USES_ALL")
+            .where(
+                "CUST_ACCT_SITE_ID",
+                "(SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND BILL_TO_FLAG = ?)"
+            ).preparedStatement();
+            stmt.setInt(1, ebs_id);
+            stmt.setString(2, "P");
+            ResultSet rs = stmt.get();
+            while (rs.next()) {
                 output = String.valueOf(rs.getInt("SITE_USE_ID"));
                 MyLogging.log(Level.INFO, "Bill to id:{0}"+ output);
             }
+            rs.close();
+            stmt.close();
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
@@ -198,21 +199,25 @@ public class EBSSqlData
     
     public String shipToAccount(int ebs_id) throws SiebelBusinessServiceException{
         String output = "";
-        
-        try {
-            
-            String sql = "SELECT SITE_USE_ID FROM HZ_CUST_SITE_USES_ALL\n";
-            sql += "WHERE CUST_ACCT_SITE_ID = (SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND SHIP_TO_FLAG = ?)";
-            MyLogging.log(Level.INFO, "SQL For Combination ID :" + sql);
-            preparedStatement = CONN.prepareStatement(sql);
-            preparedStatement.setInt(1, ebs_id);
-            preparedStatement.setString(2, "P");
-            ResultSet rs = preparedStatement.executeQuery();
+        try 
+        {
+            stmt.select("SITE_USE_ID").from("HZ_CUST_SITE_USES_ALL")
+            .where(
+                "CUST_ACCT_SITE_ID",
+                "(SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND SHIP_TO_FLAG = ?)"
+            ).preparedStatement();
+            stmt.setInt(1, ebs_id);
+            stmt.setString(2, "P");
+            ResultSet rs = stmt.get();
             while (rs.next()) {
                 output = String.valueOf(rs.getInt("SITE_USE_ID"));
                 MyLogging.log(Level.INFO, "Ship to id:{0}"+ output);
             }
-        } catch (SQLException ex) {
+            rs.close();
+            stmt.close();
+        }
+        catch (SQLException ex) 
+        {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
@@ -220,31 +225,66 @@ public class EBSSqlData
         return output;
     }
     
+    public String getHeaderId(Integer order_id) throws SiebelBusinessServiceException, SQLException{
+        String output = "";
+        stmt.select("HEADER_ID").from("OE_ORDER_HEADERS_ALL").where("ORDER_NUMBER").preparedStatement();
+        stmt.setInt(1,  order_id);
+        ResultSet get = stmt.get();
+        while(get.next())
+        {
+            output = get.getString("HEADER_ID");
+        }
+        return output;
+    }
+    
+    public String[] getHeaderLineId(Integer order_id, Integer inventory_id) throws SiebelBusinessServiceException, SQLException{
+        String[] output = new String[3];
+        stmt.select(new String[]{"a.LINE_ID", "a.HEADER_ID", "a.ORDERED_QUANTITY"})
+        .from("OE_ORDER_LINES_ALL a")
+        .join("OE_ORDER_HEADERS_ALL b", "b.header_id = a.header_id", "inner")
+        .where("b.order_number")
+        .andWhere("a.INVENTORY_ITEM_ID")
+        .preparedStatement();
+        stmt.setInt(1, order_id);
+        stmt.setInt(2, inventory_id);
+        ResultSet get = stmt.get();
+        while(get.next())
+        {
+            output[0] = get.getString("LINE_ID");
+            output[1] = get.getString("HEADER_ID");
+            output[2] = get.getString("ORDERED_QUANTITY");
+            MyLogging.log(Level.INFO, "LINE_ID:{0}"+ output[0]);
+            MyLogging.log(Level.INFO, "\n HEADER_ID:{0}"+ output[1]);
+            MyLogging.log(Level.INFO, "\n ORDERED_QUANTITY:{0}"+ output[2]);
+        }
+        return output;
+    }
+    
     public String[] orgCode(int ebs_id) throws SiebelBusinessServiceException, SQLException
     {
         String[] output = new String[2];
-        sql.select(new String[]{"a.org_id", "b.organization_code"})
+        stmt.select(new String[]{"a.org_id", "b.organization_code"})
         .from("HZ_CUST_ACCT_SITES_ALL a")
         .join("org_organization_definitions b", "b.organization_id = a.org_id", "left")
         .where("CUST_ACCOUNT_ID")
         .preparedStatement();
-        sql.setInt(1, ebs_id);
-        ResultSet get = sql.get();
+        stmt.setInt(1, ebs_id);
+        ResultSet get = stmt.get();
         while (get.next()) {
-            output[0] = String.valueOf(get.getInt("org_id"));
-            output[1] = String.valueOf(get.getString("organization_code"));
-            MyLogging.log(Level.INFO, "Organization Id:{0}"+ output[0]);
-            MyLogging.log(Level.INFO, "Organization code:{0}"+ output[1]);
+            output[0] = get.getString("org_id");
+            output[1] = get.getString("organization_code");
         }
+        MyLogging.log(Level.INFO, "Organization Id:{0}"+ output[0]);
+        MyLogging.log(Level.INFO, "Organization code:{0}"+ output[1]);
         get.close();
-        sql.close();
+        stmt.close();
         return output;
     }
     
     public boolean updatePriceList(int item_price, int org_id, int inventory_id, int price_list) throws SiebelBusinessServiceException, SQLException
     {
         boolean output;
-        sql.select("spll.LIST_LINE_ID").
+        stmt.select("spll.LIST_LINE_ID").
         from(new String[]{
             "qp_list_headers_b spl",
             "qp_list_lines spll", 
@@ -265,49 +305,75 @@ public class EBSSqlData
         andWhere("qpa.excluder_flag", "'N'").
         andWhere("qpa.pricing_phase_id", "1").
         preparedStatement();
-        sql.setInt(1, 123);
-        sql.setInt(2, 18);
-        sql.setInt(3, 9013);
+        stmt.setInt(1, 123);
+        stmt.setInt(2, 18);
+        stmt.setInt(3, 9013);
         String line_id = "";
-        while (sql.get().next()) {
-            line_id = String.valueOf(sql.get().getInt(1));
+        ResultSet rs = stmt.get();
+        while (rs.next()) {
+            line_id = String.valueOf(rs.getInt(1));
         }
-        sql.get().close();
-        sql.close();
+        stmt.get().close();
+        stmt.close();
         //
-        sql.update("qp_list_lines", new String[]{"OPERAND"})
+        stmt.update("qp_list_lines", new String[]{"OPERAND"})
         .where("LIST_LINE_ID")
         .preparedStatement();
-        sql.setInt(1, item_price);
-        sql.setString(2, String.valueOf(line_id));
-        output = sql.executeUpdate();
-        sql.close();
+        stmt.setInt(1, item_price);
+        stmt.setString(2, String.valueOf(line_id));
+        output = stmt.executeUpdate();
+        stmt.close();
         return output;
     }
     
     public String getTrxNumber(int cust_trx_id) throws SiebelBusinessServiceException, SQLException
     {
         String output = null;
-        sql.select("trx_number").from("RA_CUSTOMER_TRX_ALL").where("customer_trx_id").preparedStatement();
-        sql.setInt(1, cust_trx_id);
-        while (sql.get().next()) 
+        stmt.select("trx_number").from("RA_CUSTOMER_TRX_ALL").where("customer_trx_id").preparedStatement();
+        stmt.setInt(1, cust_trx_id);
+        ResultSet rs = stmt.get();
+        while (rs.next()) 
         {
-            output = String.valueOf(sql.get().getInt("trx_number"));
+            output = String.valueOf(rs.getInt("trx_number"));
             MyLogging.log(Level.INFO, "TRX_NUMBER:{0}"+ output);
         }
-        sql.get().close();
-        sql.close();
+        rs.close();
+        stmt.close();
+        return output;
+    }
+    
+    public String getOrderBookingStatus(String param, String table, String column, String where) throws SiebelBusinessServiceException
+    {
+        String output = "";
+        try {
+            stmt.select(param).from(table).where(column).preparedStatement();
+            stmt.setString(1, where);
+            ResultSet rs = stmt.get();
+            while (rs.next())
+            {
+                try {
+                    output = rs.getString(param);
+                    MyLogging.log(Level.INFO, "Booking status:{0}"+ output);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EBSSqlData.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(EBSSqlData.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return output;
     }
     
     public Boolean setCustReference(int cust_trx_id, String quote_id) throws SiebelBusinessServiceException
     {
         Boolean output;
-        sql.update("RA_CUSTOMER_TRX_ALL", new String[]{"CT_REFERENCE"}).where("CUSTOMER_TRX_ID");
-        sql.setString(1, quote_id);
-        sql.setInt(2, cust_trx_id);
-        output = sql.executeUpdate();
-        sql.close();
+        stmt.update("RA_CUSTOMER_TRX_ALL", new String[]{"CT_REFERENCE"}).where("CUSTOMER_TRX_ID").preparedStatement();
+        stmt.setString(1, quote_id);
+        stmt.setInt(2, cust_trx_id);
+        output = stmt.executeUpdate();
+        stmt.close();
         MyLogging.log(Level.INFO, "Check if update on ct_ref is successful: " + output);
         return output;
     }
@@ -316,7 +382,11 @@ public class EBSSqlData
     {
         EBSSqlData ebs = new EBSSqlData(ApplicationsConnection.connectToEBSDatabase());
         //boolean updatePriceList = ebs.updatePriceList(0, 123, 18, 9013);
-        String[] orgId = ebs.orgCode(35113);//35113 35125
-        MyLogging.log(Level.INFO, String.valueOf(orgId[0]));
+        //String[] orgId = ebs.orgCode(35113);//35113 35125
+        //String status = ebs.getOrderBookingStatus("FLOW_STATUS_CODE", "OE_ORDER_HEADERS_ALL", "ORDER_NUMBER", "156");
+        //String status = ebs.shipToAccount(35113); 
+        ebs.setCustReference(26102, OS);
+        String status = ebs.getTrxNumber(26102);
+        MyLogging.log(Level.INFO, String.valueOf(status));
     }
 }

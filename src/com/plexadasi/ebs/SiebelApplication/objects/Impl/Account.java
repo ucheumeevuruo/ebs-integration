@@ -52,7 +52,35 @@ public abstract class Account
     /**
      * 
      */
+    public static final String ACC_EBS_ID = "EBS Id";
+    /**
+     * 
+     */
     public static final String ACC_STATE_FIELD = "State";
+    /**
+     * 
+     */
+    public static final String ACC_BILL_TO_PRI_COUNTRY_FIELD = "Primary Bill To Country";
+    /**
+     * 
+     */
+    public static final String ACC_BILL_TO_PRI_STATE_FIELD = "Primary Bill To State";
+    /**
+     * 
+     */
+    public static final String ACC_BILL_TO_PRI_CITY_FIELD = "Primary Bill To City";
+    /**
+     * 
+     */
+    public static final String ACC_SHIP_TO_PRI_COUNTRY_FIELD = "Primary Ship To Country";
+    /**
+     * 
+     */
+    public static final String ACC_SHIP_TO_PRI_STATE_FIELD = "Primary Ship To State";
+    /**
+     * 
+     */
+    public static final String ACC_SHIP_TO_PRI_CITY_FIELD = "Primary Ship To City";
     /**
      * 
      */

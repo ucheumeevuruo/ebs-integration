@@ -18,6 +18,7 @@ import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
 import com.plexadasi.order.PurchaseOrderInventory;
 import com.plexadasi.order.SalesOrderInventory;
+import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -27,6 +28,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
 
 
@@ -177,7 +179,7 @@ public class EBSSql {
         }
     }
     
-    public void createSalesOrder(SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
+    public void createSalesOrder(SiebelDataBean sb, SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
     {
         try 
         {
@@ -201,7 +203,7 @@ public class EBSSql {
             cs.setString(11, salesOrder.getStatusCode());
             cs.setString(12, String.valueOf(salesOrder.getSiebelOrderId()));
             cs.setInt(13, salesOrder.getSourceId());
-            cs.setArray(14, salesOrder.getInventoryItem());
+            cs.setArray(14, salesOrder.inventory(sb, CONN).getInventoryItem());
             // Retrieve the out parameters from the procedure call
             cs.registerOutParameter(15, java.sql .Types.VARCHAR);
             cs.registerOutParameter(16, java.sql .Types.VARCHAR);
@@ -242,21 +244,75 @@ public class EBSSql {
         }
     }
     
-    public void createPurchaseOrder(PurchaseOrderInventory poInventory) throws SiebelBusinessServiceException
+    public void cancelSalesOrder(String header_id) throws SiebelBusinessServiceException{
+        try {
+            cs = CONN.prepareCall("{CALL CANCEL_SALES_ORDER(?,?,?,?,?,?,?,?)}");
+            cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
+            cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
+            cs.setString(3, header_id);
+            cs.registerOutParameter(4, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(5, java.sql .Types.INTEGER);
+            cs.registerOutParameter(6, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(7, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(8, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
+            cs.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+    }
+    
+    public void cancelSalesLineOrder(String header_id, String line_id, String quantity_ordered) throws SiebelBusinessServiceException{
+        try {
+            cs = CONN.prepareCall("{CALL CANCEL_LINE_ORDER(?,?,?,?,?,?,?,?,?)}");
+            cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
+            cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
+            cs.setInt(3, DataConverter.toInt(header_id));
+            cs.setInt(4, DataConverter.toInt(line_id));
+            cs.setInt(5, DataConverter.toInt(quantity_ordered));
+            cs.registerOutParameter(6, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(7, java.sql .Types.INTEGER);
+            cs.registerOutParameter(8, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(9, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
+            cs.execute();
+            MyLogging.log(Level.SEVERE, header_id + " " + line_id + " " + quantity_ordered);
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+    }
+    
+    public void createPurchaseOrder(SiebelDataBean sb, PurchaseOrderInventory poInventory) throws SiebelBusinessServiceException
     {
-        sqlContext = "{CALL PURCHASE_ORDER(?,?,?,?,?,?)}";
+        sqlContext = "{CALL PURCHASE_ORDER(?,?,?,?,?,?,?)}";
         try 
         {
-            poInventory.triggers();
+            String shipToCity = poInventory.getShipToCity() != null ? " " + poInventory.getShipToCity() + "," : "";
+            String shipToState = poInventory.getShipToState() != null ? poInventory.getShipToState() : "";
+            String shipToCountry = poInventory.getShipToCountry() != null ? poInventory.getShipToCountry() : "";
+            String billToCity = poInventory.getBillToCity() != null ? " " + poInventory.getBillToCity() + "," : "";
+            String billToState = poInventory.getBillToState() != null ? poInventory.getBillToState() : "";
+            String billToCountry = poInventory.getBillToCountry() != null ? poInventory.getBillToCountry() : "";
             MyLogging.log(Level.INFO, "SQL :" + sqlContext);
             cs = CONN.prepareCall(sqlContext);
             cs.setInt(1, poInventory.getSourceId());
-            cs.setString(2, poInventory.getShipToLocation());
-            cs.setString(3, poInventory.getBillToLocation());
+            cs.setString(2, 
+                poInventory.getShipToLocation() + 
+                shipToCity + " " + 
+                shipToState
+            );
+            cs.setString(3, 
+                poInventory.getBillToLocation() + 
+                billToCity + " " + 
+                billToState
+            );
             cs.setString(4, poInventory.getCurrencyCode());
             cs.setInt(5, poInventory.getAgentCode());
-            cs.setArray(6, poInventory.getInventoryItem());
-            MyLogging.log(Level.INFO, sqlContext);
+            cs.setString(6, poInventory.getOrderNumber());
+            cs.setArray(7, poInventory.inventory(sb, CONN).getInventoryItem());
+            MyLogging.log(Level.INFO, poInventory.toString());
             //cs.registerOutParameter(2, java.sql .Types.VARCHAR);
             //cs.registerOutParameter(3, java.sql .Types.VARCHAR);
             //cs.registerOutParameter(4, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");

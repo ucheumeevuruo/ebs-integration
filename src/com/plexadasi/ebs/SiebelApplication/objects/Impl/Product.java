@@ -109,7 +109,7 @@ public abstract class Product
     /**
      * 
      */
-    public static final String PLX_AGENT_ID = "PLX Primary Sales Rep Id";
+    public static final String PLX_AGENT_ID = "PLX Agent Id";
     /**
      * 
      */

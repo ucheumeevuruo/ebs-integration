@@ -25,7 +25,7 @@ public class EBSAccountTest
         Connection ebs = ApplicationsConnection.connectToEBSDatabase();
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
         EBSAccount ebsAccount = new EBSAccount();
-        ebsAccount.doInvoke("1-2DJHR", "34126", "account", sb, ebs);//1-1SC-78
+        ebsAccount.doInvoke("1-1U30H", "35130", "account", sb, ebs);//1-1SC-78
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getBillToId()));
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getShipToId()));
         ebs.close();

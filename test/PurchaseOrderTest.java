@@ -1,5 +1,6 @@
 
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
+import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.order.PurchaseOrder;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.beans.PropertyVetoException;
 import com.plexadasi.order.PurchaseOrderInventory;
+import java.util.logging.Level;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -25,14 +27,15 @@ public class PurchaseOrderTest
         Connection ebs = ApplicationsConnection.connectToEBSDatabase();
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
         PurchaseOrder pOrder = new PurchaseOrder();
-        PurchaseOrderInventory poInventory = new PurchaseOrderInventory(sb, ebs);
+        PurchaseOrderInventory poInventory = new PurchaseOrderInventory();
         poInventory.setAccountType("organization");
-        poInventory.setSiebelOrderId("1-2KBRL");
-        poInventory.setSiebelAccountId("1-22FBL");
-        poInventory.setEbsId("35113");
+        poInventory.setSiebelOrderId("1-2P4M4");
+        poInventory.setSiebelAccountId("1-2CIZO");
         poInventory.setSourceId(97);
-        pOrder.doInvoke(poInventory);
-        //MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getReturnStatus()) + " Order Number:" + ebsAccount.getOrderNumber());
+        pOrder.doInvoke(poInventory, sb, ebs);
+        String po = pOrder.getPurchaseOrderBookingStatus(ebs, "1-4307601");
+        
+        MyLogging.log(Level.INFO, "Done: " + po);
         ebs.close();
         sb.logoff();
     }

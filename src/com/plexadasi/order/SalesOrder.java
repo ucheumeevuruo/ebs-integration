@@ -6,6 +6,7 @@
 package com.plexadasi.order;
 
 import com.plexadasi.build.EBSSql;
+import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.Helper.DataConverter;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.siebel.data.SiebelDataBean;
@@ -24,8 +25,8 @@ import java.util.logging.Level;
  * @author SAP Training
  */
 public class SalesOrder {
-    private static Connection EBS_CONN = null;
-    private static SiebelDataBean SIEBEL_CONN = new SiebelDataBean();
+    private Connection EBS_CONN = null;
+    private SiebelDataBean SIEBEL_CONN = new SiebelDataBean();
     private static final StringWriter ERROR = new StringWriter();
     private Integer integerOutput;
     private String stringOutput;
@@ -33,12 +34,13 @@ public class SalesOrder {
     private String returnValue = "";
     private String statusCode;
     private String orderNumber;
-    private static EBSSql e;
+    private EBSSql e = null;
+    private String line_order_status_code;
     
-    public void doInvoke(SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
+    public void doInvoke(SalesOrderInventory salesOrder, SiebelDataBean sb, Connection ebs) throws SiebelBusinessServiceException
     {
-        SIEBEL_CONN = salesOrder.getSiebelConnection();
-        EBS_CONN = salesOrder.getEbsConnection();
+        SIEBEL_CONN = sb;
+        EBS_CONN = ebs;
         if(SIEBEL_CONN == null)
         {
             MyLogging.log(Level.SEVERE, "Connection to siebel cannot be established.");
@@ -49,7 +51,10 @@ public class SalesOrder {
             MyLogging.log(Level.SEVERE, "Connection to ebs cannot be established.");
             throw new SiebelBusinessServiceException("NULL_DEF", "Connection to ebs cannot be established.");
         }
-        e = new EBSSql(EBS_CONN);
+        if(e == null)
+        {
+            e = new EBSSql(EBS_CONN);
+        }
         generateSalesOrder(salesOrder);
         generateOrderReservation();
     }
@@ -74,6 +79,20 @@ public class SalesOrder {
         return DataConverter.toInt(orderNumber);
     }
     
+    public String getSalesOrderBookingStatus(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
+    {
+        return new EBSSqlData(ebsConn).getOrderBookingStatus(
+            "FLOW_STATUS_CODE", 
+            "OE_ORDER_HEADERS_ALL", 
+            "ORDER_NUMBER", 
+            order_num
+        );
+    }
+    
+    public String getOrderLineBookngStatus(){
+        return this.line_order_status_code;
+    }
+    
     private void generateSalesOrder(SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
     {
         try 
@@ -81,7 +100,7 @@ public class SalesOrder {
             List<SalesOrderInventory> list = new ArrayList();
             list.add(salesOrder);
             MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + list);
-            e.createSalesOrder(salesOrder);
+            e.createSalesOrder(SIEBEL_CONN, salesOrder);
             returnValue = e.getString(15);
             Array arr = e.getArray(18);
             statusCode = e.getString(19);
@@ -140,6 +159,72 @@ public class SalesOrder {
                 ex.printStackTrace(new PrintWriter(ERROR));
                 MyLogging.log(Level.SEVERE, "Caught Null Pointer Exception:" + ERROR.toString());
                 throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ex.getMessage()); 
+            }
+        }
+        else
+        {
+            MyLogging.log(Level.SEVERE, "Cannot reserve order.");
+        }
+    }
+    
+    public void cancelOrder(Connection ebsConn, Integer order_number) throws SiebelBusinessServiceException, SQLException{
+        EBSSqlData ebsData = new EBSSqlData(ebsConn);
+        String ret = ebsData.getHeaderId(order_number);
+        MyLogging.log(Level.SEVERE, "Order Number:" + ret);
+        if(ret.length() == 0){
+            throw new SiebelBusinessServiceException("NUM_EXCEPT", "Invalid order number. Please check your order number and try again.");
+        }
+        e = new EBSSql(ebsConn);
+        e.cancelSalesOrder(ret);
+        returnValue = e.getString(4);
+        this.statusCode = e.getString(7);
+        Array arr = e.getArray(8);
+        String[] data = new String[]{};
+        if (arr != null) 
+        {
+           data = (String[]) arr.getArray();
+        }
+        MyLogging.log(Level.INFO, "----------------------------Return message--------------------------");
+        for (String data1 : data) 
+        {
+            hList.add(data1);
+            MyLogging.log(Level.INFO, data1);
+        }
+    }
+    
+    public void cancelLineOrder(Connection ebsConn, Integer order_number, Integer inventory_id) throws SiebelBusinessServiceException, SQLException{
+        EBSSqlData ebsData = new EBSSqlData(ebsConn);
+        String[] ret = ebsData.getHeaderLineId(order_number, inventory_id);
+        if(ret.length == 0){
+            throw new SiebelBusinessServiceException("NUM_EXCEPT", "Inventory does not exists. Please check your order number and try again.");
+        }
+        String header, line_id, quantity_ordered;
+        line_id = ret[0];
+        header = ret[1];
+        quantity_ordered = ret[2];
+        e = new EBSSql(ebsConn);
+        e.cancelSalesLineOrder(header, line_id, quantity_ordered);
+        this.returnValue = e.getString(6);
+        //this.statusCode = e.getString(7);
+        Array arr = e.getArray(9);
+        this.line_order_status_code = new EBSSqlData(ebsConn).getOrderBookingStatus(
+            "FLOW_STATUS_CODE", 
+            "OE_ORDER_LINES_ALL", 
+            "LINE_ID", 
+            line_id
+        );
+        String[] data = new String[]{};
+        if (arr != null) 
+        {
+           data = (String[]) arr.getArray();
+        }
+        MyLogging.log(Level.INFO, "########################### PROCESS INFO #############################");
+        if(!this.returnValue.equalsIgnoreCase("s")){
+            MyLogging.log(Level.INFO, "----------------------------Return message--------------------------");
+            for (String data1 : data) 
+            {
+                hList.add(data1);
+                MyLogging.log(Level.INFO, data1);
             }
         }
     }

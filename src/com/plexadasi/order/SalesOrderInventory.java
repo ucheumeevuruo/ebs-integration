@@ -5,20 +5,9 @@
  */
 package com.plexadasi.order;
 
-import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.Helper.DataConverter;
-import com.plexadasi.ebs.Helper.HelperAP;
-import com.plexadasi.ebs.SiebelApplication.MyLogging;
-import com.plexadasi.ebs.SiebelApplication.bin.SalesOrder;
+import com.plexadasi.ebs.SiebelApplication.bin.SOInventory;
 import com.siebel.data.SiebelDataBean;
-import com.siebel.eai.SiebelBusinessServiceException;
-import java.sql.Array;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.logging.Level;
-import oracle.sql.ARRAY;
-import oracle.sql.ArrayDescriptor;
 
 
 /**
@@ -38,18 +27,7 @@ public class SalesOrderInventory {
     private String statusCode;
     private String purchaseOrderNumber;
     private Integer sourceId;
-    private Array inventoryItem;
-    private SiebelDataBean siebConn = null;
-    private Connection ebsConn = null;
     private String siebelOrderId;
-    EBSSqlData ebsData = null;
-    
-    public SalesOrderInventory(SiebelDataBean s, Connection e)
-    {
-        siebConn = s;
-        ebsConn = e;
-        ebsData = new EBSSqlData(e);
-    }
     
     public void setSiebelOrderId(String orderId) 
     {
@@ -209,6 +187,11 @@ public class SalesOrderInventory {
     {
         return sourceId;
     }
+    
+    public SOInventory inventory(SiebelDataBean sb, Connection ebs)
+    {
+        return new SOInventory(sb, ebs, this);
+    }
 
     /**
      * @param sourceId the sourceId to set
@@ -216,53 +199,6 @@ public class SalesOrderInventory {
     public void setSourceId(Integer sourceId)
     {
         this.sourceId = sourceId;
-    }
-
-    /**
-     * @return the inventoryItem
-     * @throws com.siebel.eai.SiebelBusinessServiceException
-     * @throws java.sql.SQLException
-     */
-    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException 
-    {
-        SalesOrder sales = new SalesOrder(siebConn);
-        sales.setSiebelAccountId(siebelOrderId);
-        shipToOrgId = ebsData.shipToAccount(soldToOrgId);
-        sales.doTrigger();
-        ArrayDescriptor desc = ArrayDescriptor.createDescriptor("PRODUCT", ebsConn);
-        int toSize  = sales.getList().size();
-        String[][] stringArray = new String[toSize][3];
-        for (int i = 0; i < toSize; i++) 
-        {
-            Map<String, String> map = sales.getList().get(i);
-            String inventoryId = map.get(SalesOrder.PLX_INVENTORY);
-            Integer itemPrice = DataConverter.toInt(map.get(SalesOrder.PLX_ITEM_PRICE));
-            Integer lot_id = DataConverter.toInt(map.get(SalesOrder.PLX_LOT_ID));
-            String product = map.get(SalesOrder.PLX_PRODUCT);
-            priceId = DataConverter.toInt(HelperAP.getPriceListID());
-            stringArray[i][0] = inventoryId;
-            stringArray[i][1] = map.get(SalesOrder.FIELD_QUANTITY);
-            stringArray[i][2] = shipToOrgId;
-            boolean isUpdated = ebsData.updatePriceList(itemPrice, lot_id, DataConverter.toInt(inventoryId), priceId);
-            if(isUpdated)
-            {
-                MyLogging.log(Level.INFO, "Inventory with name " + product + " updated successfully");
-            }
-            else
-            {
-                MyLogging.log(Level.INFO, "Inventory " + product + " does not exists in table QP_LIST_LINES");  
-            }
-        }
-        inventoryItem = new ARRAY(desc, ebsConn, stringArray);
-        return inventoryItem;
-    }
-
-    /**
-     * @param inventoryItem the inventoryItem to set
-     */
-    public void setInventoryItem(Array inventoryItem)
-    {
-        this.inventoryItem = inventoryItem;
     }
     
     @Override
@@ -282,15 +218,5 @@ public class SalesOrderInventory {
         output += "\t\t[Purchase order number=" + purchaseOrderNumber + "]\n";
         output += "\t\t[Source id=" + sourceId + "]\n";
         return getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
-    }
-
-    public SiebelDataBean getSiebelConnection() 
-    {
-        return siebConn;
-    }
-
-    public Connection getEbsConnection() 
-    {
-        return ebsConn;
     }
 }

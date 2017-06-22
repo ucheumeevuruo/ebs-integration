@@ -80,6 +80,7 @@ public class CreateInvoice
             createSql.setProperty(input);
             ebsSql.createInvoiceQuote(createSql);
             int cust_trx_id = ebsSql.getInt(1);
+            MyLogging.log(Level.INFO, "Customer transaction Id: " + cust_trx_id);
             if(ebsSqlData.setCustReference(cust_trx_id, acc_id))
             {
                 output = DataConverter.toInt(ebsSqlData.getTrxNumber(cust_trx_id));

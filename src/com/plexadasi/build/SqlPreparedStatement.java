@@ -16,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,7 +27,7 @@ public class SqlPreparedStatement
     private static Connection CONN;
     private static Statement cs;
     private static PreparedStatement preparedStatement;
-    protected static String sqlQuery = "";
+    protected String sqlQuery = "";
     protected static ResultSet rs = null;
     protected String setString = "";
     protected int length = 0;
@@ -60,6 +59,8 @@ public class SqlPreparedStatement
         try 
         {
             preparedStatement = CONN.prepareStatement(sqlQuery);
+            MyLogging.log(Level.SEVERE, "Sql Query Statement:"+sqlQuery);
+            sqlQuery = "";
             MyLogging.log(Level.INFO, sqlQuery);
         } 
         catch (SQLException ex) {
@@ -205,6 +206,7 @@ public class SqlPreparedStatement
     public SqlPreparedStatement set(String[] param) throws SQLException
     {
         length = param.length;
+        setString = "";
         returnInteger = 0;
         if(length <= 0)
         {
@@ -253,18 +255,17 @@ public class SqlPreparedStatement
         return this;
     }
     
-    public ResultSet get()
+    public ResultSet get() throws SiebelBusinessServiceException
     {
         try 
         {
-            if(rs == null)
-            {
-                rs = preparedStatement.executeQuery();
-            }
+            rs = preparedStatement.executeQuery();
         } 
         catch (SQLException ex) 
         {
-            Logger.getLogger(SqlPreparedStatement.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
         return rs;
     }
@@ -275,16 +276,17 @@ public class SqlPreparedStatement
         return this;
     }
     
-    public void close()
+    public void close() throws SiebelBusinessServiceException
     {
         try 
         {
-            sqlQuery = "";
             preparedStatement.close();
         } 
         catch (SQLException ex) 
         {
-            Logger.getLogger(SqlPreparedStatement.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
     }
 }

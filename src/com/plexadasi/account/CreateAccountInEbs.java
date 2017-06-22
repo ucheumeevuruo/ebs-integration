@@ -100,7 +100,7 @@ public class CreateAccountInEbs
             party.setProperty("module", "BO_API");
             e.createPartySite(party);
             partySiteId = e.getInt(1);
-            checkPoint(e.getString(2));
+            checkPoint(e.getString(3));
             MyLogging.log(Level.INFO, "Party site Id : " + partySiteId);
             // Instanciate the site usage
             SiteUsage siteUsage = new SiteUsage();
@@ -156,7 +156,7 @@ public class CreateAccountInEbs
     private void checkPoint(String checkPoint) throws SQLException
     {
         MyLogging.log(Level.INFO, "Return value at check point is " + checkPoint + " where (S) is success and (E) is failure.");
-        if(checkPoint.equalsIgnoreCase("e"))
+        if(!checkPoint.equalsIgnoreCase("s"))
         {
            throw new SQLException("There was error processing information");
         }

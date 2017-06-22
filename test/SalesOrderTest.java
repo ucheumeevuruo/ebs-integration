@@ -1,4 +1,5 @@
 
+import com.plexadasi.ebs.Helper.DataConverter;
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.order.SalesOrder;
@@ -29,8 +30,8 @@ public class SalesOrderTest
         Connection ebs = ApplicationsConnection.connectToEBSDatabase();
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
         SalesOrder ebsAccount = new SalesOrder();
-        SalesOrderInventory s = new SalesOrderInventory(sb, ebs);
-        s.setSiebelOrderId("1-3129373");
+        SalesOrderInventory s = new SalesOrderInventory();
+        s.setSiebelOrderId("1-3450762");
         s.setOrderId(1001);//fixed
         s.setSoldToOrgId(35125);//ebs customer id 35113
         s.setShipToOrgId(16165);// site use id
@@ -47,8 +48,17 @@ public class SalesOrderTest
         List<SalesOrderInventory> list = new ArrayList();
         list.add(s);
         MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + list);
-        ebsAccount.doInvoke(s);
+        ebsAccount.doInvoke(s, sb, ebs);
+        ebsAccount.getSalesOrderBookingStatus(ebs, String.valueOf(ebsAccount.getOrderNumber()));
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getReturnStatus()) + " Order Number:" + ebsAccount.getOrderNumber());
+        ebsAccount.cancelOrder(ebs, 234);
+        ebsAccount.cancelLineOrder(ebs, 233, 14);
+        List<String> ht = ebsAccount.getReturnMessages();
+        String returns = "";
+        for (String ht1 : ht) {
+            returns += ht1 + "\n";
+        }
+        MyLogging.log(Level.INFO, "Done Cancel: " + String.valueOf(ebsAccount.getReturnStatus()) + " Return Message:" + returns + " Return Flow Status Code:" + ebsAccount.getOrderLineBookngStatus());
         ebs.close();
         sb.logoff();
     }

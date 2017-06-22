@@ -52,7 +52,19 @@ public class PurchaseOrderIndividual extends Account implements Impl
         
         s.setSField(ACC_PRI_BILL_TO_ADDR, BLANK);
         
-        s.setSField(ACC_ORG_ID, BLANK);
+        s.setSField(ACC_EBS_ID, BLANK);
+        
+        s.setSField(ACC_BILL_TO_PRI_CITY_FIELD, BLANK);
+        
+        s.setSField(ACC_BILL_TO_PRI_STATE_FIELD, BLANK);
+        
+        s.setSField(ACC_BILL_TO_PRI_COUNTRY_FIELD, BLANK);
+        
+        s.setSField(ACC_SHIP_TO_PRI_CITY_FIELD, BLANK);
+        
+        s.setSField(ACC_SHIP_TO_PRI_STATE_FIELD, BLANK);
+        
+        s.setSField(ACC_SHIP_TO_PRI_COUNTRY_FIELD, BLANK);
         
         set = s.getSField(BUS_OBJ, BUS_COMP, this);
         
