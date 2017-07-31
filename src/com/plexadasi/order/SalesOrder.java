@@ -104,7 +104,7 @@ public class SalesOrder {
             returnValue = e.getString(15);
             Array arr = e.getArray(18);
             statusCode = e.getString(19);
-            orderNumber = e.getString(20).replace(" ", "");
+            orderNumber = (e.getString(20) == null) ? "0" : e.getString(20).replace(" ", "");
             String[] data = new String[]{};
             if (arr != null) 
             {
@@ -150,7 +150,7 @@ public class SalesOrder {
                 MyLogging.log(Level.INFO, "----------------------------Return Reserved message--------------------------");
                 for (String data1 : data) 
                 {
-                    //hList.add(data1);
+                    hList.add(data1);
                     MyLogging.log(Level.INFO, data1);
                 }
             } 

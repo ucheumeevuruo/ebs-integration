@@ -28,7 +28,6 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
 
 
@@ -194,7 +193,7 @@ public class EBSSql {
             cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
             cs.setInt(3, salesOrder.getOrderId());  
             cs.setInt(4, orgId);
-            cs.setInt(5, DataConverter.toInt(shipToOrgId)); 
+            cs.setInt(5, DataConverter.toInt(shipToOrgId));
             cs.setInt(6, DataConverter.toInt(billToOrgId));
             cs.setInt(7, salesOrder.getSoldFromId());
             cs.setInt(8, salesOrder.getSalesRepId());

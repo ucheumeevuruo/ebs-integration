@@ -53,7 +53,7 @@ public abstract class Product
     /**
      * 
      */
-    public static final String PLX_LOT_ID  = "Lot#";
+    public static final String PLX_LOT_ID  = "PLX Warehouse#";
     /**
      * 
      */

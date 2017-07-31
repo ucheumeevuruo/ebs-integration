@@ -239,7 +239,7 @@ public class PurchaseOrderInventory
         returnString = "";
         returnString += "\t\t[Siebel order number=" + siebelOrderNumber + "\n";
         returnString += "\t\t[Siebel order id=" + siebelOrderId + "\n";
-        returnString += "\t\t[Siebel sccount id=" + siebelAccountId + "\n";
+        returnString += "\t\t[Siebel account id=" + siebelAccountId + "\n";
         returnString += "\t\t[Account type=" + accountType + "\n";
         returnString += "\t\t[Ebs id=" + getEbsId()+ "\n";
         returnString += "\t\t[Organization id=" + organization[0] + "\n";
