@@ -33,17 +33,17 @@ public class CreateInvoiceTest
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException
     {
         InvoiceObject input = new InvoiceObject();
-        input.setBillToId("28116");
+        input.setBillToId("34151");
         input.setTrxDistId("");
         input.setTrxDate("sysdate");
         input.setTrxCurrency("NGN");
         input.setTermId("1002");
         input.setPrimarySalesId("100000040");
         input.setCustomerTrxTypeId("1003");
-        input.setCtRef("1-1YWWV");
+        input.setCtRef("1-55LW2");
         Connection ebs = ApplicationsConnection.connectToEBSDatabase();
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
-        Integer output = CreateInvoice.doInvoke("1-1YWPS", input, "Quote", sb, ebs);
+        Integer output = CreateInvoice.doInvoke("1-55LW2", input, "Quote", sb, ebs);
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(output));
         ebs.close();
         sb.logoff();

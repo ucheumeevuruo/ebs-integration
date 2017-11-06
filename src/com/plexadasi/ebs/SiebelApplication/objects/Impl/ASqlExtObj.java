@@ -146,23 +146,23 @@ abstract public class ASqlExtObj implements ImplSql
         {
             int num = addNum == true ? i + 1 : 1;
             Map<String, String> item = List.get(i);
-            int inventoryId = DataConverter.toInt(item.get("Product Inventory Item Id"));
+            int inventoryId = DataConverter.toInt(item.get(Product.PLX_INVENTORY));
             if(inventoryId <= 0)
             {
                 MyLogging.log(Level.SEVERE, "Inventory cannot be empty. Please check and try again.");
                 throw new SiebelBusinessServiceException("NO_INVENTORY_ID", "Inventory cannot be empty. Please check and try again.");
             }
-            int org_id = DataConverter.toInt(item.get("Lot#"));
+            int org_id = DataConverter.toInt(item.get(Product.PLX_LOT_ID));
             int codeCombinationId = DataConverter.toInt(ebsSqlData.getCombinationId(inventoryId, org_id));
             invoiceItemsBody += "-- Initializing the Mandatory API parameters" + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").trx_header_id := " + trx_header_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").line_number := " + line_number + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").inventory_item_id := " + inventoryId + NEXT_LINE_COL;
-            invoiceItemsBody += L_TRX_LINES + "(" + num + ").quantity_invoiced := " + DataConverter.toInt(item.get("Quantity")) + NEXT_LINE_COL;
-            invoiceItemsBody += L_TRX_LINES + "(" + num + ").unit_selling_price := " + DataConverter.toInt(item.get("Item Price")) + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_LINES + "(" + num + ").quantity_invoiced := " + DataConverter.toInt(item.get(Product.FIELD_QUANTITY)) + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_LINES + "(" + num + ").unit_selling_price := " + Float.parseFloat(item.get(Product.PLX_ITEM_PRICE)) + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").line_type := 'LINE'" + NEXT_LINE_COL;
-            invoiceItemsBody += L_TRX_LINES + "(" + num + ").TAX_RATE := " + DataConverter.toInt(item.get("Discount Amount")) + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_LINES + "(" + num + ").TAX_RATE := " + DataConverter.toInt(item.get(Product.PLX_DISCOUNT_AMOUNT)) + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_DIST + "(" + num + ").trx_dist_id := " + trx_dist_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_DIST + "(" + num + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_DIST + "(" + num + ").account_class := 'REV'" + NEXT_LINE_COL;

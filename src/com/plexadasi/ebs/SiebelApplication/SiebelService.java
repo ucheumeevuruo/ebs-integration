@@ -7,7 +7,6 @@ import com.siebel.data.SiebelBusObject;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
 import com.siebel.data.SiebelPropertySet;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +28,9 @@ public class SiebelService {
     /**
      *
      */
-    protected static SiebelDataBean sdb;
+    protected static SiebelDataBean sdb = new SiebelDataBean();
+    protected SiebelBusObject sbBO = new SiebelBusObject();
+    protected SiebelBusComp sbBC = new SiebelBusComp();
     private StringWriter errors;
     protected static SiebelPropertySet properties, values;
     protected Integer beginCount = 1;
@@ -39,7 +40,7 @@ public class SiebelService {
         sdb = conn;
     }
     
-    public static SiebelDataBean getService() throws IOException
+    public SiebelDataBean getService()
     {
         return sdb;
     }
@@ -57,8 +58,8 @@ public class SiebelService {
     public List<Map<String, String>> getSField(String bO, String bC, Impl qM) throws SiebelException
     {
 
-        SiebelBusObject sbBO = sdb.getBusObject(bO); 
-        SiebelBusComp sbBC = sbBO.getBusComp(bC);
+        sbBO = sdb.getBusObject(bO); 
+        sbBC = sbBO.getBusComp(bC);
         List<Map<String, String>> List;
         values = sdb.newPropertySet();
         sbBC.setViewMode(3);

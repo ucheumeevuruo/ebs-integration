@@ -31,17 +31,17 @@ public class SalesOrderTest
         SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
         SalesOrder ebsAccount = new SalesOrder();
         SalesOrderInventory s = new SalesOrderInventory();
-        s.setSiebelOrderId("1-3746273");
+        s.setSiebelOrderId("1-8696928");
         s.setOrderId(1001);//fixed
-        s.setSoldToOrgId(31126);//ebs customer id 35113
-        s.setShipToOrgId(16165);// site use id
-        s.setInvoiceId(16164);// site use id
+        s.setSoldToOrgId(53133);//ebs customer id 35113
+        s.setShipToOrgId(34152);// site use id
+        s.setInvoiceId(34151);// site use id
         s.setSoldFromId(124);
         s.setSalesRepId(100000040);
         //s.setPriceId(9013);
         s.setTransactionCode("NGN");
         s.setStatusCode("ENTERED");
-        s.setPurchaseOrderNumber("1-3129373");
+        s.setPurchaseOrderNumber("1-8696940");
         s.setSourceId(0);
         // To print out the values passed to the object Sales Order Inventory
         // I created an output that writes the object as string.
@@ -49,17 +49,19 @@ public class SalesOrderTest
         list.add(s);
         MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + list);
         ebsAccount.doInvoke(s, sb, ebs);
-        //ebsAccount.getSalesOrderBookingStatus(ebs, String.valueOf(ebsAccount.getOrderNumber()));
+        ebsAccount.getSalesOrderBookingStatus(ebs, String.valueOf(ebsAccount.getOrderNumber()));
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getReturnStatus()) + " Order Number:" + ebsAccount.getOrderNumber() + ebsAccount.getFlowStatusCode());
         //ebsAccount.cancelOrder(ebs, 234);
         //ebsAccount.cancelLineOrder(ebs, 233, 14);
-        List<String> ht = ebsAccount.getReturnMessages();
+        //List<String> ht = ebsAccount.getReturnMessages();
         String returns = "";
-        for (String ht1 : ht) {
+        String onHand = ebsAccount.onHandStatus(ebs, 233, 14);
+        MyLogging.log(Level.INFO, onHand);
+        /*for (String ht1 : ht) {
             returns += ht1 + "\n";
         }
         //MyLogging.log(Level.INFO, "Done Cancel: " + String.valueOf(ebsAccount.getReturnStatus()) + " Return Message:" + returns + " Return Flow Status Code:" + ebsAccount.getSalesOrderBookingStatus(ebs, returns));
-        ebs.close();
+        */ebs.close();
         sb.logoff();
     }
 }

@@ -35,7 +35,7 @@ public class SOInventory {
     private final String sqlName = "PRODUCT";
     private String[][] stringArray;
     private int length = 0;
-    private final int maxLength = 3;
+    private final int maxLength = 4;
     
     public SOInventory(SiebelDataBean sb, Connection ebs, SalesOrderInventory sO)
     {
@@ -64,15 +64,16 @@ public class SOInventory {
         for (int i = 0; i < length; i++) 
         {
             Map<String, String> map = sales.getList().get(i);
-            String inventoryId = map.get(SalesOrder.PLX_INVENTORY);
-            Integer itemPrice = DataConverter.toInt(map.get(SalesOrder.PLX_ITEM_PRICE));
-            Integer lot_id = DataConverter.toInt(map.get(SalesOrder.PLX_LOT_ID));
+            String partNumber = map.get(SalesOrder.PLX_PART_NUMBER);
+            Float itemPrice = Float.parseFloat(map.get(SalesOrder.PLX_ITEM_PRICE));
+            String lot_id = (map.get(SalesOrder.PLX_LOT_ID));
             String product = map.get(SalesOrder.PLX_PRODUCT);
             priceId = DataConverter.toInt(HelperAP.getPriceListID());
-            stringArray[i][0] = inventoryId;
+            stringArray[i][0] = partNumber;
             stringArray[i][1] = map.get(SalesOrder.FIELD_QUANTITY);
             stringArray[i][2] = shipToOrgId;
-            boolean isUpdated = ebsData.updatePriceList(itemPrice, lot_id, DataConverter.toInt(inventoryId), priceId);
+            stringArray[i][3] = lot_id;
+            boolean isUpdated = ebsData.updatePriceList(itemPrice, DataConverter.toInt(lot_id), (partNumber), priceId);
             if(isUpdated)
             {
                 MyLogging.log(Level.INFO, "Inventory with name " + product + " updated successfully");

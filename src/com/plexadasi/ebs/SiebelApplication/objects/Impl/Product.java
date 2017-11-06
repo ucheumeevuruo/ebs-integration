@@ -36,6 +36,10 @@ public abstract class Product
     /**
      * 
      */
+    public static final String PLX_PART_NUMBER = "Part Number";
+    /**
+     * 
+     */
     public static final String FIELD_QUANTITY = "Quantity";
     
     /**
@@ -53,7 +57,12 @@ public abstract class Product
     /**
      * 
      */
-    public static final String PLX_LOT_ID  = "PLX Warehouse#";
+    public static final String PLX_LOT_ID  = "PLX Lot#";
+    /**
+     * 
+     *
+     */
+    public static final String LOT_ID = "Lot#";
     /**
      * 
      */
@@ -62,6 +71,10 @@ public abstract class Product
      * 
      */
     public static final String PLX_UNIT_PRICE = "Unit Price";
+    /**
+     * 
+     */
+    public static final String PLX_DUE_DATE = "Requested Ship Date";
     /**
      * 
      */
@@ -85,7 +98,15 @@ public abstract class Product
     /**
      * 
      */
+    public static final String PLX_DISCOUNT_AMOUNT = "Discount Amount";
+    /**
+     * 
+     */
     public static final String PLX_INVENTORY = "Product Inventory Item Id";
+    /**
+     * 
+     */
+    public static final String PLX_QUANTITY_AVAILABLE = "Available Quantity";
     /**
      * 
      */

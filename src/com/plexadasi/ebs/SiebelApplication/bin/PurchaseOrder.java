@@ -52,7 +52,9 @@ public class PurchaseOrder extends Product implements Impl
             
             //set.setProperty(PLX_LINE_TYPE, PLX_LINE_TYPE);
             
-            set.setProperty(PLX_PRODUCT, PLX_PRODUCT);
+            set.setProperty(PLX_LOT_ID, PLX_LOT_ID);
+            
+            set.setProperty(PLX_PART_NUMBER, PLX_PART_NUMBER);
             
             set.setProperty(PLX_UNIT_OF_MEASURE, PLX_UNIT_OF_MEASURE);
             

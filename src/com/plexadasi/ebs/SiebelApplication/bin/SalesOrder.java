@@ -5,15 +5,19 @@
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
+import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.SiebelService;
+import com.plexadasi.ebs.SiebelApplication.SiebelServiceClone;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Impl;
 import com.siebel.data.SiebelBusComp;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
+import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.logging.Level;
 
 /**
@@ -46,12 +50,13 @@ public class SalesOrder extends Product implements Impl
     @Override
     public void doTrigger() throws SiebelBusinessServiceException
     {
-        try {
+        try 
+        {
             SiebelService s = new SiebelService(CONN);
             
             set.setProperty(PLX_PRODUCT, PLX_PRODUCT);
             
-            set.setProperty(PLX_INVENTORY, PLX_INVENTORY);
+            set.setProperty(PLX_PART_NUMBER, PLX_PART_NUMBER);
             
             set.setProperty(FIELD_QUANTITY, FIELD_QUANTITY);
             
@@ -69,7 +74,41 @@ public class SalesOrder extends Product implements Impl
         } catch (SiebelException ex) {
             ex.printStackTrace(new PrintWriter(error));
             MyLogging.log(Level.SEVERE, "Caught Siebel Exception Line in doTrigger: " + error.toString());
-            throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", error.toString()); 
+            throw new SiebelBusinessServiceException("SiebelException", error.toString()); 
+        }
+    }
+    
+    public void onHandQuantities(Connection ebsConn, String warehouse) throws SiebelBusinessServiceException
+    {
+        try 
+        {
+            SiebelServiceClone s = new SiebelServiceClone(CONN);
+            EBSSqlData ebs = new EBSSqlData(ebsConn);
+            SiebelPropertySet values = CONN.newPropertySet();
+            set.setProperty(PLX_PART_NUMBER, PLX_PART_NUMBER);
+            //set.setProperty(PLX_LOT_ID, PLX_LOT_ID);
+            set.setProperty(PLX_PRODUCT, PLX_PRODUCT);
+            s.setSField(set);
+            SiebelBusComp sbBC = s.fields(BUS_OBJ, BUS_COMP, this).getBusComp();
+            boolean isRecord = sbBC.firstRecord();
+            while (isRecord)
+            {
+                sbBC.getMultipleFieldValues(set, values);
+                MyLogging.log(Level.INFO, String.valueOf(values));
+                String partNumber = values.getProperty(PLX_PART_NUMBER);
+                //Integer inventoryId = Integer.parseInt(values.getProperty(PLX_INVENTORY));
+                //Integer warehouse = Integer.parseInt(values.getProperty(PLX_LOT_ID));
+                Integer onHandQuantity = ebs.getOnHandQuantity(partNumber, Integer.parseInt(warehouse));
+                MyLogging.log(Level.INFO, "On Hand Quantity: " + String.valueOf(onHandQuantity));
+                sbBC.setFieldValue(PLX_QUANTITY_AVAILABLE, String.valueOf(onHandQuantity));
+                isRecord = sbBC.nextRecord();
+            }
+            sbBC.writeRecord();
+            s.release();
+        } catch (SiebelException ex) {
+            ex.printStackTrace(new PrintWriter(error));
+            MyLogging.log(Level.SEVERE, "Caught Siebel Exception Line in doTrigger: " + error.toString());
+            throw new SiebelBusinessServiceException("SiebelException", error.toString()); 
         }
     }
     
@@ -82,6 +121,7 @@ public class SalesOrder extends Product implements Impl
     public void searchSpec(SiebelBusComp sbBC) throws SiebelException 
     {
         sbBC.setSearchSpec("Order Number", this.siebelAccountId);  
+        sbBC.setSearchSpec("Product Type", "Equipment");
     }
 
     @Override

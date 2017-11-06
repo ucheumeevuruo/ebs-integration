@@ -84,6 +84,17 @@ public class SqlPreparedStatement
         }
     }
     
+
+    public void setFloat(int index, Float value) throws SiebelBusinessServiceException {
+        try {
+            preparedStatement.setFloat(index, value);
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception when setting string:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+    }
+    
     public void setString(int index, String value) throws SiebelBusinessServiceException
     {
         try 

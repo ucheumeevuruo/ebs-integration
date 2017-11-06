@@ -285,36 +285,95 @@ public class EBSSql {
     
     public void createPurchaseOrder(SiebelDataBean sb, PurchaseOrderInventory poInventory) throws SiebelBusinessServiceException
     {
-        sqlContext = "{CALL PURCHASE_ORDER(?,?,?,?,?,?,?)}";
+        sqlContext = "{CALL PURCHASE_ORDER(?,?,?,?,?,?)}";
         try 
         {
-            String shipToCity = poInventory.getShipToCity() != null ? " " + poInventory.getShipToCity() + "," : "";
-            String shipToState = poInventory.getShipToState() != null ? poInventory.getShipToState() : "";
-            String shipToCountry = poInventory.getShipToCountry() != null ? poInventory.getShipToCountry() : "";
-            String billToCity = poInventory.getBillToCity() != null ? " " + poInventory.getBillToCity() + "," : "";
-            String billToState = poInventory.getBillToState() != null ? poInventory.getBillToState() : "";
-            String billToCountry = poInventory.getBillToCountry() != null ? poInventory.getBillToCountry() : "";
+            EBSSqlData ebsData = new EBSSqlData(CONN);
+            if(!ebsData.vendorExists(poInventory.getSourceId()))
+            {
+                MyLogging.log(Level.SEVERE, "Please choose a valid supplier.");
+                throw new SiebelBusinessServiceException("NOT_FOUND", "Please choose a valid supplier.");
+            }
             MyLogging.log(Level.INFO, "SQL :" + sqlContext);
             cs = CONN.prepareCall(sqlContext);
+            // Get the Suppliers Id
             cs.setInt(1, poInventory.getSourceId());
-            cs.setString(2, 
-                poInventory.getShipToLocation() + 
-                shipToCity + " " + 
-                shipToState
-            );
-            cs.setString(3, 
-                poInventory.getBillToLocation() + 
-                billToCity + " " + 
-                billToState
-            );
-            cs.setString(4, poInventory.getCurrencyCode());
-            cs.setInt(5, poInventory.getAgentCode());
-            cs.setString(6, poInventory.getOrderNumber());
-            cs.setArray(7, poInventory.inventory(sb, CONN).getInventoryItem());
+            // Get the Lot Id
+            cs.setString(2, poInventory.getShipToLocation());
+            // Get company currency code
+            cs.setString(3, poInventory.getCurrencyCode());
+            // Get agent id
+            cs.setInt(4, poInventory.getAgentCode());
+            // Get Order number
+            cs.setString(5, poInventory.getOrderNumber());
+            // Get array with inventory items
+            cs.setArray(6, poInventory.inventory(sb, CONN).getInventoryItem());
+            // Lets check if the inventory has data
+            // For debug purpose
             MyLogging.log(Level.INFO, poInventory.toString());
-            //cs.registerOutParameter(2, java.sql .Types.VARCHAR);
-            //cs.registerOutParameter(3, java.sql .Types.VARCHAR);
-            //cs.registerOutParameter(4, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
+            cs.execute();
+        } 
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }  
+    }
+    
+    public void CreateItemInEBS(String desc, String part) throws SiebelBusinessServiceException
+    {
+        sqlContext = "{CALL CREATE_UPDATE_ITEM(?,?,?,?,?,?,?,?,?)}";
+        try 
+        {
+            MyLogging.log(Level.INFO, "SQL :" + sqlContext);
+            cs = CONN.prepareCall(sqlContext);
+            // Get the Ebs User Id
+            cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
+            // Get the Ebs User Resposibility
+            cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
+            // Get the Ebs Application Id
+            cs.setInt(3, DataConverter.toInt(HelperAP.getEbsAppId()));
+            // Get Part Name
+            cs.setString(4, part);
+            // Get Description
+            cs.setString(5, desc);
+            // Get Lot Organization
+            cs.setString(6, HelperAP.getMasterOrganizationCode());
+            // Get Template Name
+            cs.setString(7, HelperAP.getTemplateName());
+            cs.registerOutParameter(8, java.sql .Types.INTEGER);
+            cs.registerOutParameter(9, java.sql .Types.INTEGER);
+            // Execute query
+            cs.execute();
+        } 
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }  
+    }
+    
+    public void ItemAssignToChild(Integer invId, String orgId) throws SiebelBusinessServiceException
+    {
+        sqlContext = "{CALL ITEM_ASSIGN(?,?,?,?,?,?)}";
+        try 
+        {
+            MyLogging.log(Level.INFO, "SQL :" + sqlContext);
+            cs = CONN.prepareCall(sqlContext);
+            // Get the Ebs User Id
+            cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
+            // Get the Ebs User Resposibility
+            cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
+            // Get the Ebs Application Id
+            cs.setInt(3, DataConverter.toInt(HelperAP.getEbsAppId()));
+            // Get Part Name
+            cs.setInt(4, invId);
+            // Get Description
+            cs.setString(5, orgId);
+            cs.registerOutParameter(6, java.sql .Types.CLOB);
+            // Execute query
             cs.execute();
         } 
         catch (SQLException ex) 

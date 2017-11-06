@@ -158,7 +158,6 @@ public class EBSSqlData
             while (rs.next()) 
             {
                 output = String.valueOf(rs.getInt("SALES_ACCOUNT"));
-                MyLogging.log(Level.INFO, "Code Combination Number:{0}"+ output);
             }
         } 
         catch (SQLException ex) 
@@ -167,6 +166,7 @@ public class EBSSqlData
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
+        MyLogging.log(Level.INFO, "Inventory Id:{0} " + inventory_id + "; Org Id:{2}" + org_id + "; Code Combination Number:{3}"+ output);
         return output;
     }
     
@@ -260,28 +260,29 @@ public class EBSSqlData
         return output;
     }
     
-    public String[] orgCode(int ebs_id) throws SiebelBusinessServiceException, SQLException
+    public String[] getOrgCode(int orgId) throws SiebelBusinessServiceException, SQLException
     {
-        String[] output = new String[2];
-        stmt.select(new String[]{"a.org_id", "b.organization_code"})
-        .from("HZ_CUST_ACCT_SITES_ALL a")
-        .join("org_organization_definitions b", "b.organization_id = a.org_id", "left")
-        .where("CUST_ACCOUNT_ID")
+        String[] output = new String[3];
+        stmt.select(new String[]{"organization_id", "organization_code", "organization_name"})
+        .from("org_organization_definitions")
+        .where("organization_id")
         .preparedStatement();
-        stmt.setInt(1, ebs_id);
+        stmt.setInt(1, orgId);
         ResultSet get = stmt.get();
         while (get.next()) {
-            output[0] = get.getString("org_id");
-            output[1] = get.getString("organization_code");
+            output[0] = get.getString("organization_code");
+            output[1] = get.getString("organization_id");
+            output[2] = get.getString("organization_name");
         }
         MyLogging.log(Level.INFO, "Organization Id:{0}"+ output[0]);
         MyLogging.log(Level.INFO, "Organization code:{0}"+ output[1]);
+        MyLogging.log(Level.INFO, "Organization name:{0}"+ output[2]);
         get.close();
         stmt.close();
         return output;
     }
     
-    public boolean updatePriceList(int item_price, int org_id, int inventory_id, int price_list) throws SiebelBusinessServiceException, SQLException
+    public boolean updatePriceList(Float item_price, int org_id, String part_number, int price_list) throws SiebelBusinessServiceException, SQLException
     {
         boolean output;
         stmt.select("spll.LIST_LINE_ID").
@@ -292,7 +293,8 @@ public class EBSSqlData
             "qp_pricing_attributes qpa"
         }).
         where("msi.organization_id").
-        andWhere("msi.inventory_item_id").
+        andWhere("msi.segment1").
+        //andWhere("msi.inventory_item_id").
         andWhere("spl.list_header_id").
         andWhere("spll.list_header_id", "spl.list_header_id").
         andWhere("qpa.list_header_id", "spl.list_header_id").
@@ -305,21 +307,22 @@ public class EBSSqlData
         andWhere("qpa.excluder_flag", "'N'").
         andWhere("qpa.pricing_phase_id", "1").
         preparedStatement();
-        stmt.setInt(1, 123);
-        stmt.setInt(2, 18);
-        stmt.setInt(3, 9013);
+        stmt.setInt(1, org_id);
+        stmt.setString(2, part_number);
+        stmt.setInt(3, price_list);
         String line_id = "";
         ResultSet rs = stmt.get();
         while (rs.next()) {
             line_id = String.valueOf(rs.getInt(1));
         }
+        MyLogging.log(Level.INFO, "Line Id: "+line_id);
         stmt.get().close();
         stmt.close();
         //
         stmt.update("qp_list_lines", new String[]{"OPERAND"})
         .where("LIST_LINE_ID")
         .preparedStatement();
-        stmt.setInt(1, item_price);
+        stmt.setFloat(1, item_price);
         stmt.setString(2, String.valueOf(line_id));
         output = stmt.executeUpdate();
         stmt.close();
@@ -378,11 +381,56 @@ public class EBSSqlData
         return output;
     }
     
+    public Boolean vendorExists(Integer orgId) throws SiebelBusinessServiceException
+    {
+        Boolean output = false;
+        try {
+            stmt.select("Count(*)")
+                    .from("ap_suppliers aps").join("ap_supplier_sites_all apss", "apss.vendor_id = aps.vendor_id", "INNER")
+                    .where("aps.vendor_id").preparedStatement();
+            stmt.setInt(1, orgId);
+            ResultSet rs = stmt.get();
+            while (rs.next())
+            {
+                if(rs.getInt(1) > 0)
+                    output = true;
+                MyLogging.log(Level.INFO, "Supplier Exists?:{0}"+ output);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+        }
+        return output;
+    }
+    
+    public Integer getOnHandQuantity(String partNumber, int warehouseId) throws SiebelBusinessServiceException{
+        Integer onHand = 0;
+        try {
+            SqlPreparedStatement jdbcConnect = new SqlPreparedStatement(CONN);
+            jdbcConnect.select("XXMADN_GET_OHQTY(?, ?, ?)")
+            .from("dual").preparedStatement();
+            jdbcConnect.setString(1, partNumber);
+            jdbcConnect.setInt(2, warehouseId);
+            jdbcConnect.setString(3, "OHQ");
+            ResultSet rs = jdbcConnect.get();
+            while (rs.next()) {
+                onHand = (rs.getInt(1));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        return onHand;
+    }
+    
     public static void main(String[] args) throws SQLException, SiebelBusinessServiceException 
     {
         EBSSqlData ebs = new EBSSqlData(ApplicationsConnection.connectToEBSDatabase());
         //boolean updatePriceList = ebs.updatePriceList(0, 123, 18, 9013);
-        //String[] orgId = ebs.orgCode(35113);//35113 35125
+        //String[] orgId = ebs.getOrgCode(35113);//35113 35125
         //String status = ebs.getOrderBookingStatus("FLOW_STATUS_CODE", "OE_ORDER_HEADERS_ALL", "ORDER_NUMBER", "156");
         //String status = ebs.shipToAccount(35113); 
         ebs.setCustReference(26102, OS);

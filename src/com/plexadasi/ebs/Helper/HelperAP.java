@@ -38,6 +38,11 @@ public class HelperAP
         return AP.getProperty();
     }
 
+    public static String getEbsAppId() throws SiebelBusinessServiceException {
+        AP.setProperties(IProperties.EBS_APP_ID);
+        return AP.getProperty();
+    }
+
     public static String getGeneratedPath() throws SiebelBusinessServiceException
     {
         AP.setProperties(IProperties.NIX_OUTPUT_KEY, IProperties.WIN_OUTPUT_KEY);
@@ -64,6 +69,26 @@ public class HelperAP
 
     public static String getLineType() throws SiebelBusinessServiceException {
         AP.setProperties(IProperties.LINE_TYPE);
+        return AP.getProperty();
+    }
+
+    public static String getTemplateName() throws SiebelBusinessServiceException {
+        AP.setProperties(IProperties.TEMPLATE_NAME);
+        return AP.getProperty();
+    }
+
+    public static String getMasterOrganizationCode() throws SiebelBusinessServiceException {
+        AP.setProperties(IProperties.MASTER_ORG_CODE);
+        return AP.getProperty();
+    }
+
+    public static String getLagosWarehouseId() throws SiebelBusinessServiceException {
+        AP.setProperties(IProperties.MASTER_ORG_CODE);
+        return AP.getProperty();
+    }
+
+    public static String getAbujaWarehouseId() throws SiebelBusinessServiceException {
+        AP.setProperties(IProperties.MASTER_ORG_CODE);
         return AP.getProperty();
     }
 }

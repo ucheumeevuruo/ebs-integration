@@ -2,6 +2,7 @@
 import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import item.Items;
 import com.plexadasi.order.PurchaseOrder;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
@@ -21,25 +22,18 @@ import java.util.logging.Level;
  *
  * @author SAP Training//3053495
  *///bpms //154760
-public class PurchaseOrderTest 
+public class ItemTest 
 {
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException, PropertyVetoException 
     {
+        SiebelDataBean sb = new SiebelDataBean();
         Connection ebs = ApplicationsConnection.connectToEBSDatabase();
-        SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
-        PurchaseOrder pOrder = new PurchaseOrder();
-        PurchaseOrderInventory poInventory = new PurchaseOrderInventory();
-        poInventory.setAccountType("organization");
-        poInventory.setSiebelOrderId("1-3AOSQ");
-        poInventory.setSiebelAccountId("1-1MV7P");
-        poInventory.setSourceId(2014);
-        //poInventory.triggers(sb, new EBSSqlData(ebs));
-        //System.out.println(poInventory.toString());
-        pOrder.doInvoke(poInventory, sb, ebs);
-        String po = pOrder.getPONumber(ebs, "1-5537546");
-        
-        MyLogging.log(Level.INFO, "Done: " + po);
+        ///SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
+        Items item = new Items(sb, ebs);
+        //item.CreateItem("Actros 3343", "WDB9301831L7889");
+        item.AssignItem(50648, "124");
+        MyLogging.log(Level.INFO, "Done: ");
         ebs.close();
-        sb.logoff();
+        //sb.logoff();
     }
 }

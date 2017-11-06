@@ -5,14 +5,18 @@
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
+import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.Helper.HelperAP;
+import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.order.PurchaseOrderInventory;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Level;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
 
@@ -27,7 +31,7 @@ public class POInventory {
     private final String sqlName = "PRODUCT";
     private String[][] stringArray;
     private int length = 0;
-    private final int maxLength = 11;
+    private final int maxLength = 12;
     
     public POInventory(SiebelDataBean sb, Connection ebs, PurchaseOrderInventory PO)
     {
@@ -49,20 +53,24 @@ public class POInventory {
         ArrayDescriptor desc = ArrayDescriptor.createDescriptor(sqlName, ebsConn);
         length  = po.getList().size();
         stringArray = new String[length][maxLength];
+        EBSSqlData ebsData = new EBSSqlData(ebsConn);
         for (int i = 0; i < length; i++)
         {
             Map<String, String> map = po.getList().get(i);
+            String[] org = ebsData.getOrgCode(Integer.parseInt(map.get(PurchaseOrder.PLX_LOT_ID)));
             stringArray[i][0] = map.get(PurchaseOrder.FIELD_LINE_NUMBER);
             stringArray[i][1] = map.get(PurchaseOrder.SHIPMENT_NUMBER);
             stringArray[i][2] = HelperAP.getLineType();
-            stringArray[i][3] = map.get(PurchaseOrder.PLX_PRODUCT);
+            stringArray[i][3] = map.get(PurchaseOrder.PLX_PART_NUMBER);
             stringArray[i][4] = map.get(PurchaseOrder.PLX_UNIT_OF_MEASURE);
             stringArray[i][5] = map.get(PurchaseOrder.FIELD_QUANTITY);
             stringArray[i][6] = map.get(PurchaseOrder.PLX_UNIT_PRICE);
-            stringArray[i][7] = poOrder.getOrganizationCode();
-            stringArray[i][8] = poOrder.getOrganizationId();
-            stringArray[i][9] = poOrder.getShipToAccount();
-            stringArray[i][10] = map.get(PurchaseOrder.PLX_QUANTITY_REQUESTED);
+            stringArray[i][7] = org[0];
+            stringArray[i][8] = org[1];
+            stringArray[i][9] = org[2];
+            stringArray[i][10] = poOrder.getPromiseDate();
+            stringArray[i][11] = map.get(PurchaseOrder.PLX_QUANTITY_REQUESTED);
+            MyLogging.log(Level.INFO, Arrays.toString(stringArray[i]));
         }
         return new ARRAY(desc, ebsConn, stringArray);
     }

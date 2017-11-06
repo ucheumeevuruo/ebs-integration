@@ -56,7 +56,7 @@ public class SalesOrder {
             e = new EBSSql(EBS_CONN);
         }
         generateSalesOrder(salesOrder);
-        generateOrderReservation();
+        //generateOrderReservation();
     }
     
     public String getReturnStatus()
@@ -167,6 +167,22 @@ public class SalesOrder {
         }
     }
     
+    public String onHandStatus(Connection ebsConn, Integer order_number, Integer inventory_id) throws SiebelBusinessServiceException, SQLException{
+        EBSSqlData ebsData = new EBSSqlData(ebsConn);
+        String[] ret = ebsData.getHeaderLineId(order_number, inventory_id);
+        if(ret.length == 0){
+            throw new SiebelBusinessServiceException("NUM_EXCEPT", "Inventory does not exists. Please check your order number and try again.");
+        }
+        String line_id;
+        line_id = ret[0];
+        return new EBSSqlData(ebsConn).getOrderBookingStatus(
+            "FLOW_STATUS_CODE", 
+            "OE_ORDER_LINES_ALL", 
+            "LINE_ID", 
+            line_id
+        );
+    }
+    
     public void cancelOrder(Connection ebsConn, Integer order_number) throws SiebelBusinessServiceException, SQLException{
         EBSSqlData ebsData = new EBSSqlData(ebsConn);
         String ret = ebsData.getHeaderId(order_number);
@@ -207,12 +223,7 @@ public class SalesOrder {
         this.returnValue = e.getString(6);
         //this.statusCode = e.getString(7);
         Array arr = e.getArray(9);
-        this.line_order_status_code = new EBSSqlData(ebsConn).getOrderBookingStatus(
-            "FLOW_STATUS_CODE", 
-            "OE_ORDER_LINES_ALL", 
-            "LINE_ID", 
-            line_id
-        );
+        this.line_order_status_code = this.onHandStatus(ebsConn, order_number, inventory_id);
         String[] data = new String[]{};
         if (arr != null) 
         {

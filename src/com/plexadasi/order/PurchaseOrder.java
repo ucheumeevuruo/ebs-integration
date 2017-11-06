@@ -49,7 +49,12 @@ public class PurchaseOrder {
         {
             e = new EBSSql(EBS_CONN);
         }
-        e.createPurchaseOrder(SIEBEL_CONN, poInventory.triggers(SIEBEL_CONN, new EBSSqlData(EBS_CONN)));
+        poInventory.triggers(SIEBEL_CONN, new EBSSqlData(EBS_CONN));
+        Boolean IsProcessed = this.processIsNotNull(EBS_CONN, poInventory.getOrderNumber());
+        if(IsProcessed) {
+        } else {
+            e.createPurchaseOrder(SIEBEL_CONN, poInventory);
+        }
     }
     
     private Boolean isPurchaseOrderProcessed(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
@@ -60,7 +65,28 @@ public class PurchaseOrder {
             "REFERENCE_NUM", 
             order_num
         );
-        return (stat.equalsIgnoreCase("approved"));
+        return (!stat.equalsIgnoreCase(""));
+    }
+    
+    private Boolean processIsNotNull(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
+    {
+        String stat = new EBSSqlData(ebsConn).getOrderBookingStatus(
+            "PROCESS_CODE", 
+            "PO_HEADERS_INTERFACE", 
+            "REFERENCE_NUM", 
+            order_num
+        );
+        return (!stat.equalsIgnoreCase(""));
+    }
+    
+    public String getPONumber(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
+    {
+        return new EBSSqlData(ebsConn).getOrderBookingStatus(
+            "SEGMENT1", 
+            "PO_HEADERS_ALL", 
+            "PO_HEADER_ID", 
+            getPurchaseOrderNumber(ebsConn, order_num)
+        );
     }
     
     public String getPurchaseOrderNumber(Connection ebsConn, String order_num) throws SiebelBusinessServiceException

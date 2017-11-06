@@ -118,7 +118,12 @@ public class PurchaseOrderInventory
     
     public String getShipToLocation() 
     {
-        return acc.getProperty(Account.ACC_PRI_SHIP_TO_ADDR);
+        return order.getProperty(Product.PLX_WAREHOUSE_ID);
+    }
+    
+    public String getPromiseDate()
+    {
+        return order.getProperty(Product.PLX_DUE_DATE);
     }
     
     public String getShipToCity()
@@ -178,7 +183,12 @@ public class PurchaseOrderInventory
     
     public String getOrganizationCode()
     {
-        return organization[1];
+        return organization[0];
+    }
+    
+    public String getOrganizationName()
+    {
+        return organization[0];
     }
     
     public String getShipToAccount() throws SiebelBusinessServiceException
@@ -196,6 +206,8 @@ public class PurchaseOrderInventory
         order = new Order(siebConn);
         order.setPropertySet(Product.FIELD_ORDER_NUMBER, Product.FIELD_ORDER_NUMBER);
         order.setPropertySet(Product.PLX_AGENT_ID, Product.PLX_AGENT_ID);
+        order.setPropertySet(Product.PLX_WAREHOUSE_ID, Product.PLX_WAREHOUSE_ID);
+        order.setPropertySet(Product.PLX_DUE_DATE, Product.PLX_DUE_DATE);
         order.setSiebelAccountId(siebelOrderId);
         order.doTrigger();
     }
@@ -212,16 +224,6 @@ public class PurchaseOrderInventory
         }
         acc.setSiebelAccountId(siebelAccountId);
         acc.doTrigger();
-        try 
-        {
-            organization = ebsData.orgCode(DataConverter.toInt(getEbsId()));
-        } 
-        catch (SQLException ex) 
-        {
-            ex.printStackTrace(new PrintWriter(errors));
-            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
-        }
     }
     
     public PurchaseOrderInventory triggers(SiebelDataBean sb, EBSSqlData ed) throws SiebelBusinessServiceException
@@ -242,8 +244,8 @@ public class PurchaseOrderInventory
         returnString += "\t\t[Siebel account id=" + siebelAccountId + "\n";
         returnString += "\t\t[Account type=" + accountType + "\n";
         returnString += "\t\t[Ebs id=" + getEbsId()+ "\n";
-        returnString += "\t\t[Organization id=" + organization[0] + "\n";
-        returnString += "\t\t[Organization code=" + organization[1] + "\n";
+        //returnString += "\t\t[Organization id=" + organization[0] + "\n";
+        //returnString += "\t\t[Organization code=" + organization[1] + "\n";
         returnString += "\t\t[Source id=" + String.valueOf(sourceId) + "\n";
         return getClass().getSimpleName() + "\n[Details\n\t[\n" + returnString + "\t]\n";
     }
