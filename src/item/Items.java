@@ -6,17 +6,26 @@
 package item;
 
 import com.plexadasi.build.EBSSql;
+import com.plexadasi.Helper.DataConverter;
+import com.plexadasi.Helper.HelperAP;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
-import com.plexadasi.ebs.SiebelApplication.bin.Quote;
+import com.plexadasi.ebs.SiebelApplication.bin.PLXBackOrder;
+import com.plexadasi.ebs.SiebelApplication.bin.QuotePartItem;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
-import com.plexadasi.ebs.SiebelApplication.bin.SalesOrder;
+import com.plexadasi.ebs.SiebelApplication.bin.SalesOrderItem;
+import com.plexadasi.build.EBSSqlData;
+import com.plexadasi.ebs.model.Product;
+import com.plexadasi.ebs.services.ProductService;
 import com.siebel.data.SiebelException;
 import com.siebel.data.SiebelPropertySet;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -50,43 +59,92 @@ public class Items {
         }
     }
     
-    public void CreateItem(String desc, String part) throws SiebelBusinessServiceException{
+    public Product CreateItem(String desc, String part) throws SiebelBusinessServiceException{
+        Product item = null;
         try {
-            e.CreateItemInEBS(desc, part);
-            this.orgId = e.getInt(8);
-            this.invId = e.getInt(9);
+            ProductService service = new ProductService(this.SIEBEL_CONN, this.EBS_CONN);
+            Product product = new Product();
+            product.setPartNumber(part);
+            product.setDescription(desc);
+            product.setOrganizationCode(HelperAP.getMasterOrganizationCode());
+            item = service.createProduct(product);
+            MyLogging.log(Level.INFO, String.valueOf(item.getId()));
         } catch (SQLException ex) {
-            MyLogging.log(Level.SEVERE, ex.getMessage());
-            throw new SiebelBusinessServiceException("CREATE_UPDATE_ITEM", ex.getMessage());
+            ex.printStackTrace(new PrintWriter(ERROR));
+            MyLogging.log(Level.SEVERE, ERROR.toString());
+            throw new SiebelBusinessServiceException("SQL", ex.getMessage());
         }
+        return item;
     }
     
     public void AssignItem(Integer invId, String orgId) throws SiebelBusinessServiceException{
         try {
-            e.ItemAssignToChild(invId, orgId);
-        } catch (SiebelBusinessServiceException ex) {
-            MyLogging.log(Level.SEVERE, ex.getMessage());
-            throw new SiebelBusinessServiceException("ITEM_ASSIGN", ex.getMessage());
+            ProductService service = new ProductService(this.SIEBEL_CONN, this.EBS_CONN);
+            Product product = new Product();
+            product.setId(invId);
+            product.setOrganizationId(DataConverter.toInt(orgId));
+            service.assignProduct(product);
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(ERROR));
+            MyLogging.log(Level.SEVERE, ERROR.toString());
+            throw new SiebelBusinessServiceException("SQL", ex.getMessage());
         }
     }
     
     public void setOnHandQuantity(SiebelPropertySet inputs) throws SiebelBusinessServiceException{
-        String type = inputs.getProperty("Type");
-        String Id = inputs.getProperty("Id");
-        String warehouse = inputs.getProperty("Warehouse");
-        if("Sales Order".equals(type))
-        {
-            SalesOrder s = new SalesOrder(SIEBEL_CONN);
+        try {
+            String type = inputs.getProperty("Type");
+            String Id = inputs.getProperty("Id");
+            String warehouse = inputs.getProperty("Warehouse");
+            SalesOrderItem s = new SalesOrderItem(SIEBEL_CONN);
+            if("Quote".equals(type))
+            {
+                s = new QuotePartItem(SIEBEL_CONN);
+            }
             s.setSiebelAccountId(Id);
-            MyLogging.log(Level.INFO, "Order Number: " + s.getSiebelAccountId());
-            s.onHandQuantities(EBS_CONN, warehouse);
+            s.setOrgId(Integer.parseInt(warehouse));
+            s.onHandQuantities(EBS_CONN, "OHQ");
+        } catch (SiebelException ex) {
+            MyLogging.log(Level.SEVERE, ex.getMessage());
+            throw new SiebelBusinessServiceException("SIEBEL", ex.getMessage());
+        } catch (SQLException ex) {
+            MyLogging.log(Level.SEVERE, ex.getMessage());
+            throw new SiebelBusinessServiceException("SQL", "Cannot process your request. Please try again.");
         }
-        else if("Quote".equals(type))
-        {
-            Quote q = new Quote(SIEBEL_CONN);
-            q.setSiebelAccountId(Id);
-            MyLogging.log(Level.INFO, "Quote Number: " + q.getSiebelAccountId());
-            q.onHandQuantities(EBS_CONN, warehouse);
+    }
+    
+    public void setBackOrderStatus(SiebelPropertySet inputs) throws SiebelBusinessServiceException{
+        try {
+            String Id = inputs.getProperty("Id");
+            String warehouse = inputs.getProperty("Warehouse");
+            SalesOrderItem s = new SalesOrderItem(SIEBEL_CONN);
+            String getBC = inputs.getProperty("Type");
+            if("PLXBackOrder".equals(getBC))
+            {
+                s = new PLXBackOrder(SIEBEL_CONN);
+            }
+            s.setSiebelAccountId(Id);
+            s.setOrgId(DataConverter.toInt(warehouse));
+            s.backOrder(EBS_CONN);
+        } catch (SQLException ex) {
+            MyLogging.log(Level.SEVERE, ex.getMessage());
+            throw new SiebelBusinessServiceException("SIEBEL", ex.getMessage());
+        } catch (SiebelException ex) {
+            MyLogging.log(Level.SEVERE, ex.getMessage());
+            throw new SiebelBusinessServiceException("SQL", "Cannot process your request. Please try again.");
+        }
+    }
+    
+    public void setOrderStatus(SiebelPropertySet inputs, SiebelPropertySet output) throws SiebelBusinessServiceException{
+        EBSSqlData ebsdata = new EBSSqlData(EBS_CONN);
+        Map<String, String> backorder = ebsdata.backOrder(
+            inputs.getProperty("partnumber"), 
+            DataConverter.toInt(inputs.getProperty("lotid")), 
+            inputs.getProperty("ordernumber")
+        );
+        // set the output value
+        for(Map.Entry<String, String> backorderItems : backorder.entrySet()){
+            output.setProperty(backorderItems.getKey(), backorderItems.getValue());
         }
     }
     

@@ -1,6 +1,5 @@
 
-import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
+import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection_old;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.order.PurchaseOrder;
 import com.siebel.data.SiebelDataBean;
@@ -25,18 +24,18 @@ public class PurchaseOrderTest
 {
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException, PropertyVetoException 
     {
-        Connection ebs = ApplicationsConnection.connectToEBSDatabase();
-        SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
+        Connection ebs = ApplicationsConnection_old.connectToEBSDatabase();
+        SiebelDataBean sb = ApplicationsConnection_old.connectSiebelServer();
         PurchaseOrder pOrder = new PurchaseOrder();
         PurchaseOrderInventory poInventory = new PurchaseOrderInventory();
         poInventory.setAccountType("organization");
-        poInventory.setSiebelOrderId("1-3AOSQ");
-        poInventory.setSiebelAccountId("1-1MV7P");
-        poInventory.setSourceId(2014);
+        poInventory.setSiebelOrderId("1-LFJLR");
+        poInventory.setSiebelAccountId("1-1CKWM");
+        poInventory.setSourceId(33);
         //poInventory.triggers(sb, new EBSSqlData(ebs));
         //System.out.println(poInventory.toString());
         pOrder.doInvoke(poInventory, sb, ebs);
-        String po = pOrder.getPONumber(ebs, "1-5537546");
+        String po = pOrder.getPONumber(ebs, "1-35997183");
         
         MyLogging.log(Level.INFO, "Done: " + po);
         ebs.close();

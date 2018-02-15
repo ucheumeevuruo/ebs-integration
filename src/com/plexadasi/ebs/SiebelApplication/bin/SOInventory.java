@@ -5,18 +5,19 @@
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
+import com.plexadasi.Helper.DataConverter;
+import com.plexadasi.Helper.HelperAP;
 import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.Helper.DataConverter;
-import com.plexadasi.ebs.Helper.HelperAP;
-import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.order.SalesOrderInventory;
 import com.siebel.data.SiebelDataBean;
+import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
 
@@ -26,11 +27,12 @@ import oracle.sql.ArrayDescriptor;
  */
 public class SOInventory {
     private SiebelDataBean siebConn = null;
+    SalesOrderInventory so = null;
     private Connection ebsConn = null;
-    private Integer soldToOrgId = null;
-    private String shipToOrgId = "";
+    //private Integer soldToOrgId = null;
+    //private String shipToOrgId = "";
     private Integer priceId = null;
-    private String siebelOrderId = "";
+    //private String siebelOrderId = "";
     private EBSSqlData ebsData = null;
     private final String sqlName = "PRODUCT";
     private String[][] stringArray;
@@ -41,9 +43,10 @@ public class SOInventory {
     {
         siebConn = sb;
         ebsConn = ebs;
-        soldToOrgId = sO.getSoldToOrgId();
-        shipToOrgId = sO.getShipToOrgId();
-        siebelOrderId = sO.getSiebelOrderId();
+        this.so = sO;
+        //soldToOrgId = sO.getSoldToOrgId();
+        //shipToOrgId = sO.getShipToOrgId();
+        //siebelOrderId = sO.getSiebelOrderId();
         ebsData = new EBSSqlData(ebs);
     }
     
@@ -51,38 +54,40 @@ public class SOInventory {
      * @return the inventoryItem
      * @throws com.siebel.eai.SiebelBusinessServiceException
      * @throws java.sql.SQLException
+     * @throws com.siebel.data.SiebelException
      */
-    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException 
+    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException, SiebelException 
     {
-        SalesOrder sales = new SalesOrder(siebConn);
-        sales.setSiebelAccountId(siebelOrderId);
-        shipToOrgId = ebsData.shipToAccount(soldToOrgId);
-        sales.doTrigger();
+        SalesOrderItem sales = new SalesOrderItem(siebConn);
+        sales.setSiebelAccountId(this.so.getSiebelOrderId());
+        sales.setOrgId(this.so.getSoldFromId());
         ArrayDescriptor desc = ArrayDescriptor.createDescriptor(sqlName, ebsConn);
-        length = sales.getList().size();
+        List<Map<String, String>> inventoryItems = sales.inventoryItems(ebsConn);
+        length = inventoryItems.size();
+        int number = 0;
         stringArray = new String[length][maxLength];
-        for (int i = 0; i < length; i++) 
-        {
-            Map<String, String> map = sales.getList().get(i);
-            String partNumber = map.get(SalesOrder.PLX_PART_NUMBER);
-            Float itemPrice = Float.parseFloat(map.get(SalesOrder.PLX_ITEM_PRICE));
-            String lot_id = (map.get(SalesOrder.PLX_LOT_ID));
-            String product = map.get(SalesOrder.PLX_PRODUCT);
-            priceId = DataConverter.toInt(HelperAP.getPriceListID());
-            stringArray[i][0] = partNumber;
-            stringArray[i][1] = map.get(SalesOrder.FIELD_QUANTITY);
-            stringArray[i][2] = shipToOrgId;
-            stringArray[i][3] = lot_id;
-            boolean isUpdated = ebsData.updatePriceList(itemPrice, DataConverter.toInt(lot_id), (partNumber), priceId);
-            if(isUpdated)
-            {
-                MyLogging.log(Level.INFO, "Inventory with name " + product + " updated successfully");
-            }
-            else
-            {
-                MyLogging.log(Level.INFO, "Inventory " + product + " does not exists in table QP_LIST_LINES");  
+        for(Map<String, String> inventoryItem : inventoryItems){
+            for(Map.Entry<String,String> mapEntry : inventoryItem.entrySet()){
+                stringArray[number][2] = ebsData.shipToAccount(this.so.getSoldToOrgId());
+                stringArray[number][Integer.parseInt(mapEntry.getKey())] = mapEntry.getValue();
+                number++;
             }
         }
         return new ARRAY(desc, ebsConn, stringArray);
+    }
+    
+    public void updatePriceList() throws SiebelBusinessServiceException, SQLException, SiebelException
+    {
+        SalesOrderItem sales = new SalesOrderItem(siebConn);
+        sales.setSiebelAccountId(this.so.getSiebelOrderId());
+        sales.setOrgId(this.so.getSoldFromId());
+        List<Map<String, String>> inventoryItems = sales.inventoryItems(ebsConn);
+        int priceListId = DataConverter.toInt(HelperAP.getPriceListID());
+        for(Map<String, String> inventoryItem : inventoryItems){
+            String partNumber = inventoryItem.get(Product.PLX_PART_NUMBER);
+            int warehouse = DataConverter.toInt(inventoryItem.get(Product.PLX_ITEM_PRICE));
+            float price = Float.parseFloat(inventoryItem.get(Product.PLX_ITEM_PRICE));
+            boolean isUpdated = ebsData.updatePriceList(price, warehouse, partNumber, priceListId);
+        }
     }
 }

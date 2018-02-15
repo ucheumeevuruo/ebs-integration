@@ -53,6 +53,18 @@ public abstract class Product
     /**
      * 
      */
+    public static final String FIELD_FREIGHT = "Freight Total";
+    /**
+     * 
+     */
+    public static final String PLX_TAX_RATE = "PLX Calculate VAT";
+    /**
+     * 
+     */
+    public static final String PLX_VAT = "PLX Vat";
+    /**
+     * 
+     */
     public static final String PLX_LINE_TYPE = "";
     /**
      * 
@@ -71,6 +83,10 @@ public abstract class Product
      * 
      */
     public static final String PLX_UNIT_PRICE = "Unit Price";
+    /**
+     * 
+     */
+    public static final String PLX_NET_PRICE = "Net Price";
     /**
      * 
      */
@@ -138,6 +154,18 @@ public abstract class Product
     /**
      * 
      */
+    public static final String FIELD_LDC = "PLX Local Delivery Charges";
+    
+    public static final String PICK_MEANING = "PLX Pick Meaning";
+    
+    public static final String STATUS = "Status";
+    public static final String RELEASE_STATUS = "PLX Release Status";
+    protected String busComp;
+    protected String busObj;
+    
+    /**
+     * 
+     */
     protected String siebelAccountId;
     
     /**
@@ -174,6 +202,8 @@ public abstract class Product
      * 
      */
     protected String module;
+    
+    protected SiebelPropertySet properties;
     
     protected StringWriter error = new StringWriter();
     
@@ -216,6 +246,14 @@ public abstract class Product
         this.ebsAccountId = value;
     }
     
+    /**
+     * 
+     * @return 
+     */
+    public SiebelPropertySet getProperties()
+    {
+        return this.properties;
+    }
     /**
      * 
      * @return 

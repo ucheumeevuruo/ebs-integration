@@ -7,7 +7,9 @@ package com.plexadasi.order;
 
 import com.plexadasi.ebs.SiebelApplication.bin.SOInventory;
 import com.siebel.data.SiebelDataBean;
+import com.siebel.data.SiebelException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 /**
@@ -22,12 +24,13 @@ public class SalesOrderInventory {
     private Integer invoiceId;
     private Integer soldFromId;
     private Integer salesRepId;
-    private Integer priceId;
     private String transactionCode;
     private String statusCode;
     private String purchaseOrderNumber;
     private Integer sourceId;
     private String siebelOrderId;
+    private Integer billToId;
+    private Integer shipToId;
     
     public void setSiebelOrderId(String orderId) 
     {
@@ -188,9 +191,9 @@ public class SalesOrderInventory {
         return sourceId;
     }
     
-    public SOInventory inventory(SiebelDataBean sb, Connection ebs)
+    public SOInventory inventory(SiebelDataBean sb, Connection ebsConn) throws SiebelException, SQLException
     {
-        return new SOInventory(sb, ebs, this);
+        return new SOInventory(sb, ebsConn, this);
     }
 
     /**
@@ -218,5 +221,21 @@ public class SalesOrderInventory {
         output += "\t\t[Purchase order number=" + purchaseOrderNumber + "]\n";
         output += "\t\t[Source id=" + sourceId + "]\n";
         return getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
+    }
+
+    public int getBillToId() {
+        return this.billToId;
+    }
+
+    public int getShipToId() {
+        return this.shipToId;
+    }
+
+    public void setShipToId(Integer shipToId) {
+        this.shipToId = shipToId;
+    }
+
+    public void setBillToId(Integer billToId) {
+        this.billToId = billToId;
     }
 }

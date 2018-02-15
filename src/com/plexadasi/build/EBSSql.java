@@ -12,13 +12,23 @@ package com.plexadasi.build;
  *
  * @author SAP Training
  */
-import com.plexadasi.ebs.Helper.DataConverter;
-import com.plexadasi.ebs.Helper.HelperAP;
+import com.plexadasi.build.EBSSqlData;
+import com.plexadasi.Helper.DataConverter;
+import com.plexadasi.Helper.HelperAP;
+import com.plexadasi.build.Context;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.SiebelApplication.bin.Inventory;
+import com.plexadasi.ebs.SiebelApplication.bin.Quote;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
+import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
+import com.plexadasi.ebs.model.BillingAccount;
+import com.plexadasi.ebs.model.Customer;
+import com.plexadasi.ebs.services.BillingAccountService;
+import com.plexadasi.invoice.InvoiceObject;
 import com.plexadasi.order.PurchaseOrderInventory;
 import com.plexadasi.order.SalesOrderInventory;
 import com.siebel.data.SiebelDataBean;
+import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -27,8 +37,15 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import oracle.jdbc.OracleTypes;
+import static oracle.jdbc.OracleTypes.STRUCT;
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
+import oracle.sql.STRUCT;
+import oracle.sql.StructDescriptor;
 
 
 public class EBSSql {
@@ -42,7 +59,7 @@ public class EBSSql {
     {
         CONN = connectObj;
     }
-    
+    /*
     public void createInvoiceOrder(ImplSql method) throws SiebelBusinessServiceException
     {
         try 
@@ -60,6 +77,64 @@ public class EBSSql {
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
+    }
+    */
+    public void createInvoiceQuote(SiebelDataBean sConn, InvoiceObject invoice, Quote product) throws SiebelBusinessServiceException
+    {
+        try {
+            sqlContext = "{CALL CREATE_SINGLE_INVOICE(?,?,?,?,?,?,?,?,?,?,?,?)}";
+            MyLogging.log(Level.INFO, "SQL :" + sqlContext);
+            cs = CONN.prepareCall(sqlContext);
+            // Get the Ebs User Id
+            cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
+            // Get the Ebs User Resposibility
+            cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
+            // Get the Ebs Application Id
+            cs.setInt(3, DataConverter.toInt(HelperAP.getEbsAppId()));
+            // Get the batch source id
+            cs.setInt(4, DataConverter.toInt(HelperAP.getSourceBatchId()));
+            cs.setInt(5, DataConverter.toInt(invoice.getBillToId()));
+            cs.setInt(6, DataConverter.toInt(invoice.getCustomerTrxTypeId()));
+            cs.setString(7, invoice.getTrxCurrency());
+            cs.setString(8, invoice.getTermId());
+            cs.setInt(9, DataConverter.toInt(HelperAP.getLegalEntity()));
+            cs.setString(10, invoice.getPrimarySalesId());
+            cs.setArray(11, new ARRAY(
+                ArrayDescriptor.createDescriptor("ITEM", CONN), 
+                CONN, 
+                createStructArray(
+                    product.getInventories(CONN), 
+                    StructDescriptor.createDescriptor("ITEMS", CONN), 
+                    CONN
+                )
+            ));
+            cs.registerOutParameter(12, java.sql .Types.VARCHAR);
+            cs.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
+            throw new SiebelBusinessServiceException("SQLException", ex.getMessage());
+        }
+    }
+    
+    public STRUCT[] createStructArray(List<Inventory> inventory, StructDescriptor structDescriptor, Connection ebsConn) throws SQLException
+    {
+        STRUCT[] structArray = new STRUCT[inventory.size()];
+        Integer index = 0;
+        for(Inventory inventories : inventory)
+        {
+            Object[] structObj = new Object[]{
+                inventories.getPart_number(),
+                inventories.getOrg_id(),
+                inventories.getQuantity(),
+                inventories.getAmount(),
+                inventories.getLine_type()
+            };
+            STRUCT genericStruct = new STRUCT(structDescriptor, ebsConn, structObj);
+            structArray[index] = genericStruct;
+            index++;
+        }
+        return structArray;
     }
     
     public void createInvoiceQuote(ImplSql method) throws SiebelBusinessServiceException
@@ -178,23 +253,23 @@ public class EBSSql {
         }
     }
     
-    public void createSalesOrder(SiebelDataBean sb, SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
+    public void createSalesOrder(SiebelDataBean sb, SalesOrderInventory salesOrder) throws SiebelBusinessServiceException, SiebelException
     {
         try 
         {
-            cs = CONN.prepareCall("{CALL SALES_ORDER(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-            EBSSqlData ebsData = new EBSSqlData(CONN);
-            Integer orgId = salesOrder.getSoldToOrgId();
-            String shipToOrgId = ebsData.shipToAccount(orgId);
-            String billToOrgId = ebsData.billToAccount(orgId);
-            MyLogging.log(Level.INFO, shipToOrgId);
+            // Initialize the procedure
+            cs = CONN.prepareCall("{CALL SALES_ORDER_TEST(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            
+            // Update the prices in EBS before we proceed
+            salesOrder.inventory(sb, CONN).updatePriceList();
+            
             // Pass the in parameters to the procedure call
             cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));
             cs.setInt(2, DataConverter.toInt(HelperAP.getEbsUserResp()));
             cs.setInt(3, salesOrder.getOrderId());  
-            cs.setInt(4, orgId);
-            cs.setInt(5, DataConverter.toInt(shipToOrgId));
-            cs.setInt(6, DataConverter.toInt(billToOrgId));
+            cs.setInt(4, salesOrder.getSoldToOrgId());
+            cs.setInt(5, salesOrder.getShipToId());
+            cs.setInt(6, salesOrder.getBillToId());
             cs.setInt(7, salesOrder.getSoldFromId());
             cs.setInt(8, salesOrder.getSalesRepId());
             cs.setInt(9, DataConverter.toInt(HelperAP.getPriceListID()));
@@ -204,15 +279,16 @@ public class EBSSql {
             cs.setInt(13, salesOrder.getSourceId());
             cs.setArray(14, salesOrder.inventory(sb, CONN).getInventoryItem());
             // Retrieve the out parameters from the procedure call
-            cs.registerOutParameter(15, java.sql .Types.VARCHAR);
-            cs.registerOutParameter(16, java.sql .Types.VARCHAR);
-            cs.registerOutParameter(17, java.sql .Types.INTEGER);
+            //cs.registerOutParameter(15, java.sql .Types.VARCHAR);
+            //cs.registerOutParameter(16, java.sql .Types.VARCHAR);
+            //cs.registerOutParameter(17, java.sql .Types.INTEGER);
             
             // Bind the output array, this will contain any exception indexes.
-            cs.registerOutParameter(18, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
-            cs.registerOutParameter(19, java.sql .Types.VARCHAR);
-            cs.registerOutParameter(20, OracleTypes.CHAR);
-            cs.execute();
+            //cs.registerOutParameter(18, OracleTypes.ARRAY, "CUSTOMERS_ARRAY");
+            //cs.registerOutParameter(19, java.sql .Types.VARCHAR);
+            cs.registerOutParameter(15, OracleTypes.CHAR);
+            Boolean ex = cs.execute();
+            MyLogging.log(Level.INFO, String.valueOf(ex));
         } 
         catch (SQLException ex) 
         {
@@ -238,8 +314,8 @@ public class EBSSql {
         catch (SQLException ex) 
         {
             ex.printStackTrace(new PrintWriter(errors));
-            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
-            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+            MyLogging.log(Level.SEVERE, errors.toString());
+            throw new SiebelBusinessServiceException("SQL", ex.getMessage());
         }
     }
     

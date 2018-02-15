@@ -5,7 +5,7 @@
  */
 package com.plexadasi.build;
 
-import com.plexadasi.ebs.Helper.DataTypeCheck;
+import com.plexadasi.Helper.DataTypeCheck;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

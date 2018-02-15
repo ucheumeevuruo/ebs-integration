@@ -5,11 +5,17 @@
  */
 package com.plexadasi.invoice;
 
+import com.plexadasi.ebs.SiebelApplication.bin.QuoteInventory;
+import com.siebel.data.SiebelDataBean;
+import java.sql.Connection;
+
+
 /**
  *
  * @author SAP Training
  */
 public class InvoiceObject {
+    private String id;
     private String v_customer_id;
     private String cust_trx_type_id; 
     private String v_date;       
@@ -20,8 +26,12 @@ public class InvoiceObject {
     
     /**
      * 
-     * @param value 
+     * @param id
      */
+    public void setId(String id)
+    {
+        this.id = id;
+    }
     
     public void setBillToId(String value)
     {
@@ -61,6 +71,11 @@ public class InvoiceObject {
     public void setTrxDistId(String value)
     {
         this.v_siebelquote = value;
+    }
+    
+    public String getId()
+    {
+        return this.id;
     }
     
     public String getBillToId()

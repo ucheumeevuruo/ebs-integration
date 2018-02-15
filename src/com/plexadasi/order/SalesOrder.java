@@ -7,9 +7,12 @@ package com.plexadasi.order;
 
 import com.plexadasi.build.EBSSql;
 import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.Helper.DataConverter;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.model.BillingAccount;
+import com.plexadasi.ebs.services.BillingAccountService;
+import com.plexadasi.ebs.services.SalesOrderService;
 import com.siebel.data.SiebelDataBean;
+import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -18,45 +21,36 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author SAP Training
  */
 public class SalesOrder {
-    private Connection EBS_CONN = null;
-    private SiebelDataBean SIEBEL_CONN = new SiebelDataBean();
+    private Connection connection;
+    private SiebelDataBean siebelConnection = new SiebelDataBean();
     private static final StringWriter ERROR = new StringWriter();
-    private Integer integerOutput;
-    private String stringOutput;
     private final List<String> hList = new ArrayList();
     private String returnValue = "";
-    private String statusCode;
-    private String orderNumber;
-    private EBSSql e = null;
+    private String statusCode = "";
+    private Integer orderNumber = 0;
+    private EBSSql ebs = null;
     private String line_order_status_code;
     
     public void doInvoke(SalesOrderInventory salesOrder, SiebelDataBean sb, Connection ebs) throws SiebelBusinessServiceException
     {
-        SIEBEL_CONN = sb;
-        EBS_CONN = ebs;
-        if(SIEBEL_CONN == null)
-        {
-            MyLogging.log(Level.SEVERE, "Connection to siebel cannot be established.");
-            throw new SiebelBusinessServiceException("NULL_DEF", "Connection to siebel cannot be established.");
+        try
+        { 
+            siebelConnection = sb;
+            connection = ebs;
+        }catch(NullPointerException ex){
+            MyLogging.log(Level.SEVERE, "Connection could not be established.");
+            throw new SiebelBusinessServiceException("CONN_ERROR", "Connection could not be established.");
         }
-        else if(EBS_CONN == null)
-        {
-            MyLogging.log(Level.SEVERE, "Connection to ebs cannot be established.");
-            throw new SiebelBusinessServiceException("NULL_DEF", "Connection to ebs cannot be established.");
-        }
-        if(e == null)
-        {
-            e = new EBSSql(EBS_CONN);
-        }
-        generateSalesOrder(salesOrder);
-        //generateOrderReservation();
+        this.generateSalesOrder(salesOrder);
     }
     
     public String getReturnStatus()
@@ -76,7 +70,7 @@ public class SalesOrder {
     
     public Integer getOrderNumber()
     {
-        return DataConverter.toInt(orderNumber);
+        return orderNumber;
     }
     
     public String getSalesOrderBookingStatus(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
@@ -95,75 +89,42 @@ public class SalesOrder {
     
     private void generateSalesOrder(SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
     {
+        SalesOrderService sos = new SalesOrderService(this.connection);
+        
         try 
         {
-            List<SalesOrderInventory> list = new ArrayList();
-            list.add(salesOrder);
-            MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + list);
-            e.createSalesOrder(SIEBEL_CONN, salesOrder);
-            returnValue = e.getString(15);
-            Array arr = e.getArray(18);
-            statusCode = e.getString(19);
-            orderNumber = (e.getString(20) == null) ? "0" : e.getString(20).replace(" ", "");
-            String[] data = new String[]{};
-            if (arr != null) 
-            {
-               data = (String[]) arr.getArray();
-            }
-            MyLogging.log(Level.INFO, "----------------------------Return message--------------------------");
-            for (String data1 : data) 
-            {
-                hList.add(data1);
-                MyLogging.log(Level.INFO, data1);
-            }
+            Integer orgId = salesOrder.getSoldToOrgId();
+            BillingAccountService bas = new BillingAccountService(this.connection);
+            salesOrder.setShipToId(bas.findShipToCode(orgId));
+            salesOrder.setBillToId(bas.findBillToCode(orgId));
+            //this.returnValue = this.ebs.getString(15);
+            //this.statusCode = this.ebs.getString(19);
+            Map<Integer, Object> item = sos.createSalesOrder(salesOrder);
+            this.returnValue = (String)item.get(15);
+            this.statusCode = (String)item.get(16);
+            this.orderNumber = (Integer)item.get(17);
         } 
         catch (SQLException ex) 
         {
             ex.printStackTrace(new PrintWriter(ERROR));
-            MyLogging.log(Level.SEVERE, "Caught SQL Exception:" + ERROR.toString());
-            throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ex.getMessage()); 
-        }
-        catch (NullPointerException ex)
-        {
+            MyLogging.log(Level.SEVERE, "SQL:" + ERROR.toString());
+            throw new SiebelBusinessServiceException("SQL", ex.getMessage());
+        } catch (SiebelException ex) {
             ex.printStackTrace(new PrintWriter(ERROR));
-            MyLogging.log(Level.SEVERE, "Caught Null Pointer Exception:" + ERROR.toString());
-            throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ex.getMessage()); 
+            MyLogging.log(Level.SEVERE, "SIEBEL:" + ERROR.toString());
         }
     }
     
-    private void generateOrderReservation() throws SiebelBusinessServiceException
+    public void generateOrderReservation() throws SiebelBusinessServiceException
     {
-        if(returnValue.equalsIgnoreCase("s") && statusCode.equalsIgnoreCase("booked"))
-        {
-            try 
-            {
-                e.createOrderReservation(DataConverter.toInt(orderNumber));
-                String r_id = e.getString(2);
-                String r = e.getString(3);
-                Array arr = e.getArray(4);
-                String[] data = new String[]{};
-                if (arr != null) 
-                {
-                   data = (String[]) arr.getArray();
-                }
-                MyLogging.log(Level.INFO, r + " " + r_id);
-                MyLogging.log(Level.INFO, "----------------------------Return Reserved message--------------------------");
-                for (String data1 : data) 
-                {
-                    hList.add(data1);
-                    MyLogging.log(Level.INFO, data1);
-                }
-            } 
-            catch (SQLException ex) 
-            {
-                ex.printStackTrace(new PrintWriter(ERROR));
-                MyLogging.log(Level.SEVERE, "Caught Null Pointer Exception:" + ERROR.toString());
-                throw new SiebelBusinessServiceException("CAUGHT_EXCEPT", ex.getMessage()); 
-            }
-        }
-        else
-        {
-            MyLogging.log(Level.SEVERE, "Cannot reserve order.");
+        try {
+            SalesOrderService salesOrderService = new SalesOrderService(this.connection);
+            salesOrderService.createReservation(this.orderNumber);
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(ERROR));
+            MyLogging.log(Level.SEVERE, "SQL:" + ERROR.toString());
+            throw new SiebelBusinessServiceException("SQL", "Cannot create reservation."
+                    + " Please try again later.");
         }
     }
     
@@ -190,11 +151,11 @@ public class SalesOrder {
         if(ret.length() == 0){
             throw new SiebelBusinessServiceException("NUM_EXCEPT", "Invalid order number. Please check your order number and try again.");
         }
-        e = new EBSSql(ebsConn);
-        e.cancelSalesOrder(ret);
-        returnValue = e.getString(4);
-        this.statusCode = e.getString(7);
-        Array arr = e.getArray(8);
+        ebs = new EBSSql(ebsConn);
+        ebs.cancelSalesOrder(ret);
+        returnValue = ebs.getString(4);
+        this.statusCode = ebs.getString(7);
+        Array arr = ebs.getArray(8);
         String[] data = new String[]{};
         if (arr != null) 
         {
@@ -218,11 +179,11 @@ public class SalesOrder {
         line_id = ret[0];
         header = ret[1];
         quantity_ordered = ret[2];
-        e = new EBSSql(ebsConn);
-        e.cancelSalesLineOrder(header, line_id, quantity_ordered);
-        this.returnValue = e.getString(6);
-        //this.statusCode = e.getString(7);
-        Array arr = e.getArray(9);
+        ebs = new EBSSql(ebsConn);
+        ebs.cancelSalesLineOrder(header, line_id, quantity_ordered);
+        this.returnValue = ebs.getString(6);
+        //this.statusCode = ebs.getString(7);
+        Array arr = ebs.getArray(9);
         this.line_order_status_code = this.onHandStatus(ebsConn, order_number, inventory_id);
         String[] data = new String[]{};
         if (arr != null) 

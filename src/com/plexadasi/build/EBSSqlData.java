@@ -12,7 +12,8 @@ package com.plexadasi.build;
  *
  * @author SAP Training
  */
-import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
+import com.plexadasi.build.SqlPreparedStatement;
+import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection_old;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
@@ -22,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -178,7 +181,7 @@ public class EBSSqlData
             stmt.select("SITE_USE_ID").from("HZ_CUST_SITE_USES_ALL")
             .where(
                 "CUST_ACCT_SITE_ID",
-                "(SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND BILL_TO_FLAG = ?)"
+                "(SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND BILL_TO_FLAG = ?) AND SITE_USE_CODE='BILL_TO'"
             ).preparedStatement();
             stmt.setInt(1, ebs_id);
             stmt.setString(2, "P");
@@ -204,7 +207,7 @@ public class EBSSqlData
             stmt.select("SITE_USE_ID").from("HZ_CUST_SITE_USES_ALL")
             .where(
                 "CUST_ACCT_SITE_ID",
-                "(SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND SHIP_TO_FLAG = ?)"
+                "(SELECT CUST_ACCT_SITE_ID FROM HZ_CUST_ACCT_SITES_ALL WHERE CUST_ACCOUNT_ID = ? AND SHIP_TO_FLAG = ?) AND SITE_USE_CODE='SHIP_TO'"
             ).preparedStatement();
             stmt.setInt(1, ebs_id);
             stmt.setString(2, "P");
@@ -375,6 +378,7 @@ public class EBSSqlData
         stmt.update("RA_CUSTOMER_TRX_ALL", new String[]{"CT_REFERENCE"}).where("CUSTOMER_TRX_ID").preparedStatement();
         stmt.setString(1, quote_id);
         stmt.setInt(2, cust_trx_id);
+        
         output = stmt.executeUpdate();
         stmt.close();
         MyLogging.log(Level.INFO, "Check if update on ct_ref is successful: " + output);
@@ -405,7 +409,7 @@ public class EBSSqlData
         return output;
     }
     
-    public Integer getOnHandQuantity(String partNumber, int warehouseId) throws SiebelBusinessServiceException{
+    public Integer getOnHandQuantity(String partNumber, int warehouseId, String type) throws SiebelBusinessServiceException{
         Integer onHand = 0;
         try {
             SqlPreparedStatement jdbcConnect = new SqlPreparedStatement(CONN);
@@ -413,11 +417,13 @@ public class EBSSqlData
             .from("dual").preparedStatement();
             jdbcConnect.setString(1, partNumber);
             jdbcConnect.setInt(2, warehouseId);
-            jdbcConnect.setString(3, "OHQ");
+            jdbcConnect.setString(3, type);
             ResultSet rs = jdbcConnect.get();
             while (rs.next()) {
                 onHand = (rs.getInt(1));
             }
+            rs.close();
+            jdbcConnect.close();
         } catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
@@ -426,9 +432,66 @@ public class EBSSqlData
         return onHand;
     }
     
+    public Map<String, String> backOrder(String partNumber, String orderNumber) throws SiebelBusinessServiceException
+    {
+        Map <String, String> map = new HashMap();
+        try {
+            SqlPreparedStatement jdbcConnect = new SqlPreparedStatement(CONN);
+            jdbcConnect.select("d.PICK_MEANING, b.FLOW_STATUS_CODE, c.RELEASED_STATUS")
+            .from("OE_ORDER_HEADERS_ALL a")
+            .join("OE_ORDER_LINES_ALL b", "b.header_id = a.header_id", "INNER")
+            .join("wsh_delivery_details c", "c.source_line_id=b.line_id", "INNER")
+            .join("wsh_delivery_line_status_v d", "d.source_line_id=c.source_line_id", "INNER")
+            .join("mtl_system_items_b d", "d.inventory_item_id = c.inventory_item_id and d.organization_id=c.organization_id", "INNER")
+            .where("a.CUST_PO_NUMBER").andWhere("d.SEGMENT1").preparedStatement();
+            jdbcConnect.setString(1, orderNumber);
+            jdbcConnect.setString(2, partNumber);
+            ResultSet rs = jdbcConnect.get();
+            while (rs.next()) {
+                map.put("status", rs.getString("PICK_MEANING"));
+                map.put("flow code", rs.getString("FLOW_STATUS_CODE"));
+                map.put("release status", rs.getString("RELEASED_STATUS"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        return map;
+    }
+    
+    public Map<String, String> backOrder(String partNumber, int warehouseId, String orderNumber) throws SiebelBusinessServiceException
+    {
+        Map <String, String> map = new HashMap();
+        try {
+            SqlPreparedStatement jdbcConnect = new SqlPreparedStatement(CONN);
+            jdbcConnect.select("wdls.Pick_Meaning,ool.Flow_Status_Code, wdd.Released_Status,ool.Ordered_Quantity Quantity")
+            .from("OE_ORDER_HEADERS_ALL ooh")
+            .join("OE_ORDER_LINES_ALL OOL", "ool.header_id = ooh.header_id", "INNER")
+            .join("wsh_delivery_details WDD", "wdd.source_line_id=ool.line_id", "INNER")
+            .join("wsh_delivery_line_status_v WDLS", "wdls.source_line_id=wdd.source_line_id", "INNER")
+            .where("OOH.CUST_PO_NUMBER").andWhere("ool.ordered_item").andWhere("ool.ship_from_org_id").preparedStatement();
+            jdbcConnect.setString(1, orderNumber);
+            jdbcConnect.setString(2, partNumber);
+            jdbcConnect.setInt(3, warehouseId);
+            ResultSet rs = jdbcConnect.get();
+            while (rs.next()) {
+                map.put("pick_meaning", rs.getString("PICK_MEANING"));
+                map.put("item_status", rs.getString("FLOW_STATUS_CODE"));
+                map.put("release_status", rs.getString("RELEASED_STATUS"));
+                map.put("back_order_quantity", rs.getString("QUANTITY"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "Caught Sql Exception:" + errors.toString());
+            throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
+        }
+        return map;
+    }
+    
     public static void main(String[] args) throws SQLException, SiebelBusinessServiceException 
     {
-        EBSSqlData ebs = new EBSSqlData(ApplicationsConnection.connectToEBSDatabase());
+        EBSSqlData ebs = new EBSSqlData(ApplicationsConnection_old.connectToEBSDatabase());
         //boolean updatePriceList = ebs.updatePriceList(0, 123, 18, 9013);
         //String[] orgId = ebs.getOrgCode(35113);//35113 35125
         //String status = ebs.getOrderBookingStatus("FLOW_STATUS_CODE", "OE_ORDER_HEADERS_ALL", "ORDER_NUMBER", "156");

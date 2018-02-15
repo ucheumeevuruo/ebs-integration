@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.plexadasi.ebs.Helper;
+package com.plexadasi.Helper;
 
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.siebel.eai.SiebelBusinessServiceException;

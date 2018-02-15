@@ -1,6 +1,5 @@
 
-import com.plexadasi.ebs.Helper.DataConverter;
-import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection;
+import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection_old;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.order.SalesOrder;
 import com.siebel.data.SiebelDataBean;
@@ -27,21 +26,21 @@ public class SalesOrderTest
 {
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException, PropertyVetoException 
     {
-        Connection ebs = ApplicationsConnection.connectToEBSDatabase();
-        SiebelDataBean sb = ApplicationsConnection.connectSiebelServer();
+        Connection ebs = ApplicationsConnection_old.connectToEBSDatabase();
+        SiebelDataBean sb = ApplicationsConnection_old.connectSiebelServer();
         SalesOrder ebsAccount = new SalesOrder();
         SalesOrderInventory s = new SalesOrderInventory();
-        s.setSiebelOrderId("1-8696928");
+        s.setSiebelOrderId("1-30474202");
         s.setOrderId(1001);//fixed
-        s.setSoldToOrgId(53133);//ebs customer id 35113
-        s.setShipToOrgId(34152);// site use id
-        s.setInvoiceId(34151);// site use id
-        s.setSoldFromId(124);
+        s.setSoldToOrgId(51086);//ebs customer id 35113
+        //s.setShipToOrgId(34152);// site use id
+        //s.setInvoiceId(34151);// site use id
+        s.setSoldFromId(123);
         s.setSalesRepId(100000040);
         //s.setPriceId(9013);
         s.setTransactionCode("NGN");
         s.setStatusCode("ENTERED");
-        s.setPurchaseOrderNumber("1-8696940");
+        s.setPurchaseOrderNumber("1-30474202");
         s.setSourceId(0);
         // To print out the values passed to the object Sales Order Inventory
         // I created an output that writes the object as string.

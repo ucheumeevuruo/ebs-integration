@@ -6,7 +6,7 @@
 package com.plexadasi.ebs.SiebelApplication.bin;
 
 import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.Helper.HelperAP;
+import com.plexadasi.Helper.HelperAP;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.order.PurchaseOrderInventory;
 import com.siebel.data.SiebelDataBean;

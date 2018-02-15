@@ -36,6 +36,11 @@ public class MyLogging {
   String propfilepath;
   String vlogFile = "";
   String logFile = "";
+  String logName = "EbsLogger_";
+  
+  public void setLogName(String name){
+      this.logName = name;
+  }
   
   private MyLogging()throws IOException{
     ip = InetAddress.getLocalHost();
@@ -53,8 +58,7 @@ public class MyLogging {
     Date date = new Date();
     SimpleDateFormat app = new SimpleDateFormat("dd-MM-yyyy");
     String dateApp = app.format(date);
-    String file = "EbsLogger_";
-    logFile += file + dateApp + ".log";
+    logFile += this.logName + dateApp + ".log";
     logger = Logger.getLogger(MyLogging.class.getName() + "\n\n");
     
     this.fileHandler = new FileHandler(logFile, true);

@@ -24,9 +24,9 @@ import java.io.StringWriter;
  * @author SAP Training
  */
 
-public class ApplicationsConnection {
+public class ApplicationsConnection_old {
 
-    private static final Logger LOG = Logger.getLogger(ApplicationsConnection.class.getName());
+    private static final Logger LOG = Logger.getLogger(ApplicationsConnection_old.class.getName());
     private static final String OS = System.getProperty("os.name").toLowerCase();
     private static String prop_file_path = "";
     private static String ebs_database = "";
@@ -46,7 +46,7 @@ public class ApplicationsConnection {
     private static final String gateway_port = "2321";
     private static StringWriter errors = new StringWriter();
     
-    public ApplicationsConnection() {
+    public ApplicationsConnection_old() {
         initializePropertyValues();
         //LOG = vLOG;
     }

@@ -79,7 +79,7 @@ public class CreateAccountInEbs
             }   
             if(siteUseType.equals(""))
             {
-                throw new SiebelBusinessServiceException("CUMPOLSARY_EXCPT", "Site use type must be defined");
+                throw new SiebelBusinessServiceException("COMPULSARY_EXCPT", "Site use type must be defined");
             }
             account.setSiebelAccountId(acc_id);
             // Let use setup the account location

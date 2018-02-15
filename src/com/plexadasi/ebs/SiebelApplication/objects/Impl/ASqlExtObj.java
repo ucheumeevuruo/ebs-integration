@@ -4,11 +4,13 @@ package com.plexadasi.ebs.SiebelApplication.objects.Impl;
 
 
 import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.ebs.Helper.DataConverter;
+import com.plexadasi.Helper.DataConverter;
 import java.util.Map;
-import com.plexadasi.ebs.Helper.HelperAP;
+import com.plexadasi.Helper.HelperAP;
 import com.plexadasi.invoice.InvoiceObject;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import static com.plexadasi.ebs.SiebelApplication.objects.Impl.Product.PLX_NET_PRICE;
+import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -78,18 +80,21 @@ abstract public class ASqlExtObj implements ImplSql
     
     private final String trxDistId;
     
+    protected Product items = null;
+    
     private final int lineNumber = 1;
     
     public ASqlExtObj(Connection ebs_conn, Product item) throws SiebelBusinessServiceException
     {
-        this.L_TRX_LINES = "l_trx_lines_tbl";
-        this.L_TRX_HEADER = "l_trx_header_tbl";
+       this.L_TRX_LINES = "l_trx_lines_tbl";
+       this.L_TRX_HEADER = "l_trx_header_tbl";
        this.AR_INVOICE_API = "AR_INVOICE_API_PUB.create_single_invoice";
        userId = HelperAP.getEbsUserId();
        respId = HelperAP.getEbsUserResp();
        batchId = HelperAP.getSourceBatchId();
        legalEntity = HelperAP.getLegalEntity();
        List = new ArrayList();
+       this.items = item;
        item.doTrigger();
        List = item.getList();
        ebsSqlData = new EBSSqlData(ebs_conn);
@@ -136,13 +141,15 @@ abstract public class ASqlExtObj implements ImplSql
         int trx_header_id = DataConverter.toInt(trxHeaderId);
         int trx_line_id = DataConverter.toInt(trxLineId);
         int trx_dist_id = DataConverter.toInt(trxDistId);
+        int link_to_trx_line_id = trx_line_id;
         int line_number = lineNumber;
-        if(List.size()<= 0)
+        int length = List.size();
+        if(length<= 0)
         {
              MyLogging.log(Level.SEVERE, "Please add one or more item.");
              throw new SiebelBusinessServiceException("NO_ITEM", "Please add one or more item.");
         }
-        for(int i = 0; i < List.size(); i++)
+        for(int i = 0; i < length; i++)
         {
             int num = addNum == true ? i + 1 : 1;
             Map<String, String> item = List.get(i);
@@ -160,9 +167,9 @@ abstract public class ASqlExtObj implements ImplSql
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").line_number := " + line_number + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").inventory_item_id := " + inventoryId + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").quantity_invoiced := " + DataConverter.toInt(item.get(Product.FIELD_QUANTITY)) + NEXT_LINE_COL;
-            invoiceItemsBody += L_TRX_LINES + "(" + num + ").unit_selling_price := " + Float.parseFloat(item.get(Product.PLX_ITEM_PRICE)) + NEXT_LINE_COL;
+            invoiceItemsBody += L_TRX_LINES + "(" + num + ").unit_selling_price := " + Float.parseFloat(item.get(Product.PLX_NET_PRICE)) + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_LINES + "(" + num + ").line_type := 'LINE'" + NEXT_LINE_COL;
-            invoiceItemsBody += L_TRX_LINES + "(" + num + ").TAX_RATE := " + DataConverter.toInt(item.get(Product.PLX_DISCOUNT_AMOUNT)) + NEXT_LINE_COL;
+            //invoiceItemsBody += L_TRX_LINES + "(" + num + ").TAX_RATE := 5"  + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_DIST + "(" + num + ").trx_dist_id := " + trx_dist_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_DIST + "(" + num + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
             invoiceItemsBody += L_TRX_DIST + "(" + num + ").account_class := 'REV'" + NEXT_LINE_COL;
@@ -173,6 +180,30 @@ abstract public class ASqlExtObj implements ImplSql
             trx_dist_id++;
             line_number++;
         }
+        length += 1;
+        SiebelPropertySet prop = this.items.getProperties();
+        String freight_amount = prop.getProperty(Product.FIELD_FREIGHT);
+        String tax_rate = prop.getProperty(Product.PLX_TAX_RATE);
+        String vat = prop.getProperty(Product.PLX_VAT);
+        String ldc = prop.getProperty(Product.FIELD_LDC);
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").trx_header_id := " + trx_header_id + NEXT_LINE_COL;
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").line_number := " + line_number + NEXT_LINE_COL;
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").inventory_item_id := " + HelperAP.getDeliveryCharges() + NEXT_LINE_COL;
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").quantity_invoiced := 1" + NEXT_LINE_COL;
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").unit_selling_price := " + Float.parseFloat(ldc) + NEXT_LINE_COL;
+
+        finvoiceItemsBody += L_TRX_LINES + "(" + length + ").line_type := 'LINE'" + NEXT_LINE_COL;
+        //length += 1;
+        //trx_line_id += 1;
+        //line_number += 1;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + (length) + ").trx_header_id := " + trx_header_id + NEXT_LINE_COL;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + (length) + ").trx_line_id := " + trx_line_id + NEXT_LINE_COL;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + (length) + ").line_number := " + line_number + NEXT_LINE_COL;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + length + ").link_to_trx_line_id := " + link_to_trx_line_id  + NEXT_LINE_COL;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + length + ").TAX_RATE_CODE := '"+vat+"% VAT'" + NEXT_LINE_COL;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + length + ").amount := " + tax_rate + NEXT_LINE_COL;
+        //finvoiceItemsBody += L_TRX_LINES + "(" + length + ").line_type := 'TAX'" + NEXT_LINE_COL;
         MyLogging.log(Level.INFO, finvoiceItemsBody);
         output += finvoiceItemsBody;
     }

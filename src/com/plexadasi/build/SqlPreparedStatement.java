@@ -42,6 +42,7 @@ public class SqlPreparedStatement
     protected static final String AND_CLAUSE = "AND ";
     protected static final String OR_CLAUSE = "OR ";
     protected static final String POSITIONAL_PARAMETER = "?";
+    protected static final String GROUP_BY_CLAUSE = "GROUP BY ";
     protected static final String NEW_LINE = "\n";
     protected static final String EQUALS = "=";
     protected static final String BLANK = " ";
@@ -49,27 +50,34 @@ public class SqlPreparedStatement
     protected static final String IS_NULL = "IS NULL";
     private static final String PARAM_EXCEPTION = "Sql Parameter for insert statement cannot be empty.";
     
+    public SqlPreparedStatement()
+    {
+        
+    }
+    
     public SqlPreparedStatement(Connection ebsConn)
     {
         CONN = ebsConn;
     }
     
-    protected SqlPreparedStatement preparedStatement() throws SiebelBusinessServiceException
+    public SqlPreparedStatement preparedStatement() throws SiebelBusinessServiceException
     {
         try 
         {
             preparedStatement = CONN.prepareStatement(sqlQuery);
-            MyLogging.log(Level.SEVERE, "Sql Query Statement:"+sqlQuery);
-            sqlQuery = "";
-            MyLogging.log(Level.INFO, sqlQuery);
         } 
         catch (SQLException ex) {
             ex.printStackTrace(new PrintWriter(errors));
             MyLogging.log(Level.SEVERE, "Caught Sql Exception at prepared statement:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
+        finally{
+            this.sqlQuery = "";
+        }
         return this;
     }
+    
+   // public Object query(String query, Object[], RowMapper)
     
     public void setInt(int index, int value) throws SiebelBusinessServiceException
     {
@@ -287,6 +295,23 @@ public class SqlPreparedStatement
         return this;
     }
     
+    public SqlPreparedStatement groupBy(String[] groups)
+    {
+        sqlQuery += GROUP_BY_CLAUSE;
+        length = groups.length;
+        returnInteger = 0;
+        for(String group : groups)
+        {
+            returnInteger++;
+            sqlQuery += group;
+            if(returnInteger != length)
+            {
+                sqlQuery += COMMA_SEPERATOR;
+            }
+        }
+        return this;
+    }
+    
     public void close() throws SiebelBusinessServiceException
     {
         try 
@@ -299,5 +324,12 @@ public class SqlPreparedStatement
             MyLogging.log(Level.SEVERE, "Caught Sql Exception:"+errors.toString());
             throw new SiebelBusinessServiceException("SQL_EXCEPT", ex.getMessage());
         }
+    }
+    
+    public String getQuery()
+    {
+        String query = this.sqlQuery;
+        this.sqlQuery = null;
+        return query;
     }
 }
