@@ -1,6 +1,8 @@
 
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection_old;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.model.BackOrder;
+import com.plexadasi.ebs.model.Order;
 import com.plexadasi.order.SalesOrder;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
@@ -30,7 +32,7 @@ public class SalesOrderTest
         SiebelDataBean sb = ApplicationsConnection_old.connectSiebelServer();
         SalesOrder ebsAccount = new SalesOrder();
         SalesOrderInventory s = new SalesOrderInventory();
-        s.setSiebelOrderId("1-30474202");
+        s.setSiebelOrderId("1-38728863");
         s.setOrderId(1001);//fixed
         s.setSoldToOrgId(51086);//ebs customer id 35113
         //s.setShipToOrgId(34152);// site use id
@@ -40,26 +42,37 @@ public class SalesOrderTest
         //s.setPriceId(9013);
         s.setTransactionCode("NGN");
         s.setStatusCode("ENTERED");
-        s.setPurchaseOrderNumber("1-30474202");
+        s.setPurchaseOrderNumber("1-38728863");
         s.setSourceId(0);
         // To print out the values passed to the object Sales Order Inventory
         // I created an output that writes the object as string.
         List<SalesOrderInventory> list = new ArrayList();
         list.add(s);
+        Order so = new Order();
+        so.setOrderNumber("1-42776238");
+        so.setPartNumber("B66848216");
+        so.setWarehouseId(123);
+        
+        BackOrder b = ebsAccount.getSalesOrderLineItemStatus(ebs, so);
+        System.out.println(b.getItemStatus());
+        System.out.println(b.getPickMeaning());
+        System.out.println(b.getReleaseStatus());
+        System.out.println(b.getQuantity());
         MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + list);
         ebsAccount.doInvoke(s, sb, ebs);
         ebsAccount.getSalesOrderBookingStatus(ebs, String.valueOf(ebsAccount.getOrderNumber()));
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getReturnStatus()) + " Order Number:" + ebsAccount.getOrderNumber() + ebsAccount.getFlowStatusCode());
-        //ebsAccount.cancelOrder(ebs, 234);
+        //ebsAccount.cancelOrder(ebs, ebsAccount.getOrderNumber());
+        MyLogging.log(Level.INFO, "Done: " + String.valueOf(ebsAccount.getReturnStatus()) + " Order Number:" + ebsAccount.getOrderNumber() + ebsAccount.getFlowStatusCode());
         //ebsAccount.cancelLineOrder(ebs, 233, 14);
-        //List<String> ht = ebsAccount.getReturnMessages();
+        List<String> ht = ebsAccount.getReturnMessages();
         String returns = "";
-        String onHand = ebsAccount.onHandStatus(ebs, 233, 14);
-        MyLogging.log(Level.INFO, onHand);
+        //String onHand = ebsAccount.onHandStatus(ebs, 233, 14);
+        //MyLogging.log(Level.INFO, onHand);
         /*for (String ht1 : ht) {
             returns += ht1 + "\n";
         }
-        //MyLogging.log(Level.INFO, "Done Cancel: " + String.valueOf(ebsAccount.getReturnStatus()) + " Return Message:" + returns + " Return Flow Status Code:" + ebsAccount.getSalesOrderBookingStatus(ebs, returns));
+        MyLogging.log(Level.INFO, "Done Cancel: " + String.valueOf(ebsAccount.getReturnStatus()) + " Return Message:" + returns + " Return Flow Status Code:" + ebsAccount.getSalesOrderBookingStatus(ebs, returns));
         */ebs.close();
         sb.logoff();
     }

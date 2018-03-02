@@ -82,6 +82,11 @@ public class HelperAP
         return initializeProperty(HelperProperties.MASTER_ORG_CODE, false);
     }
 
+    public static String getDefalutWarehouse() 
+    {
+        return initializeProperty(HelperProperties.DEFAULT_WAREHOUSE, false);
+    }
+    
     public static String getLagosWarehouseId() 
     {
         return initializeProperty(HelperProperties.LAGOS_WAREHOUSE_ID, false);
@@ -130,5 +135,6 @@ public class HelperAP
         public static final String DELIVERY_CHARGES = "delivery_charges";
         public static final String ABUJA_WAREHOUSE_ID = "abuja_warehouse_code";
         public static final String LAGOS_WAREHOUSE_ID = "lagos_warehouse_code";
+        public static final String DEFAULT_WAREHOUSE = "default_warehouse";
     }
 }

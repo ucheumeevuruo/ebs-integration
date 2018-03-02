@@ -59,7 +59,7 @@ public class QuoteServices {
                 DataConverter.toInt(HelperAP.getLegalEntity()),
                 invoice.getPrimarySalesId(),
                 new QuoteInventory(this.siebelDataBean, this.connection, invoice.getId()).getInventoryItem(),
-                new OutParameter(java.sql.Types.INTEGER, Integer.class)
+                new OutParameter(java.sql.Types.INTEGER, Integer.class, "customerTranactionId")
             }
         );
         return order;

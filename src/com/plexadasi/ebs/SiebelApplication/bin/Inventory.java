@@ -89,4 +89,16 @@ public class Inventory {
     public int getKey() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public String toString() 
+    {
+        String output = "";
+        output += "\t\t[Siebel part number=" + this.part_number + "]\n";
+        output += "\t\t[Line type=" + this.line_type + "]\n";
+        output += "\t\t[Amount=" + this.amount + "]\n";
+        output += "\t\t[Ship to org id=" + this.org_id + "]\n";
+        output += "\t\t[Quantity=" + this.quantity + "]\n";
+        return getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
+    }
 }

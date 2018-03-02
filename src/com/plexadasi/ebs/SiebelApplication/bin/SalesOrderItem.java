@@ -46,16 +46,17 @@ public class SalesOrderItem extends Product implements Impl
         field = Product.FIELD_ORDER_NUMBER;
     }
     
-    com.plexadasi.ebs.model.SalesOrder salesOrder;
+    com.plexadasi.ebs.model.Order salesOrder;
     
     public List<Map<String, String>> inventoryItems(Connection ebsConn) throws SiebelException
     {
         SiebelServiceClone s = new SiebelServiceClone(CONN);
         SiebelPropertySet values = CONN.newPropertySet();
         set = CONN.newPropertySet();
-        set.setProperty(Product.PLX_PART_NUMBER, "0");
-        set.setProperty(SalesOrderItem.PLX_ITEM_PRICE, "1");
-        set.setProperty(SalesOrderItem.PLX_LOT_ID, "3");
+        set.setProperty(Product.PLX_LOT_ID, Product.PLX_LOT_ID);
+        set.setProperty(Product.FIELD_QUANTITY, Product.FIELD_QUANTITY);
+        set.setProperty(Product.PLX_PART_NUMBER, Product.PLX_PART_NUMBER);
+        set.setProperty(Product.PLX_ITEM_PRICE, Product.PLX_ITEM_PRICE);
         // Pass the properties to siebel class
         s.setSField(this.set);
         SiebelBusComp sbBC = s.fields(this.busObj, this.busComp, this).getBusComp();
@@ -69,6 +70,7 @@ public class SalesOrderItem extends Product implements Impl
                 String value = e.nextElement();
                 items.put(set.getProperty(value), values.getProperty(value));
             }
+            item.add(items);
             isRecord = sbBC.nextRecord();
         }
         return item;
@@ -78,7 +80,7 @@ public class SalesOrderItem extends Product implements Impl
     {
         SiebelServiceClone s = new SiebelServiceClone(CONN);
         SalesOrderService sos = new SalesOrderService(ebsConn);
-        this.salesOrder = new com.plexadasi.ebs.model.SalesOrder();
+        this.salesOrder = new com.plexadasi.ebs.model.Order();
         SiebelPropertySet values = CONN.newPropertySet();
         // Set properties
         this.set.setProperty(this.field, this.field);
@@ -95,7 +97,7 @@ public class SalesOrderItem extends Product implements Impl
             salesOrder.setOrderNumber(values.getProperty(this.field));
             this.salesOrder.setPartNumber(values.getProperty(Product.PLX_PART_NUMBER));
             this.salesOrder.setWarehouseId(Integer.parseInt(values.getProperty(Product.PLX_LOT_ID)));
-            com.plexadasi.ebs.model.SalesOrder salesOrderService = sos.findOnHandQuantity(this.salesOrder, type);
+            com.plexadasi.ebs.model.Order salesOrderService = sos.findOnHandQuantity(this.salesOrder, type);
             // Write field value to siebel business component
             try{
                 this.salesOrder.setQuantity(salesOrderService.getQuantity());
@@ -112,7 +114,7 @@ public class SalesOrderItem extends Product implements Impl
     public void backOrder(Connection ebsConn) throws SiebelBusinessServiceException, SQLException, SiebelException{
         SiebelServiceClone s = new SiebelServiceClone(CONN);
         SalesOrderService sos = new SalesOrderService(ebsConn);
-        this.salesOrder = new com.plexadasi.ebs.model.SalesOrder();
+        this.salesOrder = new com.plexadasi.ebs.model.Order();
         SiebelPropertySet values = CONN.newPropertySet();
         this.set.setProperty(Product.FIELD_ORDER_NUMBER, Product.FIELD_ORDER_NUMBER);
         this.set.setProperty(Product.PLX_PART_NUMBER, Product.PLX_PART_NUMBER);
@@ -131,7 +133,7 @@ public class SalesOrderItem extends Product implements Impl
             salesOrder.setOrderNumber(values.getProperty(Product.FIELD_ORDER_NUMBER));
             salesOrder.setWarehouseId(DataConverter.toInt(values.getProperty(Product.PLX_LOT_ID)));
             salesOrder.setPartName(values.getProperty(Product.PLX_PRODUCT));
-            BackOrder backorder = sos.findBackOrderedItem(salesOrder);
+            BackOrder backorder = sos.findBookingLineItemStatus(salesOrder);
             // Write values to siebel business component
             try{
                 sbBC.setFieldValue(Product.PICK_MEANING, backorder.getPickMeaning());

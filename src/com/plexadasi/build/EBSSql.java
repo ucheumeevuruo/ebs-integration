@@ -21,6 +21,10 @@ import com.plexadasi.ebs.SiebelApplication.bin.Inventory;
 import com.plexadasi.ebs.SiebelApplication.bin.Quote;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ImplSql;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
+import static com.plexadasi.ebs.SiebelApplication.objects.Impl.Product.FIELD_QUANTITY;
+import static com.plexadasi.ebs.SiebelApplication.objects.Impl.Product.PLX_LOT_ID;
+import static com.plexadasi.ebs.SiebelApplication.objects.Impl.Product.PLX_NET_PRICE;
+import static com.plexadasi.ebs.SiebelApplication.objects.Impl.Product.PLX_PART_NUMBER;
 import com.plexadasi.ebs.model.BillingAccount;
 import com.plexadasi.ebs.model.Customer;
 import com.plexadasi.ebs.services.BillingAccountService;
@@ -37,6 +41,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,11 +104,31 @@ public class EBSSql {
             cs.setString(8, invoice.getTermId());
             cs.setInt(9, DataConverter.toInt(HelperAP.getLegalEntity()));
             cs.setString(10, invoice.getPrimarySalesId());
+            
+            
+            
+            List<Inventory> inventory = new ArrayList();
+            Inventory inventories = new Inventory();
+            // We merge this with the delivery line item
+            inventory.addAll(product.getInventories(CONN));
+            
+            // Messy hack
+            // This adds the delivery charges to the invoice in EBS
+            // EBS was giving undesired result without this value.
+            inventories.setPart_number(HelperAP.getDeliveryCharges());
+            inventories.setOrg_id(DataConverter.toInt(HelperAP.getLagosWarehouseId()));
+            inventories.setQuantity(1);
+            inventories.setAmount(Float.parseFloat("0"));
+            inventories.setLine_type("LINE");
+            inventory.add(inventories);
+        
+            MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + inventory.toString());
+          
             cs.setArray(11, new ARRAY(
                 ArrayDescriptor.createDescriptor("ITEM", CONN), 
                 CONN, 
                 createStructArray(
-                    product.getInventories(CONN), 
+                    inventory, 
                     StructDescriptor.createDescriptor("ITEMS", CONN), 
                     CONN
                 )
@@ -261,7 +286,7 @@ public class EBSSql {
             cs = CONN.prepareCall("{CALL SALES_ORDER_TEST(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             
             // Update the prices in EBS before we proceed
-            salesOrder.inventory(sb, CONN).updatePriceList();
+            //salesOrder.inventory(sb, CONN).updatePriceList();
             
             // Pass the in parameters to the procedure call
             cs.setInt(1, DataConverter.toInt(HelperAP.getEbsUserId()));

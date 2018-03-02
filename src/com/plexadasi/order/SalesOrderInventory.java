@@ -211,8 +211,8 @@ public class SalesOrderInventory {
         output += "\t\t[Siebel order number=" + siebelOrderId + "]\n";
         output += "\t\t[Order type id=" + orderId + "]\n";
         output += "\t\t[Sold to org id=" + soldToOrgId + "]\n";
-        //output += "\t\t[Ship to org id=" + shipToOrgId + "]\n";
-        //output += "\t\t[Invoice id=" + invoiceId + "]\n";
+        output += "\t\t[Ship to org id=" + this.shipToId + "]\n";
+        output += "\t\t[Invoice id=" + this.billToId + "]\n";
         output += "\t\t[Sold from id=" + soldFromId + "]\n";
         output += "\t\t[Sales rep id=" + salesRepId + "]\n";
         //output += "\t\t[Price id=" + priceId + "]\n";

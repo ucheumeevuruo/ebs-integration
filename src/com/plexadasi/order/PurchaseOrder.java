@@ -105,7 +105,7 @@ public class PurchaseOrder {
         {
             return new EBSSqlData(ebsConn).getOrderBookingStatus(
                 "AUTHORIZATION_STATUS", 
-                "select * from po", 
+                "PO_HEADERS_ALL", 
                 "PO_HEADER_ID", 
                 getPurchaseOrderNumber(ebsConn, order_num)
             );

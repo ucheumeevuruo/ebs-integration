@@ -5,14 +5,17 @@
  */
 package com.plexadasi.order;
 
+import com.plexadasi.Helper.DataConverter;
 import com.plexadasi.build.EBSSql;
 import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.model.BackOrder;
 import com.plexadasi.ebs.model.BillingAccount;
 import com.plexadasi.ebs.services.BillingAccountService;
 import com.plexadasi.ebs.services.SalesOrderService;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
+import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -39,6 +42,12 @@ public class SalesOrder {
     private Integer orderNumber = 0;
     private EBSSql ebs = null;
     private String line_order_status_code;
+    
+    public SalesOrder(){
+        MyLogging.log(Level.INFO, "===============================");
+        MyLogging.log(Level.INFO, "=="+getClass().getSimpleName());
+        MyLogging.log(Level.INFO, "===============================");
+    }
     
     public void doInvoke(SalesOrderInventory salesOrder, SiebelDataBean sb, Connection ebs) throws SiebelBusinessServiceException
     {
@@ -87,6 +96,9 @@ public class SalesOrder {
         return this.line_order_status_code;
     }
     
+    /*
+        @SalesOrderInventory
+    */
     private void generateSalesOrder(SalesOrderInventory salesOrder) throws SiebelBusinessServiceException
     {
         SalesOrderService sos = new SalesOrderService(this.connection);
@@ -97,8 +109,14 @@ public class SalesOrder {
             BillingAccountService bas = new BillingAccountService(this.connection);
             salesOrder.setShipToId(bas.findShipToCode(orgId));
             salesOrder.setBillToId(bas.findBillToCode(orgId));
-            //this.returnValue = this.ebs.getString(15);
-            //this.statusCode = this.ebs.getString(19);
+            
+            // Lets log the values from the sales order inventory class.
+            // This will aid in debugging any issue that might arise in the future
+            List<SalesOrderInventory> list = new ArrayList();
+            list.add(salesOrder);
+            MyLogging.log(Level.INFO, "Describe Sales Order Inventory Object \n" + list);
+            
+            // Create the the sales order in siebel.
             Map<Integer, Object> item = sos.createSalesOrder(salesOrder);
             this.returnValue = (String)item.get(15);
             this.statusCode = (String)item.get(16);
@@ -128,6 +146,18 @@ public class SalesOrder {
         }
     }
     
+    public BackOrder getSalesOrderLineItemStatus(Connection connection, com.plexadasi.ebs.model.Order salesOrder) throws SiebelBusinessServiceException{
+        try {
+            this.connection = connection;
+            SalesOrderService salesOrderService = new SalesOrderService(this.connection);
+            return salesOrderService.findBookingLineItemStatus(salesOrder);
+        } catch(SQLException ex) {
+            ex.printStackTrace(new PrintWriter(ERROR));
+            MyLogging.log(Level.SEVERE, ERROR.toString());
+        }
+        return new BackOrder();
+    }
+    
     public String onHandStatus(Connection ebsConn, Integer order_number, Integer inventory_id) throws SiebelBusinessServiceException, SQLException{
         EBSSqlData ebsData = new EBSSqlData(ebsConn);
         String[] ret = ebsData.getHeaderLineId(order_number, inventory_id);
@@ -145,14 +175,20 @@ public class SalesOrder {
     }
     
     public void cancelOrder(Connection ebsConn, Integer order_number) throws SiebelBusinessServiceException, SQLException{
+        this.connection = ebsConn;
+        SalesOrderService sos = new SalesOrderService(ebsConn);
         EBSSqlData ebsData = new EBSSqlData(ebsConn);
         String ret = ebsData.getHeaderId(order_number);
         MyLogging.log(Level.SEVERE, "Order Number:" + ret);
         if(ret.length() == 0){
             throw new SiebelBusinessServiceException("NUM_EXCEPT", "Invalid order number. Please check your order number and try again.");
         }
-        ebs = new EBSSql(ebsConn);
-        ebs.cancelSalesOrder(ret);
+        
+        //ebs = new EBSSql(ebsConn);
+        //ebs.cancelSalesOrder(ret);
+        Map<Integer, Object> cso = sos.cancelSalesOrder(DataConverter.toInt(ret), orderNumber);
+        this.statusCode = (String)cso.get(5);
+        /*
         returnValue = ebs.getString(4);
         this.statusCode = ebs.getString(7);
         Array arr = ebs.getArray(8);
@@ -166,7 +202,7 @@ public class SalesOrder {
         {
             hList.add(data1);
             MyLogging.log(Level.INFO, data1);
-        }
+        }*/
     }
     
     public void cancelLineOrder(Connection ebsConn, Integer order_number, Integer inventory_id) throws SiebelBusinessServiceException, SQLException{

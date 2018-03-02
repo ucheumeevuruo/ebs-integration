@@ -41,10 +41,10 @@ public class CreateInvoiceTest
         input.setTermId("1002");
         input.setPrimarySalesId("100000040");
         input.setCustomerTrxTypeId("1003");
-        input.setCtRef("1-KH8SP");
+        input.setCtRef("1-NPIUR");
         Connection ebs = ApplicationsConnection_old.connectToEBSDatabase();
         SiebelDataBean sb = ApplicationsConnection_old.connectSiebelServer();
-        Integer output = CreateInvoice.doInvoke("1-KH8SP", input, "Quote", sb, ebs);
+        Integer output = CreateInvoice.doInvoke("1-NPIUR", input, "Quote", sb, ebs);
         MyLogging.log(Level.INFO, "Done: " + String.valueOf(output));
         ebs.close();
         sb.logoff();

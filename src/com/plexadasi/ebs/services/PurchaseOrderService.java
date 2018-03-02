@@ -12,7 +12,8 @@ import com.plexadasi.connect.siebel.SiebelConnect;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.CallableRunner;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ProcRunner;
 import com.plexadasi.ebs.model.BackOrder;
-import com.plexadasi.ebs.model.SalesOrder;
+import com.plexadasi.ebs.model.BillingAccount;
+import com.plexadasi.ebs.model.Order;
 import com.plexadasi.ebs.services.sql.build.SQLBuilder;
 import com.plexadasi.order.SalesOrderInventory;
 import com.siebel.data.SiebelException;
@@ -78,15 +79,12 @@ public class PurchaseOrderService {
         return order;
     }
     
-    public void createReservation(Integer orderId) throws SQLException
+    public void getBookingStatus(Integer orderId) throws SQLException
     {
-        CallableRunner prun = new CallableRunner();
-        this.query = "{CALL ORDER_MGMT_RESERVATION(?,?,?,?)}";
-        prun.queryProc(this.connection, this.query, 
+        ResultSetHandler<BillingAccount> rowMapper = new BeanHandler<BillingAccount>(BillingAccount.class);
+        this.query = "SELECT AUTHORIZATION_STATUS status FROM PO_HEADERS_ALL WHERE PO_HEADER_ID = ?";
+        this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
             new Object[]{
-                HelperAP.getEbsUserId(),
-                HelperAP.getEbsUserResp(),
-                HelperAP.getEbsAppId(),
                 orderId
             }
         );
@@ -124,7 +122,7 @@ public class PurchaseOrderService {
         );
     }
     
-    public BackOrder findBackOrderedItem(SalesOrder salesOrder) throws SQLException
+    public BackOrder findBackOrderedItem(Order salesOrder) throws SQLException
     {
         ResultSetHandler<BackOrder> rowMapper = new BeanHandler<BackOrder>(BackOrder.class);
         this.query = this.sqlBuilder.buildBackOrderSql().getQuery();
@@ -138,38 +136,38 @@ public class PurchaseOrderService {
         return backOrder;
     }
     
-    public SalesOrder findOnHandQuantity(SalesOrder salesOrder, String type) throws SQLException
+    public Order findOnHandQuantity(Order salesOrder, String type) throws SQLException
     {
-        ResultSetHandler<SalesOrder> rowMapper = new BeanHandler<SalesOrder>(SalesOrder.class);
+        ResultSetHandler<Order> rowMapper = new BeanHandler<Order>(Order.class);
         this.query = "SELECT XXMADN_GET_OHQTY(?, ?, ?) quantity FROM DUAL";
-        SalesOrder onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
+        Order onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
             new Object[]{
                 salesOrder.getPartNumber(),
                 salesOrder.getWarehouseId(),
                 type
             }
         ); 
-        return onhand != null ? onhand : new SalesOrder();
+        return onhand != null ? onhand : new Order();
     }
     
-    public List<SalesOrder> findOnHandQuantity (String partNumber, String location1, String location2) throws SQLException
+    public List<Order> findOnHandQuantity (String partNumber, String location1, String location2) throws SQLException
     {
-        ResultSetHandler<List<SalesOrder>> rowMapper = new BeanListHandler<SalesOrder>(SalesOrder.class);
+        ResultSetHandler<List<Order>> rowMapper = new BeanListHandler<Order>(Order.class);
         this.query = this.sqlBuilder.buildOnhandQuantitySql().getQuery();
-        List<SalesOrder> onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
+        List<Order> onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
             new Object[]{
                 partNumber,
                 location1,
                 location2
             }
         );
-        return onhand != null ? onhand : new ArrayList<SalesOrder>();
+        return onhand != null ? onhand : new ArrayList<Order>();
     }
     
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException, NamingException
     {
         Connection ebs = EbsConnect.connectToEBSDatabase();
-        SalesOrder salesOrder = new SalesOrder();
+        Order salesOrder = new Order();
         PurchaseOrderService sos = new PurchaseOrderService(ebs);
         BillingAccountService billing = new BillingAccountService(ebs);
         SalesOrderInventory s = new SalesOrderInventory();
@@ -198,7 +196,7 @@ public class PurchaseOrderService {
         //salesOrder.setPartNumber("A9438202445");
         //salesOrder.setOrderNumber("1-28859582");
         //List<SalesOrder> s = sos.findOnHandQuantity(salesOrder.getPartNumber(), "123", "124");
-        //for(SalesOrder salet : s){
+        //for(Order salet : s){
           //  System.out.println(salet.getQuantity()+" "+salet.getWarehouseId()+"\\n");
         //}
         //BackOrder b = sos.findBackOrderedItem(salesOrder);

@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import com.siebel.data.SiebelPropertySet;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -46,12 +49,41 @@ public class Quote extends Product implements Impl
      */
     private static final String BUS_COMP = "Quote Item";
     
+    // A dirty way of getting the header
+    // Was a quick fix. Didn't have time to think about this implementation
+    // Barca - Chelsea match
+    public Map<String, String> getQuoteHeader(SiebelPropertySet property) throws SiebelException{
+        SiebelServiceClone s = new SiebelServiceClone(CONN);
+        SiebelPropertySet values = CONN.newPropertySet();
+        s.setSField(property);
+        SiebelBusComp sbBC = s.fields(BUS_OBJ, "Quote", this).getBusComp();
+        Map<String, String> items = new HashMap();
+        boolean isRecord = sbBC.firstRecord();
+        while(isRecord){
+            sbBC.getMultipleFieldValues(property, values);
+            final Enumeration<String> e = property.getPropertyNames();
+            while (e.hasMoreElements()){
+                String value = e.nextElement();
+                items.put(property.getProperty(value), values.getProperty(value));
+            }
+            isRecord = sbBC.nextRecord();
+        }
+        return items;
+    }
+    
     public List<Inventory> getInventories(Connection ebsConn) throws SiebelBusinessServiceException
     {
         SiebelServiceClone s = new SiebelServiceClone(CONN);
-        Inventory inventories = new Inventory();
+        
         List<Inventory> inventory = new ArrayList();
+        
+        //Modifications to get the lot item id from the header
+        SiebelPropertySet property = CONN.newPropertySet();
+        property.setProperty(Product.PLX_WAREHOUSE_ID, Product.PLX_WAREHOUSE_ID);
         try{
+            Map<String, String> fields = this.getQuoteHeader(property);
+            
+            
             SiebelPropertySet values = CONN.newPropertySet();
             set.setProperty(PLX_PART_NUMBER, PLX_PART_NUMBER);
             set.setProperty(FIELD_QUANTITY, FIELD_QUANTITY);
@@ -64,9 +96,10 @@ public class Quote extends Product implements Impl
             while (isRecord)
             {
                 sbBC.getMultipleFieldValues(set, values);
-                //MyLogging.log(Level.INFO, String.valueOf(values));
+                Inventory inventories = new Inventory();
                 inventories.setPart_number(values.getProperty(PLX_PART_NUMBER));
-                inventories.setOrg_id(Integer.parseInt(values.getProperty(PLX_LOT_ID)));
+                //inventories.setOrg_id(Integer.parseInt(values.getProperty(PLX_LOT_ID)));
+                inventories.setOrg_id(Integer.parseInt(fields.get(Product.PLX_WAREHOUSE_ID)));
                 inventories.setQuantity(Integer.parseInt(values.getProperty(FIELD_QUANTITY)));
                 inventories.setAmount(Float.parseFloat(values.getProperty(PLX_NET_PRICE)));
                 inventories.setLine_type("LINE");

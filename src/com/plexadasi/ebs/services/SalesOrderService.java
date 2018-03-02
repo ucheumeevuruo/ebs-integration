@@ -9,10 +9,11 @@ import com.plexadasi.Helper.DataConverter;
 import com.plexadasi.Helper.HelperAP;
 import com.plexadasi.connect.ebs.EbsConnect;
 import com.plexadasi.connect.siebel.SiebelConnect;
+import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.CallableRunner;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.ProcRunner;
 import com.plexadasi.ebs.model.BackOrder;
-import com.plexadasi.ebs.model.SalesOrder;
+import com.plexadasi.ebs.model.Order;
 import com.plexadasi.ebs.services.sql.build.SQLBuilder;
 import com.plexadasi.order.SalesOrderInventory;
 import com.siebel.data.SiebelException;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import javax.naming.NamingException;
 import oracle.jdbc.OracleTypes;
 import org.apache.commons.dbutils.OutParameter;
@@ -92,17 +94,18 @@ public class SalesOrderService {
         );
     }
     
-    public void cancelSalesOrder(Integer headerId, Integer lineId) throws SQLException
+    public Map<Integer, Object> cancelSalesOrder(Integer headerId, Integer lineId) throws SQLException
     {
         CallableRunner prun = new CallableRunner();
-        this.query = "{CALL CANCEL_SALES_ORDER(?,?,?,?,?,?,?,?)}";
+        this.query = "{CALL CANCEL_SALES_ORDER(?,?,?,?,?)}";
         
-        prun.queryProc(this.connection, this.query,
+        return prun.queryProc(this.connection, this.query,
             new Object[]{
                 HelperAP.getEbsUserId(),
                 HelperAP.getEbsUserResp(),
                 HelperAP.getEbsAppId(),
-                headerId
+                headerId,
+                new OutParameter(java.sql.Types.VARCHAR, String.class)
             }
         );
     }
@@ -124,7 +127,7 @@ public class SalesOrderService {
         );
     }
     
-    public BackOrder findBackOrderedItem(SalesOrder salesOrder) throws SQLException
+    public BackOrder findBookingLineItemStatus(Order salesOrder) throws SQLException
     {
         ResultSetHandler<BackOrder> rowMapper = new BeanHandler<BackOrder>(BackOrder.class);
         this.query = this.sqlBuilder.buildBackOrderSql().getQuery();
@@ -138,38 +141,38 @@ public class SalesOrderService {
         return backOrder;
     }
     
-    public SalesOrder findOnHandQuantity(SalesOrder salesOrder, String type) throws SQLException
+    public Order findOnHandQuantity(Order salesOrder, String type) throws SQLException
     {
-        ResultSetHandler<SalesOrder> rowMapper = new BeanHandler<SalesOrder>(SalesOrder.class);
+        ResultSetHandler<Order> rowMapper = new BeanHandler<Order>(Order.class);
         this.query = "SELECT XXMADN_GET_OHQTY(?, ?, ?) quantity FROM DUAL";
-        SalesOrder onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
+        Order onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
             new Object[]{
                 salesOrder.getPartNumber(),
                 salesOrder.getWarehouseId(),
                 type
             }
         ); 
-        return onhand != null ? onhand : new SalesOrder();
+        return onhand != null ? onhand : new Order();
     }
     
-    public List<SalesOrder> findOnHandQuantity (String partNumber, String location1, String location2) throws SQLException
+    public List<Order> findOnHandQuantity (String partNumber, String location1, String location2) throws SQLException
     {
-        ResultSetHandler<List<SalesOrder>> rowMapper = new BeanListHandler<SalesOrder>(SalesOrder.class);
+        ResultSetHandler<List<Order>> rowMapper = new BeanListHandler<Order>(Order.class);
         this.query = this.sqlBuilder.buildOnhandQuantitySql().getQuery();
-        List<SalesOrder> onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
+        List<Order> onhand = this.jdbcTemplateObject.query(this.connection, this.query, rowMapper,
             new Object[]{
                 partNumber,
                 location1,
                 location2
             }
         );
-        return onhand != null ? onhand : new ArrayList<SalesOrder>();
+        return onhand != null ? onhand : new ArrayList<Order>();
     }
     
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException, SiebelException, NamingException
     {
         Connection ebs = EbsConnect.connectToEBSDatabase();
-        SalesOrder salesOrder = new SalesOrder();
+        Order salesOrder = new Order();
         SalesOrderService sos = new SalesOrderService(ebs);
         BillingAccountService billing = new BillingAccountService(ebs);
         SalesOrderInventory s = new SalesOrderInventory();
@@ -198,10 +201,10 @@ public class SalesOrderService {
         //salesOrder.setPartNumber("A9438202445");
         //salesOrder.setOrderNumber("1-28859582");
         //List<SalesOrder> s = sos.findOnHandQuantity(salesOrder.getPartNumber(), "123", "124");
-        //for(SalesOrder salet : s){
+        //for(Order salet : s){
           //  System.out.println(salet.getQuantity()+" "+salet.getWarehouseId()+"\\n");
         //}
-        //BackOrder b = sos.findBackOrderedItem(salesOrder);
+        //BackOrder b = sos.findBookingLineItemStatus(salesOrder);
         //System.out.println(b.getPickMeaning());
         //System.out.println(DataConverter.nullToString(b.getItemStatus()));
         /*

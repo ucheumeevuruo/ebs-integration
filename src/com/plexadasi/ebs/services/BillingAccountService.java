@@ -7,13 +7,10 @@ package com.plexadasi.ebs.services;
 
 import com.plexadasi.connect.ebs.EbsConnect;
 import com.plexadasi.ebs.model.BillingAccount;
-import com.plexadasi.ebs.model.Customer;
-import static com.plexadasi.ebs.model.Customer_.ebsId;
 import com.plexadasi.ebs.services.sql.build.SQLBuilder;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -63,7 +60,7 @@ public class BillingAccountService {
     public static void main(String[] args) throws SiebelBusinessServiceException, SQLException
     {
         BillingAccountService bas = new BillingAccountService(EbsConnect.connectToEBSDatabase());
-        int s = bas.findBillToCode(51086);
+        int s = bas.findShipToCode(51086);
         System.out.println(s);
         //BackOrder b = sos.findBackOrderedItem(salesOrder);
         //System.out.println(b.getPickMeaning());
