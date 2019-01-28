@@ -29,14 +29,15 @@ public class PurchaseOrderTest
         PurchaseOrder pOrder = new PurchaseOrder();
         PurchaseOrderInventory poInventory = new PurchaseOrderInventory();
         poInventory.setAccountType("organization");
-        poInventory.setSiebelOrderId("1-LFJLR");
+        poInventory.setSiebelOrderId("1-Y7EYR");
         poInventory.setSiebelAccountId("1-1CKWM");
         poInventory.setSourceId(33);
         //poInventory.triggers(sb, new EBSSqlData(ebs));
         //System.out.println(poInventory.toString());
-        //pOrder.doInvoke(poInventory, sb, ebs);
+        pOrder.doInvoke(poInventory, sb, ebs);
         //String po = pOrder.getPONumber(ebs, "1-35997183");
-        pOrder.getPurchaseOrderBookingStatus(ebs, "1-38783113");
+        MyLogging.log(Level.INFO, pOrder.getPurchaseOrderBookingStatus(ebs, "1-57452931"));
+        MyLogging.log(Level.INFO, pOrder.getPurchaseOrderNumber(ebs, "1-57452931"));
         //MyLogging.log(Level.INFO, "Done: " + po);
         ebs.close();
         sb.logoff();

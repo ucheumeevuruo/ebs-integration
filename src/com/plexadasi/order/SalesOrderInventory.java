@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.data.SiebelException
  */
 package com.plexadasi.order;
 
@@ -11,13 +13,7 @@ import com.siebel.data.SiebelException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
-/**
- *
- * @author SAP Training
- */
 public class SalesOrderInventory {
-
     private Integer orderId;
     private Integer soldToOrgId;
     private String shipToOrgId;
@@ -31,196 +27,118 @@ public class SalesOrderInventory {
     private String siebelOrderId;
     private Integer billToId;
     private Integer shipToId;
-    
-    public void setSiebelOrderId(String orderId) 
-    {
-        siebelOrderId = orderId;
-    }
-    
-    public String getSiebelOrderId()
-    {
-        return siebelOrderId;
-    }
-    /**
-     * @return the soldToOrgId
-     */
-    public Integer getSoldToOrgId() 
-    {
-        return soldToOrgId;
+    private String type;
+
+    public void setSiebelOrderId(String orderId) {
+        this.siebelOrderId = orderId;
     }
 
-    /**
-     * @param soldToOrgId the soldToOrgId to set
-     */
+    public String getSiebelOrderId() {
+        return this.siebelOrderId;
+    }
+
+    public Integer getSoldToOrgId() {
+        return this.soldToOrgId;
+    }
+
     public void setSoldToOrgId(Integer soldToOrgId) {
         this.soldToOrgId = soldToOrgId;
     }
 
-    /**
-     * @return the orderId
-     */
     public Integer getOrderId() {
-        return orderId;
+        return this.orderId;
     }
 
-    /**
-     * @param orderId the orderId to set
-     */
-    public void setOrderId(Integer orderId) 
-    {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
-    /**
-     * @return the shipToOrgId
-     */
-    public String getShipToOrgId() 
-    {
-        return shipToOrgId;
+    public String getShipToOrgId() {
+        return this.shipToOrgId;
     }
 
-    /**
-     * @param shipToOrgId the shipToOrgId to set
-     */
-    public void setShipToOrgId(Integer shipToOrgId) 
-    {
-        //this.shipToOrgId = shipToOrgId;
+    public void setShipToOrgId(Integer shipToOrgId) {
     }
 
-    /**
-     * @return the invoiceId
-     */
-    public Integer getInvoiceId() 
-    {
-        return invoiceId;
+    public Integer getInvoiceId() {
+        return this.invoiceId;
     }
 
-    /**
-     * @param invoiceId the invoiceId to set
-     */
-    public void setInvoiceId(Integer invoiceId) 
-    {
+    public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
     }
 
-    /**
-     * @return the soldFromId
-     */
-    public Integer getSoldFromId() 
-    {
-        return soldFromId;
+    public Integer getSoldFromId() {
+        return this.soldFromId;
     }
 
-    /**
-     * @param soldFromId the soldFromId to set
-     */
-    public void setSoldFromId(Integer soldFromId)
-    {
+    public void setSoldFromId(Integer soldFromId) {
         this.soldFromId = soldFromId;
     }
 
-    /**
-     * @return the salesRepId
-     */
-    public Integer getSalesRepId() 
-    {
-        return salesRepId;
+    public Integer getSalesRepId() {
+        return this.salesRepId;
     }
 
-    /**
-     * @param salesRepId the salesRepId to set
-     */
-    public void setSalesRepId(Integer salesRepId)
-    {
+    public void setSalesRepId(Integer salesRepId) {
         this.salesRepId = salesRepId;
     }
 
-    /**
-     * @return the statusCode
-     */
-    public String getStatusCode() 
-    {
-        return statusCode;
+    public String getStatusCode() {
+        return this.statusCode;
     }
 
-    /**
-     * @param statusCode the statusCode to set
-     */
-    public void setStatusCode(String statusCode)
-    {
+    public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
 
-    /**
-     * @return the transactionCode
-     */
-    public String getTransactionCode() 
-    {
-        return transactionCode;
+    public String getTransactionCode() {
+        return this.transactionCode;
     }
 
-    /**
-     * @param transactionCode the transactionCode to set
-     */
-    public void setTransactionCode(String transactionCode)
-    {
+    public void setTransactionCode(String transactionCode) {
         this.transactionCode = transactionCode;
     }
 
-    /**
-     * @return the purchaseOrderNumber
-     */
-    public String getPurchaseOrderNumber() 
-    {
-        return purchaseOrderNumber;
+    public String getPurchaseOrderNumber() {
+        return this.purchaseOrderNumber;
     }
 
-    /**
-     * @param purchaseOrderNumber the purchaseOrderNumber to set
-     */
-    public void setPurchaseOrderNumber(String purchaseOrderNumber)
-    {
+    public void setPurchaseOrderNumber(String purchaseOrderNumber) {
         this.purchaseOrderNumber = purchaseOrderNumber;
     }
 
-    /**
-     * @return the sourceId
-     */
-    public Integer getSourceId() 
-    {
-        return sourceId;
+    public Integer getSourceId() {
+        return this.sourceId;
     }
-    
-    public SOInventory inventory(SiebelDataBean sb, Connection ebsConn) throws SiebelException, SQLException
-    {
+
+    public SOInventory inventoryItems(SiebelDataBean sb, Connection ebsConn) {
         return new SOInventory(sb, ebsConn, this);
     }
 
-    /**
-     * @param sourceId the sourceId to set
-     */
-    public void setSourceId(Integer sourceId)
-    {
+    public com.plexadasi.ebs.SiebelApplication.bin.SalesOrderInventory inventory(SiebelDataBean sb, Connection ebsConn) throws SiebelException, SQLException {
+        return new com.plexadasi.ebs.SiebelApplication.bin.SalesOrderInventory(sb, ebsConn, this);
+    }
+
+    public void setSourceId(Integer sourceId) {
         this.sourceId = sourceId;
     }
-    
+
     @Override
-    public String toString() 
-    {
+    public String toString() {
         String output = "";
-        output += "\t\t[Siebel order number=" + siebelOrderId + "]\n";
-        output += "\t\t[Order type id=" + orderId + "]\n";
-        output += "\t\t[Sold to org id=" + soldToOrgId + "]\n";
-        output += "\t\t[Ship to org id=" + this.shipToId + "]\n";
-        output += "\t\t[Invoice id=" + this.billToId + "]\n";
-        output += "\t\t[Sold from id=" + soldFromId + "]\n";
-        output += "\t\t[Sales rep id=" + salesRepId + "]\n";
-        //output += "\t\t[Price id=" + priceId + "]\n";
-        output += "\t\t[Transaction code=" + transactionCode + "]\n";
-        output += "\t\t[Status code=" + statusCode + "]\n";
-        output += "\t\t[Purchase order number=" + purchaseOrderNumber + "]\n";
-        output += "\t\t[Source id=" + sourceId + "]\n";
-        return getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
+        output = output + "\t\t[Siebel order number=" + this.siebelOrderId + "]\n";
+        output = output + "\t\t[Order type id=" + this.orderId + "]\n";
+        output = output + "\t\t[Sold to org id=" + this.soldToOrgId + "]\n";
+        output = output + "\t\t[Ship to org id=" + this.shipToId + "]\n";
+        output = output + "\t\t[Invoice id=" + this.billToId + "]\n";
+        output = output + "\t\t[Sold from id=" + this.soldFromId + "]\n";
+        output = output + "\t\t[Sales rep id=" + this.salesRepId + "]\n";
+        output = output + "\t\t[Transaction code=" + this.transactionCode + "]\n";
+        output = output + "\t\t[Status code=" + this.statusCode + "]\n";
+        output = output + "\t\t[Purchase order number=" + this.purchaseOrderNumber + "]\n";
+        output = output + "\t\t[Source id=" + this.sourceId + "]\n";
+        return this.getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
     }
 
     public int getBillToId() {
@@ -238,4 +156,13 @@ public class SalesOrderInventory {
     public void setBillToId(Integer billToId) {
         this.billToId = billToId;
     }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
+

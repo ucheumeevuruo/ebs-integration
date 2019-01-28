@@ -1,104 +1,85 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
-/**
- *
- * @author SAP Training
- */
 public class Inventory {
     private String part_number;
     private Integer org_id;
     private Integer quantity;
     private Float amount;
+    private Integer order_number;
+    private String cust_po_number;
     private String line_type;
-    
-    /**
-     * @return the part_number
-     */
+
     public String getPart_number() {
-        return part_number;
+        return this.part_number;
     }
 
-    /**
-     * @param part_number the part_number to set
-     */
     public void setPart_number(String part_number) {
         this.part_number = part_number;
     }
 
-    /**
-     * @return the org_id
-     */
     public Integer getOrg_id() {
-        return org_id;
+        return this.org_id;
     }
 
-    /**
-     * @param org_id the org_id to set
-     */
     public void setOrg_id(Integer org_id) {
         this.org_id = org_id;
     }
 
-    /**
-     * @return the quantity
-     */
     public Integer getQuantity() {
-        return quantity;
+        return this.quantity;
     }
 
-    /**
-     * @param quantity the quantity to set
-     */
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    /**
-     * @return the amount
-     */
     public Float getAmount() {
-        return amount;
+        return this.amount;
     }
 
-    /**
-     * @param amount the amount to set
-     */
     public void setAmount(Float amount) {
         this.amount = amount;
     }
 
-    /**
-     * @return the line_type
-     */
     public String getLine_type() {
-        return line_type;
+        return this.line_type;
     }
 
-    /**
-     * @param line_type the line_type to set
-     */
     public void setLine_type(String line_type) {
         this.line_type = line_type;
     }
 
     public int getKey() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    @Override
-    public String toString() 
-    {
+
+    public String toString() {
         String output = "";
-        output += "\t\t[Siebel part number=" + this.part_number + "]\n";
-        output += "\t\t[Line type=" + this.line_type + "]\n";
-        output += "\t\t[Amount=" + this.amount + "]\n";
-        output += "\t\t[Ship to org id=" + this.org_id + "]\n";
-        output += "\t\t[Quantity=" + this.quantity + "]\n";
-        return getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
+        output = output + "\t\t[Siebel part number=" + this.part_number + "]\n";
+        output = output + "\t\t[Line type=" + this.line_type + "]\n";
+        output = output + "\t\t[Amount=" + this.amount + "]\n";
+        output = output + "\t\t[Ship to org id=" + this.org_id + "]\n";
+        output = output + "\t\t[Quantity=" + this.quantity + "]\n";
+        return this.getClass().getSimpleName() + "\n[Details\n\t[\n" + output + "\t]\n";
+    }
+
+    public Integer getOrder_number() {
+        return this.order_number;
+    }
+
+    public void setOrder_number(Integer order_number) {
+        this.order_number = order_number;
+    }
+
+    public String getCust_po_number() {
+        return this.cust_po_number;
+    }
+
+    public void setCust_po_number(String cust_po_number) {
+        this.cust_po_number = cust_po_number;
     }
 }
+

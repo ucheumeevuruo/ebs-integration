@@ -1,0 +1,3852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="7f2a38c4-db9f-4c1b-9566-9a07bd4dc29f" activeEnvironment="Default" name="DMSTT_PartsJob_V2.4_v1.0" resourceRoot="" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="12f69a0e-0751-4917-9bd0-4d63150c2ef9" wsaVersion="NONE" name="ExternalInterfaceSOAP" type="wsdl" bindingName="{http://stc.daimler.com/2009/08/DS/ext/wsdl}ExternalInterfaceSOAP" soapVersion="1_2" anonymous="optional" definition="file:/C:/Projekte/XP_Testtool/workspace/dms-testtool-web/doc/test/wsdl_tc_2.4/StarConnectDataServerExt.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\StarConnectDataServerExt.wsdl"><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\StarConnectDataServerExt.wsdl</con:url><con:content><![CDATA[<!--$Id: StarConnectDataServerExt.wsdl,v 1.12 2009/10/15 09:48:06 svgabel Exp $-->
+<wsdl:definitions name="ExternalInterface" targetNamespace="http://stc.daimler.com/2009/08/DS/ext/wsdl" xmlns:tns="http://stc.daimler.com/2009/08/DS/ext/wsdl" xmlns:dsext="http://stc.daimler.com/2009/08/DS/ext" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:annotation>
+    <xsd:documentation>
+      <description>Web Service Interface definition for the StarConnect Data Server External Interface</description>
+      <version major="1" minor="4" fix="1"/>
+    </xsd:documentation>
+  </xsd:annotation>
+  <jaxws:bindings>
+    <jaxws:package name="com.daimler.stc.dataserver.ws.server"/>
+  </jaxws:bindings>
+  <wsdl:types>
+    <xsd:schema>
+      <xsd:import namespace="http://stc.daimler.com/2009/08/DS/ext" schemaLocation="StarConnectDataServerExt.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getDataListRequest">
+    <wsdl:part element="dsext:getDataListRequest" name="getDataListRequest"/>
+  </wsdl:message>
+  <wsdl:message name="getDataListResponse">
+    <wsdl:part element="dsext:getDataListResponse" name="getDataListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getDataByIDRequest">
+    <wsdl:part element="dsext:getDataByIDRequest" name="getDataByIDRequest"/>
+  </wsdl:message>
+  <wsdl:message name="getDataResponse">
+    <wsdl:part element="dsext:getDataResponse" name="getDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getDataByDescriptorRequest">
+    <wsdl:part element="dsext:getDataByDescriptorRequest" name="getDataByDescriptorRequest"/>
+  </wsdl:message>
+  <wsdl:message name="sendDataRequest">
+    <wsdl:part element="dsext:sendDataRequest" name="sendDataRequest"/>
+  </wsdl:message>
+  <wsdl:message name="sendDataResponse">
+    <wsdl:part element="dsext:sendDataResponse" name="sendDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendTestDataRequest">
+    <wsdl:part element="dsext:sendTestDataRequest" name="sendTestDataRequest"/>
+  </wsdl:message>
+  <wsdl:message name="sendTestDataResponse">
+    <wsdl:part element="dsext:sendTestDataResponse" name="sendTestDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getPossibleInterfaceVersionsRequest">
+    <wsdl:part element="dsext:getPossibleInterfaceVersionsRequest" name="getPossibleInterfaceVersionsRequest"/>
+  </wsdl:message>
+  <wsdl:message name="getPossibleInterfaceVersionsResponse">
+    <wsdl:part element="dsext:getPossibleInterfaceVersionsResponse" name="getPossibleInterfaceVersionsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendSyncResponseRequest">
+    <wsdl:part element="dsext:sendSyncResponseRequest" name="sendSyncResponseRequest"/>
+  </wsdl:message>
+  <wsdl:message name="sendSyncResponseResponse">
+    <wsdl:part element="dsext:sendSyncResponseResponse" name="sendSyncResponseResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendSyncDataRequest">
+    <wsdl:part element="dsext:sendSyncDataRequest" name="sendSyncDataRequest"/>
+  </wsdl:message>
+  <wsdl:message name="sendSyncDataResponse">
+    <wsdl:part element="dsext:sendSyncDataResponse" name="sendSyncDataResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="ExternalInterface">
+    <wsdl:operation name="getDataList">
+      <wsdl:input message="tns:getDataListRequest"/>
+      <wsdl:output message="tns:getDataListResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDataByID">
+      <wsdl:input message="tns:getDataByIDRequest"/>
+      <wsdl:output message="tns:getDataResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDataByDescriptor">
+      <wsdl:input message="tns:getDataByDescriptorRequest"/>
+      <wsdl:output message="tns:getDataResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendData">
+      <wsdl:input message="tns:sendDataRequest"/>
+      <wsdl:output message="tns:sendDataResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendTestData">
+      <wsdl:input message="tns:sendTestDataRequest"/>
+      <wsdl:output message="tns:sendTestDataResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getPossibleInterfaceVersions">
+      <wsdl:input message="tns:getPossibleInterfaceVersionsRequest"/>
+      <wsdl:output message="tns:getPossibleInterfaceVersionsResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendSyncResponse">
+      <wsdl:input message="tns:sendSyncResponseRequest"/>
+      <wsdl:output message="tns:sendSyncResponseResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendSyncData">
+      <wsdl:input message="tns:sendSyncDataRequest"/>
+      <wsdl:output message="tns:sendSyncDataResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ExternalInterfaceSOAP" type="tns:ExternalInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getDataList">
+      <soap:operation soapAction="GetDataList"/>
+      <wsdl:input>
+        <soap:body parts="getDataListRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="getDataListResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDataByID">
+      <soap:operation soapAction="GetDataByID"/>
+      <wsdl:input>
+        <soap:body parts="getDataByIDRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="getDataResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDataByDescriptor">
+      <soap:operation soapAction="GetDataByDescriptor"/>
+      <wsdl:input>
+        <soap:body parts="getDataByDescriptorRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="getDataResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendData">
+      <soap:operation soapAction="SendData"/>
+      <wsdl:input>
+        <soap:body parts="sendDataRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="sendDataResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendTestData">
+      <soap:operation soapAction="SendTestData"/>
+      <wsdl:input>
+        <soap:body parts="sendTestDataRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="sendTestDataResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPossibleInterfaceVersions">
+      <soap:operation soapAction="GetPossibleInterfaceVersions"/>
+      <wsdl:input>
+        <soap:body parts="getPossibleInterfaceVersionsRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="getPossibleInterfaceVersionsResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSyncResponse">
+      <soap:operation soapAction="SendSyncResponse"/>
+      <wsdl:input>
+        <soap:body parts="sendSyncResponseRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="sendSyncResponseResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSyncData">
+      <soap:operation soapAction="SendSyncData"/>
+      <wsdl:input>
+        <soap:body parts="sendSyncDataRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="sendSyncDataResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ExternalInterface">
+    <wsdl:port binding="tns:ExternalInterfaceSOAP" name="ExternalInterfaceSOAP">
+      <soap:address location="https://localhost/STARCDS/services/ExternalInterface"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\StarConnectDataServerExt.xsd</con:url><con:content><![CDATA[<!--$Id: StarConnectDataServerExt.xsd,v 1.16 2009/10/27 16:50:22 jboenis
+		Exp $-->
+<xsd:schema targetNamespace="http://stc.daimler.com/2009/08/DS/ext" jaxb:version="1.0" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dsext="http://stc.daimler.com/2009/08/DS/ext" xmlns:ds="http://stc.daimler.com/2009/08/DS" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+  <xsd:annotation>
+    <xsd:documentation>
+      <description>General StarConnect Data Server data types for
+				the external interface.</description>
+      <version major="1" minor="4" fix="1"/>
+    </xsd:documentation>
+    <xsd:appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="com.daimler.stc.dataserver.ws.data.ext"/>
+      </jaxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+  <xsd:import namespace="http://stc.daimler.com/2009/08/DS" schemaLocation="StarConnectDataServer.xsd"/>
+  <!--Complex Data Types-->
+  <!--~~~~~~~~~~~~~~~~~~-->
+  <xsd:complexType name="GetDataListRequest">
+    <xsd:sequence>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="event" type="ds:Event"/>
+      <xsd:element name="eventDateFrom" type="ds:EventDate"/>
+      <xsd:element name="eventDateTo" type="ds:EventDate"/>
+      <xsd:element name="onlyUnfetched" type="xsd:boolean"/>
+      <xsd:element name="addressee" type="ds:Addressee" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="GetDataListResponse">
+    <xsd:sequence>
+      <xsd:element name="dataDescriptor" type="ds:DataDescriptor" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="GetDataByIDRequest">
+    <xsd:sequence minOccurs="1" maxOccurs="50">
+      <xsd:choice>
+        <xsd:element name="dataID" type="ds:ID"/>
+        <xsd:element name="dataByID" type="ds:DataById"/>
+      </xsd:choice>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="GetDataByDescriptorRequest">
+    <xsd:sequence minOccurs="1" maxOccurs="50">
+      <xsd:element name="dataDescriptor" type="ds:GetDataDescriptor"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="GetDataResponse">
+    <xsd:sequence minOccurs="1" maxOccurs="50">
+      <xsd:element name="getDataResult" type="ds:GetDataResult"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendTestDataRequest">
+    <xsd:sequence>
+      <xsd:element name="addressee" type="ds:Addressee" minOccurs="0"/>
+      <xsd:choice>
+        <xsd:element name="testData" type="dsext:SendDataRequest"/>
+        <xsd:element name="testSyncData" type="dsext:SendSyncTestDataRequest"/>
+      </xsd:choice>
+      <xsd:element name="testMode" type="ds:TestMode"/>
+      <xsd:element name="userName" type="ds:UserName"/>
+      <xsd:element name="password" type="ds:PassWord"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendSyncTestDataRequest">
+    <xsd:sequence>
+      <xsd:element name="addressees" type="ds:Addressees" minOccurs="0"/>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="operation" type="ds:Operation"/>
+      <xsd:element name="structuredData" type="ds:StructuredData"/>
+      <xsd:element name="dataGram" type="xsd:boolean"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendDataRequest">
+    <xsd:sequence>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="externalSystemIDs" type="dsext:ExternalSystemIDs" minOccurs="0"/>
+      <xsd:element name="addressees" type="ds:Addressees" minOccurs="0"/>
+      <xsd:element name="businessID" type="ds:BusinessID"/>
+      <xsd:element name="sequenceNo" type="ds:SequenceNo"/>
+      <xsd:element name="lastInSequence" type="ds:LastInSequence"/>
+      <xsd:element name="assembleSegments" type="ds:AssembleSegments"/>
+      <xsd:element name="interfaceVersion" type="ds:InterfaceVersion"/>
+      <xsd:element name="businessVersion" type="ds:BusinessVersion"/>
+      <xsd:element name="event" type="ds:Event"/>
+      <xsd:element name="eventDate" type="ds:EventDate"/>
+      <xsd:element name="autoDeleteDate" type="ds:DeleteDate" minOccurs="0"/>
+      <xsd:element name="data" type="ds:Data"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendDataResponse">
+    <xsd:sequence>
+      <xsd:element name="dataID" type="ds:ID" minOccurs="0"/>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendTestDataResponse">
+    <xsd:sequence>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="GetPossibleInterfaceVersionsRequest">
+    <xsd:sequence>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="interfaceVersion" type="ds:InterfaceVersion"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="GetPossibleInterfaceVersionsResponse">
+    <xsd:sequence>
+      <xsd:element name="PossibleInterfaceVersions" type="ds:PossibleInterfaceVersions"/>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendSyncResponseRequest">
+    <xsd:sequence>
+      <xsd:element name="requestID" type="ds:ID"/>
+      <xsd:element name="data" type="ds:Data"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendSyncResponseResponse">
+    <xsd:sequence>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendSyncDataRequest">
+    <xsd:sequence>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="event" type="ds:Event"/>
+      <xsd:element name="operation" type="ds:Operation"/>
+      <xsd:element name="sender" type="ds:Addressee" minOccurs="0"/>
+      <xsd:element name="data" type="ds:Data"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <xsd:complexType name="SendSyncDataResponse">
+    <xsd:sequence>
+      <xsd:element name="data" type="ds:Data" minOccurs="0"/>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="ds:Version" use="optional"/>
+  </xsd:complexType>
+  <!--Atomic Complex Data Types-->
+  <!--~~~~~~~~~~~~~~~~~~~~~~~~~-->
+  <xsd:complexType name="ExternalSystemIDs">
+    <xsd:sequence minOccurs="1" maxOccurs="1000">
+      <xsd:element name="externalSysID" type="ds:ExternalSysID"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="getDataListRequest" type="dsext:GetDataListRequest"/>
+  <xsd:element name="getDataListResponse" type="dsext:GetDataListResponse"/>
+  <xsd:element name="getDataByIDRequest" type="dsext:GetDataByIDRequest"/>
+  <xsd:element name="getDataByDescriptorRequest" type="dsext:GetDataByDescriptorRequest"/>
+  <xsd:element name="getDataResponse" type="dsext:GetDataResponse"/>
+  <xsd:element name="sendDataRequest" type="dsext:SendDataRequest"/>
+  <xsd:element name="sendDataResponse" type="dsext:SendDataResponse"/>
+  <xsd:element name="sendTestDataRequest" type="dsext:SendTestDataRequest"/>
+  <xsd:element name="sendTestDataResponse" type="dsext:SendTestDataResponse"/>
+  <xsd:element name="getPossibleInterfaceVersionsRequest" type="dsext:GetPossibleInterfaceVersionsRequest"/>
+  <xsd:element name="getPossibleInterfaceVersionsResponse" type="dsext:GetPossibleInterfaceVersionsResponse"/>
+  <xsd:element name="sendSyncResponseRequest" type="dsext:SendSyncResponseRequest"/>
+  <xsd:element name="sendSyncResponseResponse" type="dsext:SendSyncResponseResponse"/>
+  <xsd:element name="sendSyncDataRequest" type="dsext:SendSyncDataRequest"/>
+  <xsd:element name="sendSyncDataResponse" type="dsext:SendSyncDataResponse"/>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\StarConnectDataServer.xsd</con:url><con:content><![CDATA[<!--$Id: StarConnectDataServer.xsd,v 1.20 2009/10/19 15:22:22 jboenis Exp $-->
+<xsd:schema targetNamespace="http://stc.daimler.com/2009/08/DS" elementFormDefault="qualified" attributeFormDefault="qualified" jaxb:version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ds="http://stc.daimler.com/2009/08/DS" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:msg="http://dms.ri.as.daimler.com/DMSService" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+  <xsd:annotation>
+    <xsd:documentation>
+      <description>General StarConnect Data Server data types for the internal and external
+				interface.</description>
+      <version major="1" minor="4" fix="1"/>
+    </xsd:documentation>
+    <xsd:appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="com.daimler.stc.dataserver.ws.data"/>
+      </jaxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+  <xsd:import namespace="http://ws-i.org/profiles/basic/1.1/xsd" schemaLocation="swaref.xsd"/>
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService" schemaLocation="IF_XP_DMS_2_4_message_envelope_ds.xsd"/>
+  <!--Atomic Complex Data Types-->
+  <!--~~~~~~~~~~~~~~~~~~~~~~~~~-->
+  <xsd:complexType name="DataDescriptor">
+    <xsd:sequence>
+      <xsd:element name="dataID" type="ds:ID"/>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="businessID" type="ds:BusinessID"/>
+      <xsd:element name="sequenceNo" type="ds:SequenceNo"/>
+      <xsd:element name="interfaceVersion" type="ds:InterfaceVersion"/>
+      <xsd:element name="businessVersion" type="ds:BusinessVersion"/>
+      <xsd:element name="incomingDate" type="ds:IncomingDate"/>
+      <xsd:element name="event" type="ds:Event"/>
+      <xsd:element name="eventDate" type="ds:EventDate"/>
+      <xsd:element name="deleted" type="xsd:boolean"/>
+      <xsd:element name="addressees" type="ds:Addressees" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDataDescriptor">
+    <xsd:sequence>
+      <xsd:element name="type" type="ds:Type"/>
+      <xsd:element name="businessID" type="ds:BusinessID"/>
+      <xsd:element name="sequenceNo" type="ds:SequenceNo"/>
+      <xsd:element name="interfaceVersion" type="ds:InterfaceVersion"/>
+      <xsd:element name="addressee" type="ds:Addressee" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDataResult">
+    <xsd:sequence>
+      <xsd:element name="data" type="ds:Data" minOccurs="0"/>
+      <xsd:element name="responseCode" type="ds:ResponseCode"/>
+      <xsd:element name="dataDescriptor" type="ds:GetDataDescriptor" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PossibleInterfaceVersions">
+    <xsd:sequence minOccurs="0" maxOccurs="10">
+      <xsd:element name="interfaceVersion" type="ds:InterfaceVersion"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Data">
+    <xsd:sequence>
+      <xsd:choice minOccurs="0" maxOccurs="1">
+        <xsd:element name="structuredData" type="msg:StructuredData" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="compressedData" type="ds:CompressedData" minOccurs="1" maxOccurs="1"/>
+      </xsd:choice>
+      <xsd:element name="binaryData" type="wsi:swaRef" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="StructuredData">
+    <xsd:sequence minOccurs="0" maxOccurs="1">
+      <xsd:any namespace="##any" processContents="lax"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CompressedData">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="compression" type="ds:Compression" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="DataById">
+    <xsd:sequence minOccurs="1">
+      <xsd:element name="dataID" type="ds:ID" minOccurs="1"/>
+      <xsd:element name="addressee" type="ds:Addressee" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Addressee">
+    <xsd:sequence>
+      <xsd:element name="gssn" type="ds:ExternalSysID" minOccurs="0"/>
+      <xsd:element name="coFiCo" type="ds:CoFiCo" minOccurs="0"/>
+      <xsd:element name="vbet" type="ds:VBET" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Addressees">
+    <xsd:sequence minOccurs="1" maxOccurs="1000">
+      <xsd:element name="addressee" type="ds:Addressee"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!--Atomic Simple Data Types-->
+  <!--~~~~~~~~~~~~~~~~~~~~~~~~-->
+  <xsd:simpleType name="ResponseCode">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[A-Z]{4,8}[0-9]{6}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="5"/>
+      <xsd:maxLength value="30"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Operation">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="5"/>
+      <xsd:maxLength value="30"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="InterfaceVersion">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="5"/>
+      <xsd:fractionDigits value="2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Version">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="5"/>
+      <xsd:fractionDigits value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="BusinessVersion">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="5"/>
+      <xsd:fractionDigits value="2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Event">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATE"/>
+      <xsd:enumeration value="READ"/>
+      <xsd:enumeration value="UPDATE"/>
+      <xsd:enumeration value="DELETE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TestMode">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="SEND"/>
+      <xsd:enumeration value="SEND_SYNC"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EventDate">
+    <xsd:restriction base="xsd:dateTime"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="IncomingDate">
+    <xsd:restriction base="xsd:dateTime"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FetchDate">
+    <xsd:restriction base="xsd:dateTime"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DeleteDate">
+    <xsd:restriction base="xsd:dateTime"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="BusinessID">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="40"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SequenceNo">
+    <xsd:restriction base="xsd:int">
+      <xsd:minInclusive value="1"/>
+      <xsd:maxInclusive value="1000"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LastInSequence">
+    <xsd:restriction base="xsd:boolean"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AssembleSegments">
+    <xsd:restriction base="xsd:boolean"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ID">
+    <xsd:restriction base="xsd:long"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ExternalSysID">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CoFiCo">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="VBET">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Compression">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="GZIP"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MemberID">
+    <xsd:restriction base="xsd:long"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="UserName">
+    <xsd:restriction base="xsd:string"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PassWord">
+    <xsd:restriction base="xsd:string"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RFTSFileNamePattern">
+    <xsd:restriction base="xsd:string"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RFTSSourceFileName">
+    <xsd:restriction base="xsd:string"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RFTSSourceDirectory">
+    <xsd:restriction base="xsd:string"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SyncDataRequestType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="REQUEST"/>
+      <xsd:enumeration value="DATAGRAM"/>
+      <xsd:enumeration value="NOTIFICATION_REQUEST"/>
+      <xsd:enumeration value="NOTIFICATION_DATAGRAM"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\swaref.xsd</con:url><con:content><![CDATA[<!--$Id: swaref.xsd,v 1.4 2009/04/23 10:06:35 svgabel Exp $-->
+<xsd:schema targetNamespace="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:annotation>
+    <xsd:documentation>
+      <version major="1" minor="2"/>
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="swaRef">
+    <xsd:restriction base="xsd:anyURI"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\IF_XP_DMS_2_4_message_envelope_ds.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://dms.ri.as.daimler.com/DMSService" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:env="http://dms.ri.as.daimler.com/DMSService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dms="http://dms.ri.as.daimler.com/DMSService/dms_sending" xmlns:xp="http://dms.ri.as.daimler.com/DMSService/xp_sending">
+  <!--Daimler AG Copyright 2016, payload of the XENTRY Portal pro - DMS communication-->
+  <xsd:annotation>
+    <xsd:documentation>
+      <description>Complete message definition for DMS interface including header
+				information (business context, process context, user context)
+				and the actual message payload.</description>
+    </xsd:documentation>
+  </xsd:annotation>
+  <!--Resolved import for xp sending types and dms sending types.-->
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/dms_sending" schemaLocation="IF_XP_DMS_2_4_dms_sending.xsd"/>
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/xp_sending" schemaLocation="IF_XP_DMS_2_4_xp_sending.xsd"/>
+  <!--Replace the unspecified content of the original StructuredData
+         element of StarConnectDataServer.xsd with the relevant element
+         for ARB, i.e. Message-->
+  <xsd:complexType name="StructuredData">
+    <xsd:sequence minOccurs="0" maxOccurs="1">
+      <!--xsd:any namespace="##any" processContents="lax" /-->
+      <xsd:element name="Message" type="env:Message"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!--XENTRY Portal pro Message is the communication protocol between XENTRY Portal pro and DMS Applications.
+		 It subsumes exchanged Information between DMS applications and XENTRY Portal pro.-->
+  <!--<xsd:element name="Message">
+		<xsd:complexType>-->
+  <xsd:complexType name="Message">
+    <xsd:sequence>
+      <xsd:element name="BusinessContext" type="env:BusinessContext">
+        <xsd:annotation>
+          <xsd:documentation>Business related information of the service contract between DMS and XENTRY Portal pro</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="UserContext" type="env:UserContext" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Information on the user that has initiated the service call</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProcessContext" type="env:ProcessContext">
+        <xsd:annotation>
+          <xsd:documentation>Information on the current context</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ServiceMessage" type="env:ServiceMessage">
+        <xsd:annotation>
+          <xsd:documentation>Payload: request, response or service fault</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!--</xsd:element>-->
+  <xsd:complexType name="BusinessContext">
+    <xsd:annotation>
+      <xsd:documentation>Business related information of the service contract between DMS and XENTRY Portal pro. It provides information on
+				the DMS provider and the used service</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="DmsType">
+        <xsd:annotation>
+          <xsd:documentation>Name of the DMS provider. Must be at least on character that is not a whitespace. Maxlength 100</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100"/>
+            <xsd:minLength value="1"/>
+            <xsd:pattern value=".*[^\s].*"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="DmsVersion" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Installed version of the DMS provider. Optional but maxlength 100</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="ServiceVersion" type="xsd:string" fixed="2.4">
+        <xsd:annotation>
+          <xsd:documentation>Current used version of service. Fixed value of 2.4.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Type">
+        <xsd:annotation>
+          <xsd:documentation>Defines the type of the current message. Enumeration "REQUEST" "RESPONSE" "FAULT". Can be one of the given
+						enumeration literals</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="REQUEST"/>
+            <xsd:enumeration value="RESPONSE"/>
+            <xsd:enumeration value="FAULT"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="UserContext">
+    <xsd:annotation>
+      <xsd:documentation>Information on the user that has initiated the service call. This element is empty if the service call is initiated
+				by the application and not by a user interaction.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="DaimlerUserId" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>ID of the current user logged in the XENTRY Portal pro application. This user ID should be a valid user ID in the
+						Daimler User Directory. DMS applications are free to map in their application a Daimler user to a DMS user.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DmsUserId" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>ID of the current user logged in the DMS application. This user ID should be a valid user ID in the DMS user
+						directory. XENTRY Portal pro does NOT map a DMS user to Daimler user. This user is only used for traceability purpose.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <!--Defines the user locale.-->
+      <xsd:element name="UserLocale">
+        <xsd:annotation>
+          <xsd:documentation>Specifies the preferred language (ISO 639) and country (ISO 3166) of the logged in user. Language or language and
+						country code must be set. The language code must be lower case and 2 chars long. The country code must be uppercase and 2 chars long.
+						Between language and country code, an underscore must be provided. E.g. en, en_GB, de, de_AT</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[a-z]{2}_[A-Z]{2}|[a-z]{2}"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ProcessContext">
+    <xsd:annotation>
+      <xsd:documentation>Information on the current context of interaction</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Timestamp" type="xsd:dateTime">
+        <xsd:annotation>
+          <xsd:documentation>Fully qualified timestamp</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="TrackingId" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Identifies the transaction over all affected applications. The ID is identical in request and response and must be
+						unique over all request response pairs.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ServiceMessage">
+    <xsd:annotation>
+      <xsd:documentation>Service Message definition. Contains the payload of the XENTRY Portal pro Message. The payload is a specific message
+				that represents the request or a response message from DMS or from XENTRY Portal pro</xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element name="ServiceFault" type="env:ServiceException">
+        <xsd:annotation>
+          <xsd:documentation>Fault message instead of a response if an error has occurred</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <!--DMS initiated services-->
+      <xsd:element name="InitJobRequest" type="dms:InitJobRequestType"/>
+      <xsd:element name="InitJobResponse" type="dms:InitJobResponseType"/>
+      <xsd:element name="TransferJobToErepkoRequest" type="dms:TransferJobToErepkoRequestType"/>
+      <xsd:element name="TransferJobToErepkoResponse" type="dms:TransferJobToErepkoResponseType"/>
+      <xsd:element name="FinishOrderRequest" type="dms:FinishOrderRequestType"/>
+      <xsd:element name="FinishOrderResponse" type="dms:FinishOrderResponseType"/>
+      <xsd:element name="ConnectPartsListAndOrderRequest" type="dms:ConnectPartsListAndOrderRequestType"/>
+      <xsd:element name="ConnectPartsListAndOrderResponse" type="dms:ConnectPartsListAndOrderResponseType"/>
+      <xsd:element name="GetDetailsFromPartsSearchRequest" type="dms:GetDetailsFromPartsSearchRequestType"/>
+      <xsd:element name="GetDetailsFromPartsSearchResponse" type="dms:GetDetailsFromPartsSearchResponseType"/>
+      <!--XP initiated services-->
+      <xsd:element name="GetPricesTechnicalJobRequest" type="xp:GetPricesTechnicalJobRequestType"/>
+      <xsd:element name="GetPricesTechnicalJobResponse" type="xp:GetPricesTechnicalJobResponseType"/>
+      <xsd:element name="GetInvoiceCodesRequest" type="xp:GetInvoiceCodesRequestType"/>
+      <xsd:element name="GetInvoiceCodesResponse" type="xp:GetInvoiceCodesResponseType"/>
+      <xsd:element name="GetLocalOperationsRequest" type="xp:GetLocalOperationsRequestType"/>
+      <xsd:element name="GetLocalOperationsResponse" type="xp:GetLocalOperationsResponseType"/>
+      <xsd:element name="TransferJobToDmsRequest" type="xp:TransferJobToDmsRequestType"/>
+      <xsd:element name="TransferJobToDmsResponse" type="xp:TransferJobToDmsResponseType"/>
+      <xsd:element name="RunVerificationRequest" type="xp:RunVerificationRequestType"/>
+      <xsd:element name="RunVerificationResponse" type="xp:RunVerificationResponseType"/>
+      <xsd:element name="GetPricesPartsRequest" type="xp:GetPricesPartsRequestType"/>
+      <xsd:element name="GetPricesPartsResponse" type="xp:GetPricesPartsResponseType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="ServiceException">
+    <xsd:annotation>
+      <xsd:documentation>Fault message instead of a response if an error has occurred</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Timestamp" type="xsd:dateTime">
+        <xsd:annotation>
+          <xsd:documentation>The date and time of the occurrence of the exception</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ErrorId" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Identification code of the error that occurred. This code is used to support internationalization.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ErrorText" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Specifies the error text that is sent to the service requestor.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="TechnicalDetails" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Optional free text to describe the reason of the exception in detail.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="CorrelatingRequest" type="env:CorrelatingRequestType">
+        <xsd:annotation>
+          <xsd:documentation>Contains the request message (MessageEnvelope) that produced the error at processing time to the caller</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CorrelatingRequestType">
+    <xsd:annotation>
+      <xsd:documentation>The original message causing the Service Exception. Informal this is the
+				{http://partsinfo.ri.as.daimler.com/PartsService/v2.0}MessageType containing the sequence BusinessContext, UserContext, ProcessContext,
+				ServiceMessage but not explicitly enforced to enable sending of validation errors to not cause a validation error on the receiving
+				side.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:any namespace="##any" processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\IF_XP_DMS_2_4_dms_sending.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://dms.ri.as.daimler.com/DMSService/dms_sending" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dms="http://dms.ri.as.daimler.com/DMSService/dms_sending" xmlns:types="http://dms.ri.as.daimler.com/DMSService/types" xmlns:cur="http://dms.ri.as.daimler.com/DMSService/currencies">
+  <!--Daimler AG Copyright 2016, payload of the XENTRY Portal pro - DMS communication-->
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/types" schemaLocation="IF_XP_DMS_2_4_types.xsd"/>
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/currencies" schemaLocation="IF_XP_DMS_2_4_currencies.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="DE">XENTRY Portal pro - DMS Interface Messages. Copyright 2016 Daimler AG. All rights reserved.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="InitJobRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the InitJobRequest element. Used to create a Job in the Xentry Portal pro and handover the editing status to
+				XP. This Job must contain at least the Order and Vehicle data and can be enriched further on using the transfer services</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Job">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="CustomerConcern" type="types:CustomerConcernWithPricesType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Customer concerns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ServiceMeasure" type="types:ServiceMeasureType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Technical Campaigns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Order" type="types:OrderType">
+              <xsd:annotation>
+                <xsd:documentation>The DMS order</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Vehicle" type="types:VehicleInitType">
+              <xsd:annotation>
+                <xsd:documentation>In the InitJobRequest, the FIN is optional. Either a FIN or the RegistrationNumber must be provided</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Customer" type="types:CustomerType" minOccurs="0"/>
+          </xsd:sequence>
+          <xsd:attributeGroup ref="types:JobAttGroup"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="InitJobResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the InitJobResponse element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="JobId" type="types:JobIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The unique id of the created job</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="BrowserUrl" type="types:BrowserUrlType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>URL to start browser</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="TransferJobToErepkoRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the TransferJobToXpRequest element. Used to transfer the Job with its modification from the DMS back to
+				XENTRY Portal pro and handover the editing status to XENTRY Portal pro.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Job">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="CustomerConcern" type="types:CustomerConcernWithPricesType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Customer concerns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ServiceMeasure" type="types:ServiceMeasureType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Technical Campaigns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Order" type="types:OrderType">
+              <xsd:annotation>
+                <xsd:documentation>The DMS order</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Vehicle" type="types:VehicleType">
+              <xsd:annotation>
+                <xsd:documentation>In the TransferJobToErepkoRequest, the FIN is required.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Customer" type="types:CustomerType" minOccurs="0"/>
+          </xsd:sequence>
+          <xsd:attributeGroup ref="types:JobAttGroup"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="JobId" type="types:JobIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The unique id of job to identify in XENTRY Portal</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="TransferJobToErepkoResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the TransferJobToXpResponse element. Empty element that confirms that the transferJobToXpRequest has
+				successfully been received by the XENTRY Portal pro and that the editing system changed.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="BrowserUrl" type="types:BrowserUrlType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>URL to start browser</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="FinishOrderRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the FinishOrderRequest element. Used to transfer a completed Job or a cancel flag back to XENTRY Portal pro.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element name="Job">
+        <xsd:annotation>
+          <xsd:documentation>This job is than no longer editable and will be transfered to the archive in the XENTRY Portal pro with the
+						information given here.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="CustomerConcern" type="types:CustomerConcernType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Customer concerns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ServiceMeasure" type="types:ServiceMeasureType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Technical Campaigns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Order" type="types:OrderType" minOccurs="1" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>The DMS order</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Vehicle" type="types:VehicleType" minOccurs="1" maxOccurs="1"/>
+          </xsd:sequence>
+          <xsd:attributeGroup ref="types:JobAttGroup"/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Cancel" type="xsd:boolean" minOccurs="1" maxOccurs="1" default="false">
+        <xsd:annotation>
+          <xsd:documentation>Cancel flag: The order has been canceled. It is planned that XENTRY Portal pro will cancel the Job respl. filter
+						the Job list and Job archive to show no canceled Jobs.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:choice>
+    <xsd:attribute name="JobId" type="types:JobIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The unique id of the created job</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="FinishOrderResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the FinishOrderResponse element. Empty element that confirms that the finishOrderRequest has successfully
+				been received by the XENTRY Portal pro</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="ConnectPartsListAndOrderRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the ConnectPartsListAndOrderRequest element. Used to connect Order and Part List in all possible cases.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Order">
+        <xsd:annotation>
+          <xsd:documentation>Order data</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:attribute name="OrderId" type="types:OrderIdType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>The DMS order ID</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Vehicle" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Vehicle identified by the FIN/VIN. Used to preselect by FIN/VIN in iParts</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:attribute name="FinOrVin" type="types:FinVinType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>Either a FIN or a VIN may be given in this field, in order to mark that the parts sets collect parts of a
+								dedicated FIN or VIN.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ConnectPartsListAndOrderResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the ConnectPartsListAndOrderResponse element.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="PartsListId" type="types:PartsListIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Global unique identifier of the Parts list. Created in XENTRY Portal pro when the Parts list is created.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="BrowserUrl" type="types:BrowserUrlType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>URL to start browser</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="GetDetailsFromPartsSearchRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the GetDetailsFromPartsSearchRequest element.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="PartsListId" type="types:PartsListIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Global unique identifier of the Parts list. Created in XENTRY Portal pro when the Parts list is created.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="GetDetailsFromPartsSearchResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the GetDetailsFromPartsSearch element. Used to fetch the content of a parts search into the DMS.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="PartsList">
+        <xsd:annotation>
+          <xsd:documentation>List of parts for a parts order</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="PartsSet" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Bundle of parts, e. g. for one FIN or VIN or one customer</xsd:documentation>
+              </xsd:annotation>
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="Part" minOccurs="0" maxOccurs="unbounded" type="types:PartWithIdNameOriginPriceType">
+                    <xsd:annotation>
+                      <xsd:documentation>Part with price information</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+                <xsd:attribute name="Id" type="types:IdType" use="required">
+                  <xsd:annotation>
+                    <xsd:documentation>XENTRY Portal pro identifier of the parts set. Set by XENTRY Portal pro. Helps the DMS to merge the parts into
+											the DMS order.</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="Title" type="types:TitleType" use="required">
+                  <xsd:annotation>
+                    <xsd:documentation>Title of the parts set</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="FinOrVin" type="types:FinVinType" use="optional">
+                  <xsd:annotation>
+                    <xsd:documentation>Either a FIN or a VIN must be given in this field. Exact 17 alphanumerical characters.</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="ModelCode" type="types:ModelCodeType" use="optional">
+                  <xsd:annotation>
+                    <xsd:documentation>Vehicle Model Code (Baumuster)</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="Created" type="xsd:dateTime" use="required">
+                  <xsd:annotation>
+                    <xsd:documentation>Date and time when the parts set has been created</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="Modified" type="xsd:dateTime" use="required">
+                  <xsd:annotation>
+                    <xsd:documentation>Date and time of the latest modification of the parts set</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:attribute>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="PartsListId" type="types:PartsListIdType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>Global unique identifier of the Parts list. Created in XENTRY Portal pro when the Parts list is created.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+          <xsd:attribute name="Title" type="types:TitleType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>Title of the parts list</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+          <xsd:attribute name="OrderId" type="types:OrderIdType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>The DMS order ID</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+          <xsd:attribute name="Currency" type="cur:IsoCurrencyCodeType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>Currency of all prices of the Part List. Int. currency code with 3 letters according to ISO 4217</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="BrowserUrl" type="types:BrowserUrlType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>URL to start browser</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\IF_XP_DMS_2_4_types.xsd</con:url><con:content><![CDATA[<!--Mit XMLSpy v2015 rel. 4 sp1 (x64) (http://www.altova.com) von Arnold vom Ende (private) bearbeitet-->
+<xsd:schema targetNamespace="http://dms.ri.as.daimler.com/DMSService/types" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:types="http://dms.ri.as.daimler.com/DMSService/types" xmlns:cur="http://dms.ri.as.daimler.com/DMSService/currencies">
+  <!--Daimler AG Copyright 2016, payload of the XENTRY Portal pro - DMS communication-->
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/currencies" schemaLocation="IF_XP_DMS_2_4_currencies.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="DE">XENTRY Portal pro - DMS Interface Messages. Copyright 2016 Daimler AG. All rights reserved.</xsd:documentation>
+  </xsd:annotation>
+  <!--*********************************************************************************************************************************************************************************************
+		Complex types
+	***********************************************************************************************************************************************************************************************-->
+  <xsd:complexType name="CustomerConcernWithPricesEskulabDecisionType">
+    <xsd:sequence>
+      <xsd:element name="DefectKey" type="types:DefectKeyTypeWithEsculabDecision" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Damage key with a eskulab decisions</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Notes" type="types:NotesType" minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Notes relating to the customer concern</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Part" type="types:PartAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Parts (without prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="WorkItem" type="types:WorkItemAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Labors (without prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ServicePackage" type="types:ServicePackageAdvancedWithPricesType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Service packages (with SPPS price)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attributeGroup ref="types:CustomerConcernAttGroup"/>
+  </xsd:complexType>
+  <xsd:complexType name="CustomerConcernWithPricesType">
+    <xsd:sequence>
+      <xsd:element name="DefectKey" type="types:DefectKeyType" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Defect key (or damage key)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Notes" type="types:NotesType">
+        <xsd:annotation>
+          <xsd:documentation>Notes relating to the customer concern</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Part" type="types:PartAdvancedWithPricesType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Parts (with prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="WorkItem" type="types:WorkItemAdvancedWithPricesType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Labors (with prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ServicePackage" type="types:ServicePackageAdvancedWithPricesType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Service packages (with prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attributeGroup ref="types:CustomerConcernAttGroup"/>
+  </xsd:complexType>
+  <xsd:complexType name="CustomerConcernType">
+    <xsd:sequence>
+      <xsd:element name="DefectKey" type="types:DefectKeyType" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Defect key (or damage key)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Notes" type="types:NotesType">
+        <xsd:annotation>
+          <xsd:documentation>Notes relating to the customer concern</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Part" type="types:PartAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Parts (without prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="WorkItem" type="types:WorkItemAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Labors (without prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ServicePackage" type="types:ServicePackageAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Service packages (without prices)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attributeGroup ref="types:CustomerConcernAttGroup"/>
+  </xsd:complexType>
+  <xsd:complexType name="OrderType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Order type, sent from XENTRY Portal pro</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="ServiceAdvisor" type="types:EmployeeType" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>The name of the service advisor who is assigned to the order by the DMS, this does not map to the service advisor
+in XENTRY Portal</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Technician" type="types:EmployeeType" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The name of the technician who is assigned to the order by the DMS, this does not map to the technician
+in XENTRY Portal</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="OrderId" type="types:OrderIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Unique DMS Order number, valid for all order states</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="ReceptionDateTime" type="xsd:dateTime" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Appointment date of the service reception. If transferred to the DMS it must be set in the DMS as the valid
+					reception date.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="ReturnDateTime" type="xsd:dateTime" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Estimated return date of the vehicle. If transferred to the DMS it must be set in the DMS as the valid
+					return date.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="PaymentMethod" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Preferred payment method</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="100"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="EmployeeType">
+    <xsd:annotation>
+      <xsd:documentation>The description of the employee who is assigned to the order by the DMS. This can be a fullname or just an		abbreviation like usedId, however the employee from the DMS gets not synchronized with the employee in XENTRY Portal as there is no common user management</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="FirstName" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The first name of the service advisor</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="LastName" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The last name of the service advisor</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="100"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Abbreviation" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>An abbreviation of the service advisor used within the DMS</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="20"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="NotesType">
+    <xsd:annotation>
+      <xsd:documentation>Notes relating to the customer concern</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="CustomerStatement" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The statement corresponds in a 1:1 matching to the statement of the customer and may include unqualified statements. Max 300 Characters</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="300"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Cause" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Note by the service adviser as he interpretes the cause of the customer complaint frm the customer statement.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="300"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Correction" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Note by the technician which means he has applied to correct the cause.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="300"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CustomerOrgType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the customer element that only contains organizational and no personal data</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attributeGroup ref="types:CustomerOrgAttGroup"/>
+  </xsd:complexType>
+  <xsd:complexType name="CustomerType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the Customer element with organizational and personal data</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attributeGroup ref="types:CustomerPersAttGroup"/>
+    <xsd:attributeGroup ref="types:CustomerOrgAttGroup"/>
+  </xsd:complexType>
+  <xsd:complexType name="VehicleType">
+    <xsd:annotation>
+      <xsd:documentation>Vehicle from the company or third-party product</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="FinOrVin" type="types:FinVinType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Either a FIN or a VIN must be given in this field. Exact 17 alphanumerical characters. Once the vehicle is assigned
+					in XENTRY Portal pro, it may not be changed.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="FirstRegistrationDate" type="xsd:date" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Date of the first registration</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="RegistrationNumber" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The registration number</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="20"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="OdometerReading" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Odometer value in the odometer unit. Shall be the value at the arrival of the vehicle to the workshop.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="OdometerUnit" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Enumeration "m", "km". "miles"</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="m"/>
+          <xsd:enumeration value="km"/>
+          <xsd:enumeration value="miles"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="OperatingHours" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Hours of operation for the vehicle. The unit is "hours".</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="PowerEngineNumber" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Number of the power engine, retrieved from VeDoc, may be printed on the DMS order.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="11"/>
+          <xsd:maxLength value="17"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="BIN" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Number of the battery for electric and hybrid vehicles, retrieved from VeDoc, exact 22 characters</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="22"/>
+          <xsd:maxLength value="22"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="VehicleInitType">
+    <xsd:annotation>
+      <xsd:documentation>Vehicle from the company or third-party product</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="FinOrVin" type="types:FinVinType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Either a FIN or a VIN must be given in this field. Exact 17 alphanumerical characters. Once the vehicle is assigned
+					in XENTRY Portal pro, it may not be changed.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="FirstRegistrationDate" type="xsd:date" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Date of the first registration</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="RegistrationNumber" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The registration number</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="20"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="OdometerReading" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Value in the odometer unit</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="OdometerUnit" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Enumeration "m", "km". "miles" Must be set when OdometerReading exists.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="m"/>
+          <xsd:enumeration value="km"/>
+          <xsd:enumeration value="miles"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="OperatingHours" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Hours of operation of the vehicle. The unit is "hours". Is set for engines and somes</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="ServiceMeasureType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the service measure element. Contains the data of a Technical Campaign and the associated Damage (Defect) key</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="DefectKey" type="types:DefectKeyType" minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>A defect key (or damage key) is required for each service measure and is the unique identification</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Part" type="types:PartAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Parts that are chosen to accomplish the service measure</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="WorkItem" type="types:WorkItemAdvancedType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Labours that are chosen to accomplish the service measure</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ServiceMeasurePackage" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>A TechnicalCampaign contains 0 or one selected service measure package (new EVA interface) or no service measure
+						package (old EVA interface)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Part" type="types:PartAdvancedType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Part of the package</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="WorkItem" type="types:WorkItemAdvancedType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Work item of the package</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="Number" use="required">
+            <xsd:annotation>
+              <xsd:documentation>Number of the package</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="3"/>
+                <xsd:minLength value="1"/>
+                <xsd:pattern value=".*[^\s].*"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+          <xsd:attributeGroup ref="types:InternalExternalIdAttGroup"/>
+          <xsd:attribute name="Description" use="optional">
+            <xsd:annotation>
+              <xsd:documentation>Description of the Service Measure Package, provided by EVA, up to 200 characters</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="200"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+          <xsd:attributeGroup ref="types:WorkAttGroup"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="Description" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Damage text, provided by EVA</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="131"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attributeGroup ref="types:InternalExternalIdAttGroup"/>
+    <xsd:attribute name="Type" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Textual description of the Technical Campaign type, supplied by EVA</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="20"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="TerminationDate" type="xsd:date" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Termination date of the Technical Campaign, supplied by EVA</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="RejectionReason" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Reason why a technical campaign is not selected (Selected="False")</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="300"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Selected" type="xsd:boolean" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Flag, true if the Technical Campaign is selected for the current job</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="RetentionTime" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Period of time (Unit: hours) that the vehicle has to reside at the dealer's site, supplied by EVA</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:decimal">
+          <xsd:minInclusive value="0"/>
+          <xsd:maxInclusive value="99.9"/>
+          <xsd:fractionDigits value="1"/>
+          <xsd:totalDigits value="3"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="WorkItemMasterType">
+    <xsd:annotation>
+      <xsd:documentation>Master Data Work item type</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Number" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Work item number from ASRA (central work item) of the DMS (local work item)</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Description" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Work item denomination from ASRA (central work item) or the DMS (local work item)</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="180"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attributeGroup ref="types:WorkAttGroup"/>
+    <xsd:attribute name="Origin" type="types:OriginType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Origin of the item. Enumeration "Central" "Local"</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="WorkItemBasicType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Work item type (flatrate unit) with the workNumer, InvoiceCode and InternalId, ExternalId</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Number" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Work item number from ASRA (central work item) of the DMS (local work item)</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attributeGroup ref="types:InternalExternalIdAttGroup"/>
+    <xsd:attribute name="InvoiceCode" type="types:InvoiceCodeType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Code that assigns the item to a cost object Default: Customer pays. May be combined, e. g. base invoice code +
+					Fleetsite invoice code</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attributeGroup ref="types:WorkAttGroup"/>
+  </xsd:complexType>
+  <xsd:complexType name="WorkItemAdvancedType">
+    <xsd:annotation>
+      <xsd:documentation>Extended Work item type (flatrate unit) with a description and the Base Item attributes</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:WorkItemBasicType">
+        <xsd:attribute name="Description" use="required">
+          <xsd:annotation>
+            <xsd:documentation>Work item denomination from ASRA (central work item) or the DMS (local work item). May not be changed for central
+							items (Origin="Central").</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:maxLength value="180"/>
+              <xsd:minLength value="1"/>
+              <xsd:pattern value=".*[^\s].*"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attributeGroup ref="types:BaseItemAttGroup"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="WorkItemAdvancedWithPricesType">
+    <xsd:annotation>
+      <xsd:documentation>Extended Work item type with prices</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:WorkItemAdvancedType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="WorkItemBasicWithPricesAndNotificationType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Work item type with prices and possible notifications</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:WorkItemBasicType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="Notification" type="types:NotificationType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ServicePackageBasicType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Service package with PackageNumber, InvoideCode and InternalId, ExternalId</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Number" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Number of the package from SPPS (central package) or the DMS (local package)</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attributeGroup ref="types:InternalExternalIdAttGroup"/>
+    <xsd:attribute name="InvoiceCode" type="types:InvoiceCodeType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Code that assigns the item to a cost object Default: Customer pays. May be combined, e. g. base invoice code +
+					Fleetsite invoice code</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="IsNegative" type="xsd:boolean" default="false">
+      <xsd:annotation>
+        <xsd:documentation>Indicator for a refund service package.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="ServicePackageAdvancedType">
+    <xsd:annotation>
+      <xsd:documentation>Extended Service package type with Parts and WorkItems, Description and the Base Item Attributes</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:ServicePackageBasicType">
+        <xsd:sequence>
+          <xsd:element name="Part" type="types:PartAdvancedType" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:documentation>Part of the package</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="WorkItem" type="types:WorkItemAdvancedType" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:documentation>Work item of the package</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="Description" use="required">
+          <xsd:annotation>
+            <xsd:documentation>Denomination of the package from SPPS (central package) or the DMS (local package). May not be changed for central
+							items (Origin="Central").</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:maxLength value="150"/>
+              <xsd:minLength value="1"/>
+              <xsd:pattern value=".*[^\s].*"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attributeGroup ref="types:BaseItemAttGroup"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ServicePackageAdvancedWithPricesType">
+    <xsd:annotation>
+      <xsd:documentation>Extended Service package with DMS prices</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:ServicePackageAdvancedType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ServicePackageBasicWithPricesAndNotificationType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Service package with DMS prices and notifications</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:ServicePackageBasicType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="Notification" type="types:NotificationType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="DefectKeyTypeWithEsculabDecision">
+    <xsd:complexContent>
+      <xsd:extension base="types:DefectKeyType">
+        <xsd:sequence>
+          <xsd:element name="eskulabAuthorizationNumber" type="xsd:integer" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>ESKULAB authorization number that is retrieved from EVA. See documentation of the ESKULAB
+								webservice to access the
+								details of an authorization number.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="DefectKeyType">
+    <xsd:annotation>
+      <xsd:documentation>Defect key (or damage key)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Code" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Damage code, 7 resp. 9 alphanumerical digits</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="7"/>
+          <xsd:maxLength value="9"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Description" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Additional Information on the defect key that is displayed in the XENTRY Portal pro</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="100"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="PartBasicType">
+    <xsd:annotation>
+      <xsd:documentation>Part type</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="PartNumber" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Alphanumerical number of the part from iParts</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="AdditionalKey1" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>2 digits for logistic information</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="2"/>
+          <xsd:maxLength value="2"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="AdditionalKey2" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>4 digits for color parts</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="4"/>
+          <xsd:maxLength value="4"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Quantity" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Number of single parts of the parts item. Format: Decimal, not negative.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:decimal">
+          <xsd:fractionDigits value="2"/>
+          <xsd:totalDigits value="10"/>
+          <xsd:minInclusive value="0"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="IsNegative" type="xsd:boolean" default="false">
+      <xsd:annotation>
+        <xsd:documentation>Indicator for a refund part.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="PartWithIdNameOriginType">
+    <xsd:annotation>
+      <xsd:documentation>Part type as member of a Parts list</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartBasicType">
+        <xsd:attribute name="Id" type="types:IdType" use="required">
+          <xsd:annotation>
+            <xsd:documentation>XENTRY Portal pro identifier of the part. Set by XENTRY Portal pro. Helps the DMS to merge a part into the DMS
+							order.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="Name" use="required">
+          <xsd:annotation>
+            <xsd:documentation>Denomination, may not be changed in the DMS</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:maxLength value="100"/>
+              <xsd:minLength value="1"/>
+              <xsd:pattern value=".*[^\s].*"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="Origin" type="types:OriginType" use="required">
+          <xsd:annotation>
+            <xsd:documentation>Indicates whether the Number conforms to the Daimler numbering scheme. For iParts always Origin="Central".</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PartWithExInternalIdInvoiceCodeType">
+    <xsd:annotation>
+      <xsd:documentation>Part basic type with the PartNumber, ES1, ES2, quantity, invoideCode and InternalId, ExternalId</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartBasicType">
+        <xsd:attributeGroup ref="types:InternalExternalIdAttGroup"/>
+        <xsd:attribute name="InvoiceCode" type="types:InvoiceCodeType" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>Code that assigns the item to a cost object Default: Customer pays. May be combined, e. g. base invoice code +
+							Fleetsite invoice code</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PartAdvancedType">
+    <xsd:annotation>
+      <xsd:documentation>Extended Part type with a Name and the Base Item attributes</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartWithExInternalIdInvoiceCodeType">
+        <xsd:attribute name="Name" use="required">
+          <xsd:annotation>
+            <xsd:documentation>Denomination of the part from EPC (central part) or the DMS (local parts). May not be changed for central items
+							(Origin="Central").</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:maxLength value="100"/>
+              <xsd:minLength value="1"/>
+              <xsd:pattern value=".*[^\s].*"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attributeGroup ref="types:BaseItemAttGroup"/>
+        <xsd:attribute name="IsCritical" type="xsd:boolean" default="false">
+          <xsd:annotation>
+            <xsd:documentation>If present, indicates that the part is marked as critical. Default false.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PartAdvancedWithPricesType">
+    <xsd:annotation>
+      <xsd:documentation>Extended Part type with prices</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartAdvancedType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PartWithExInternalIdInvoiceCodeNotificationType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Part type with prices and possible notification</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartWithExInternalIdInvoiceCodeType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="Notification" type="types:NotificationType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PartWithIdNameOriginPriceType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Part type plus optional prices</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartWithIdNameOriginType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>Central prices of the part</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PartWithIdNameOriginPriceNotificationType">
+    <xsd:annotation>
+      <xsd:documentation>Basic Part type plus optional prices</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="types:PartWithIdNameOriginType">
+        <xsd:sequence>
+          <xsd:element name="Prices" type="types:PricesType" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>Central prices of the part</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="Notification" type="types:NotificationType" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>Notification if the price cannot be determined, according to message catalog.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PricesType">
+    <xsd:annotation>
+      <xsd:documentation>Price definition type with net and gross price as well as the origin where the price came from</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="NetPrice" type="types:PriceType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Net price (without VAT), valid in the sending system. 3 fraction digits for some currencies.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="GrossPrice" type="types:PriceType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Gross price (including VAT), valid in the sending system.3 fraction digits for some currencies.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="Origin" type="types:OriginType" default="Central">
+      <xsd:annotation>
+        <xsd:documentation>Indication of the the origin of the price. Enumeration "Central" "Local"</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="PriceName" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The name of the price. Indicates which price of a choice of prices is transferred.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+          <xsd:maxLength value="50"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="NotificationType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the notification element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Id" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Notification ID from XENTRY Portal pro Message definition (technical errors) of message catalog (contains errors
+					and
+					notifications)</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="4"/>
+          <xsd:maxLength value="4"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Text" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Notification text from XENTRY Portal pro Message definition (technical errors) of message catalog (contains errors
+					and notifications)</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+          <xsd:maxLength value="50"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <!--*********************************************************************************************************************************************************************************************
+		Attribute groups
+	***********************************************************************************************************************************************************************************************-->
+  <xsd:attributeGroup name="JobAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the basic attributes for a Job</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Currency" type="cur:IsoCurrencyCodeType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Currency of all prices of the Job. Int. currency code with 3 letters according to ISO 4217</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <xsd:attributeGroup name="CustomerPersAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the basic attributes of a customer</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Number" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The DMS customer ID</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Salutation" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The salutation of the customer, e. g. Mrs</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="FirstName" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>First Name</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="LastName" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Last Name</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Title" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>e. g. Ph.D., MA</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="EmailAddress" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The Email address that is userd for contact within the current service process</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="100"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="PhoneNumber" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The phone number that is used for contact at the current service process</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="80"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Preferences" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>e. g. Hobby, Birthday</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="255"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <xsd:attributeGroup name="CustomerOrgAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the extended attributes of a customer in the context of a workshop repair</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="UCID" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The Daimler Uniquel Customer ID. Reserved for future use.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="19"/>
+          <xsd:maxLength value="19"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="IdSource" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>The source system of the UCID. Must be defined if a UCID is present. Reserved for future use.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="CallbackFlag" type="xsd:boolean" use="optional" default="false">
+      <xsd:annotation>
+        <xsd:documentation>Message whether or not the customer requests a call-back by the service advisor. True if the customer requests a
+					call-back. Default: False</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="WaitingFlag" type="xsd:boolean" use="optional" default="false">
+      <xsd:annotation>
+        <xsd:documentation>Message whether or not the customer ist waiting for the completion of the service process. True if the customer is
+					waiting. Default: False</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <xsd:attributeGroup name="CustomerConcernAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the basic attributes of a customer concern</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attributeGroup ref="types:InternalExternalIdAttGroup"/>
+    <xsd:attribute name="Title" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Title of the customer concern.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="180"/>
+          <xsd:minLength value="1"/>
+          <xsd:pattern value=".*[^\s].*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Classification" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Type of the Customer concern. Enumeration "Maintenance", "Complaint", "Customer_Request" or "Unclassified"</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Maintenance"/>
+          <xsd:enumeration value="Complaint"/>
+          <xsd:enumeration value="Customer_Request"/>
+          <xsd:enumeration value="Unclassified"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <xsd:attributeGroup name="WorkAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the Value and the Unit for a Work Item. Only both values together give a meaning.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="Value" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The sum of flatrate units of all Work items of the package.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:decimal">
+          <xsd:maxInclusive value="999"/>
+          <xsd:fractionDigits value="2"/>
+          <xsd:minInclusive value="0"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Unit" type="types:WorkUnitType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The labor unit, either "AW", "R" or "h"</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="IsNegative" type="xsd:boolean" default="false">
+      <xsd:annotation>
+        <xsd:documentation>Indicator for a refund part.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <xsd:attributeGroup name="BaseItemAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the basic and common attributes of an item. An item might be a Part, WorkItem or ServicePackage</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="PosNo" type="xsd:int" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Position number of an item. Used to for display the item in the correct order</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="EditType" type="types:EditType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Indicator whether the item may be deleted, changed resp. not changed by XENTRY Portal pro. Default: "Delete", i. e.
+					the item may be deleted and modified by XENTRY Portal pro.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="DmsStatus" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Additional explanation of the edit type. Can be set by the DMS and will be displayed in XENTRY Portal pro</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="Origin" type="types:OriginType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Origin of the item. Enumeration "Central" "Local"</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <xsd:attributeGroup name="InternalExternalIdAttGroup">
+    <xsd:annotation>
+      <xsd:documentation>This group defines the pair of internal and external Id to identify any item (part, work, service package, service
+				measure, customer concern) for the XENTRY Portal and the DMS</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="InternalId" type="types:InternalIdType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>XENTRY Portal pro internal identifier of the item. Set by XENTRY Portal pro must be stored and returned by the DMS,
+					Required by XENTRY Portal pro to merge the DMS order and the XENTRY Portal pro job.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="ExternalId" type="types:ExternalIdType" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>DMS internal identifier of the item, set by the DMS if needed there.
+					If set, it is stored and returned by the XENTRY
+					Portal pro.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:attributeGroup>
+  <!--*********************************************************************************************************************************************************************************************
+		Simple types
+	***********************************************************************************************************************************************************************************************-->
+  <xsd:simpleType name="InvoiceCodeType">
+    <xsd:annotation>
+      <xsd:documentation>Code that assigns the item to a cost object. Default: Customer pays. May be combined, e. g. base invoice code +
+				Fleetsite invoice code</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="InternalIdType">
+    <xsd:annotation>
+      <xsd:documentation>XENTRY Portal pro-internal unique ID for an element. Is set by XENTRY Portal pro, must be stored and returned by the
+				DMS</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ExternalIdType">
+    <xsd:annotation>
+      <xsd:documentation>DMS internal ID for an element. If set by the DMS, it is stored and returned by XENTRY Portal pro.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="OrderIdType">
+    <xsd:annotation>
+      <xsd:documentation>DMS unique order number</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="50"/>
+      <xsd:minLength value="1"/>
+      <xsd:pattern value=".*[^\s].*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FinVinType">
+    <xsd:annotation>
+      <xsd:documentation>Basic vehicle identification number (abbr. FIN/VIN) is the ISO3779 standard. This field can carry a FIN or VIN.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="17"/>
+      <xsd:maxLength value="17"/>
+      <xsd:pattern value="[1234567890ABCDEFGHJKLMNPRSTUVWXYZ]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="BrowserUrlType">
+    <xsd:annotation>
+      <xsd:documentation>URL to start browser.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="1024"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="IdType">
+    <xsd:annotation>
+      <xsd:documentation>XENTRY Portal-unique ID for an element. Is set by XENTRY Portal pro to identify an object in a part list.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="20"/>
+      <xsd:pattern value=".*[^\s].*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="OriginType">
+    <xsd:annotation>
+      <xsd:documentation>Enumeration Values for Origin attribute in WorkItem, Part and ServicePackage.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Central"/>
+      <xsd:enumeration value="Local"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PriceType">
+    <xsd:annotation>
+      <xsd:documentation>Basic price definition with 3 fractional digits for some currencies</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="13"/>
+      <xsd:fractionDigits value="3"/>
+      <xsd:minInclusive value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TitleType">
+    <xsd:annotation>
+      <xsd:documentation>Basic title definition for Part List and Part Set.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="1000"/>
+      <xsd:minLength value="1"/>
+      <xsd:pattern value=".*[^\s].*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PartsListIdType">
+    <xsd:annotation>
+      <xsd:documentation>XENTRY Portal-unique ID for a Part List.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20"/>
+      <xsd:minLength value="1"/>
+      <xsd:pattern value=".*[^\s].*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ModelCodeType">
+    <xsd:annotation>
+      <xsd:documentation>Vehicle Model Code (Baumuster)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="JobIdType">
+    <xsd:annotation>
+      <xsd:documentation>XENTRY Portal-unique ID for a Job. Is set by XENTRY Portal pro to identify a job.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0"/>
+      <xsd:maxLength value="18"/>
+      <xsd:pattern value=".*[^\s].*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EditType">
+    <xsd:annotation>
+      <xsd:documentation>Enumeration Values for EditType in WorkItem, Part and ServicePackage.
+				Lock = item cannot neither be modified nor
+				deleted in XENTRY Portal
+				Edit = item cannot be modified but deleted in XENTRY Portal
+				Delete = item can be modified and deleted in XENTRY
+				Portal</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Lock"/>
+      <xsd:enumeration value="Edit"/>
+      <xsd:enumeration value="Delete"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="WorkUnitType">
+    <xsd:annotation>
+      <xsd:documentation>Enumeration Values for Work item (flatrate) unit.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="AW"/>
+      <xsd:enumeration value="R"/>
+      <xsd:enumeration value="h"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\IF_XP_DMS_2_4_currencies.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://dms.ri.as.daimler.com/DMSService/currencies" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:cur="http://dms.ri.as.daimler.com/DMSService/currencies">
+  <!--Daimler AG Copyright 2016, payload of the XENTRY Portal pro - DMS communication-->
+  <xsd:annotation>
+    <xsd:documentation>Based on ISO-4217</xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="IsoCurrencyCodeType">
+    <xsd:annotation>
+      <xsd:documentation>This code list is inline with ISO currency codes ISO 4217 (last updated on 2011-08-31)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="AED">
+        <xsd:annotation>
+          <xsd:documentation>UAE Dirham</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFN">
+        <xsd:annotation>
+          <xsd:documentation>Afghani</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ALL">
+        <xsd:annotation>
+          <xsd:documentation>Lek</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AMD">
+        <xsd:annotation>
+          <xsd:documentation>Armenian Dram</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ANG">
+        <xsd:annotation>
+          <xsd:documentation>Netherlands Antillean Guilder</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AOA">
+        <xsd:annotation>
+          <xsd:documentation>Kwanza</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ARS">
+        <xsd:annotation>
+          <xsd:documentation>Argentine Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AUD">
+        <xsd:annotation>
+          <xsd:documentation>Australian Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AWG">
+        <xsd:annotation>
+          <xsd:documentation>Aruban Guilder</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AZN">
+        <xsd:annotation>
+          <xsd:documentation>Azerbaijanian Manat</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BAM">
+        <xsd:annotation>
+          <xsd:documentation>Convertible Mark</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BBD">
+        <xsd:annotation>
+          <xsd:documentation>Barbados Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BDT">
+        <xsd:annotation>
+          <xsd:documentation>Taka</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BGN">
+        <xsd:annotation>
+          <xsd:documentation>Bulgarian Lev</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BHD">
+        <xsd:annotation>
+          <xsd:documentation>Bahraini Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BIF">
+        <xsd:annotation>
+          <xsd:documentation>Burundi Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BMD">
+        <xsd:annotation>
+          <xsd:documentation>Bermudian Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BND">
+        <xsd:annotation>
+          <xsd:documentation>Brunei Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BOB">
+        <xsd:annotation>
+          <xsd:documentation>Boliviano</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BOV">
+        <xsd:annotation>
+          <xsd:documentation>Mvdol</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRL">
+        <xsd:annotation>
+          <xsd:documentation>Brazilian Real</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BSD">
+        <xsd:annotation>
+          <xsd:documentation>Bahamian Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTN">
+        <xsd:annotation>
+          <xsd:documentation>Ngultrum</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BWP">
+        <xsd:annotation>
+          <xsd:documentation>Pula</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BYR">
+        <xsd:annotation>
+          <xsd:documentation>Belarussian Ruble</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BZD">
+        <xsd:annotation>
+          <xsd:documentation>Belize Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CAD">
+        <xsd:annotation>
+          <xsd:documentation>Canadian Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CDF">
+        <xsd:annotation>
+          <xsd:documentation>Congolese Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CHE">
+        <xsd:annotation>
+          <xsd:documentation>WIR Euro</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CHF">
+        <xsd:annotation>
+          <xsd:documentation>Swiss Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CHW">
+        <xsd:annotation>
+          <xsd:documentation>WIR Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CLF">
+        <xsd:annotation>
+          <xsd:documentation>Unidades de fomento</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CLP">
+        <xsd:annotation>
+          <xsd:documentation>Chilean Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CNY">
+        <xsd:annotation>
+          <xsd:documentation>Yuan Renminbi</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="COP">
+        <xsd:annotation>
+          <xsd:documentation>Colombian Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="COU">
+        <xsd:annotation>
+          <xsd:documentation>Unidad de Valor Real</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CRC">
+        <xsd:annotation>
+          <xsd:documentation>Costa Rican Colon</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CUC">
+        <xsd:annotation>
+          <xsd:documentation>Peso Convertible</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CUP">
+        <xsd:annotation>
+          <xsd:documentation>Cuban Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CVE">
+        <xsd:annotation>
+          <xsd:documentation>Cape Verde Escudo</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CZK">
+        <xsd:annotation>
+          <xsd:documentation>Czech Koruna</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DJF">
+        <xsd:annotation>
+          <xsd:documentation>Djibouti Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DKK">
+        <xsd:annotation>
+          <xsd:documentation>Danish Krone</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DOP">
+        <xsd:annotation>
+          <xsd:documentation>Dominican Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DZD">
+        <xsd:annotation>
+          <xsd:documentation>Algerian Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGP">
+        <xsd:annotation>
+          <xsd:documentation>Egyptian Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ERN">
+        <xsd:annotation>
+          <xsd:documentation>Nakfa</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ETB">
+        <xsd:annotation>
+          <xsd:documentation>Ethiopian Birr</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EUR">
+        <xsd:annotation>
+          <xsd:documentation>Euro</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FJD">
+        <xsd:annotation>
+          <xsd:documentation>Fiji Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FKP">
+        <xsd:annotation>
+          <xsd:documentation>Falkland Islands Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GBP">
+        <xsd:annotation>
+          <xsd:documentation>Pound Sterling</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GEL">
+        <xsd:annotation>
+          <xsd:documentation>Lari</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GHS">
+        <xsd:annotation>
+          <xsd:documentation>Cedi</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GIP">
+        <xsd:annotation>
+          <xsd:documentation>Gibraltar Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GMD">
+        <xsd:annotation>
+          <xsd:documentation>Dalasi</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GNF">
+        <xsd:annotation>
+          <xsd:documentation>Guinea Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GTQ">
+        <xsd:annotation>
+          <xsd:documentation>Quetzal</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GYD">
+        <xsd:annotation>
+          <xsd:documentation>Guyana Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HKD">
+        <xsd:annotation>
+          <xsd:documentation>Hong Kong Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HNL">
+        <xsd:annotation>
+          <xsd:documentation>Lempira</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HRK">
+        <xsd:annotation>
+          <xsd:documentation>Croatian Kuna</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HTG">
+        <xsd:annotation>
+          <xsd:documentation>Gourde</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HUF">
+        <xsd:annotation>
+          <xsd:documentation>Forint</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IDR">
+        <xsd:annotation>
+          <xsd:documentation>Rupiah</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ILS">
+        <xsd:annotation>
+          <xsd:documentation>New Israeli Sheqel</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="INR">
+        <xsd:annotation>
+          <xsd:documentation>Indian Rupee</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IQD">
+        <xsd:annotation>
+          <xsd:documentation>Iraqi Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IRR">
+        <xsd:annotation>
+          <xsd:documentation>Iranian Rial</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ISK">
+        <xsd:annotation>
+          <xsd:documentation>Iceland Krona</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="JMD">
+        <xsd:annotation>
+          <xsd:documentation>Jamaican Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="JOD">
+        <xsd:annotation>
+          <xsd:documentation>Jordanian Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="JPY">
+        <xsd:annotation>
+          <xsd:documentation>Yen</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KES">
+        <xsd:annotation>
+          <xsd:documentation>Kenyan Shilling</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KGS">
+        <xsd:annotation>
+          <xsd:documentation>Som</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KHR">
+        <xsd:annotation>
+          <xsd:documentation>Riel</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KMF">
+        <xsd:annotation>
+          <xsd:documentation>Comoro Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KPW">
+        <xsd:annotation>
+          <xsd:documentation>North Korean Won</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KRW">
+        <xsd:annotation>
+          <xsd:documentation>Won</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KWD">
+        <xsd:annotation>
+          <xsd:documentation>Kuwaiti Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KYD">
+        <xsd:annotation>
+          <xsd:documentation>Cayman Islands Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KZT">
+        <xsd:annotation>
+          <xsd:documentation>Tenge</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LAK">
+        <xsd:annotation>
+          <xsd:documentation>Kip</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LBP">
+        <xsd:annotation>
+          <xsd:documentation>Lebanese Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LKR">
+        <xsd:annotation>
+          <xsd:documentation>Sri Lanka Rupee</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LRD">
+        <xsd:annotation>
+          <xsd:documentation>Liberian Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LSL">
+        <xsd:annotation>
+          <xsd:documentation>Loti</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LTL">
+        <xsd:annotation>
+          <xsd:documentation>Lithuanian Litas</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LVL">
+        <xsd:annotation>
+          <xsd:documentation>Latvian Lats</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LYD">
+        <xsd:annotation>
+          <xsd:documentation>Libyan Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MAD">
+        <xsd:annotation>
+          <xsd:documentation>Moroccan Dirham</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MDL">
+        <xsd:annotation>
+          <xsd:documentation>Moldovan Leu</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MGA">
+        <xsd:annotation>
+          <xsd:documentation>Malagasy Ariary</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MKD">
+        <xsd:annotation>
+          <xsd:documentation>Denar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MMK">
+        <xsd:annotation>
+          <xsd:documentation>Kyat</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MNT">
+        <xsd:annotation>
+          <xsd:documentation>Tugrik</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MOP">
+        <xsd:annotation>
+          <xsd:documentation>Pataca</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MRO">
+        <xsd:annotation>
+          <xsd:documentation>Ouguiya</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MUR">
+        <xsd:annotation>
+          <xsd:documentation>Mauritius Rupee</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MVR">
+        <xsd:annotation>
+          <xsd:documentation>Rufiyaa</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MWK">
+        <xsd:annotation>
+          <xsd:documentation>Kwacha</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MXN">
+        <xsd:annotation>
+          <xsd:documentation>Mexican Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MXV">
+        <xsd:annotation>
+          <xsd:documentation>Mexican Unidad de Inversion (UDI)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MYR">
+        <xsd:annotation>
+          <xsd:documentation>Malaysian Ringgit</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MZN">
+        <xsd:annotation>
+          <xsd:documentation>Metical</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NAD">
+        <xsd:annotation>
+          <xsd:documentation>Namibia Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NGN">
+        <xsd:annotation>
+          <xsd:documentation>Naira</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NIO">
+        <xsd:annotation>
+          <xsd:documentation>Cordoba Oro</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NOK">
+        <xsd:annotation>
+          <xsd:documentation>Norwegian Krone</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NPR">
+        <xsd:annotation>
+          <xsd:documentation>Nepalese Rupee</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NZD">
+        <xsd:annotation>
+          <xsd:documentation>New Zealand Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OMR">
+        <xsd:annotation>
+          <xsd:documentation>Rial Omani</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PAB">
+        <xsd:annotation>
+          <xsd:documentation>Balboa</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PEN">
+        <xsd:annotation>
+          <xsd:documentation>Nuevo Sol</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PGK">
+        <xsd:annotation>
+          <xsd:documentation>Kina</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PHP">
+        <xsd:annotation>
+          <xsd:documentation>Philippine Peso</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PKR">
+        <xsd:annotation>
+          <xsd:documentation>Pakistan Rupee</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PLN">
+        <xsd:annotation>
+          <xsd:documentation>Zloty</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PYG">
+        <xsd:annotation>
+          <xsd:documentation>Guarani</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="QAR">
+        <xsd:annotation>
+          <xsd:documentation>Qatari Rial</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RON">
+        <xsd:annotation>
+          <xsd:documentation>Leu</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RSD">
+        <xsd:annotation>
+          <xsd:documentation>Serbian Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RUB">
+        <xsd:annotation>
+          <xsd:documentation>Russian Ruble</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RWF">
+        <xsd:annotation>
+          <xsd:documentation>Rwanda Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SAR">
+        <xsd:annotation>
+          <xsd:documentation>Saudi Riyal</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SBD">
+        <xsd:annotation>
+          <xsd:documentation>Solomon Islands Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SCR">
+        <xsd:annotation>
+          <xsd:documentation>Seychelles Rupee</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SDG">
+        <xsd:annotation>
+          <xsd:documentation>Sudanese Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SEK">
+        <xsd:annotation>
+          <xsd:documentation>Swedish Krona</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SGD">
+        <xsd:annotation>
+          <xsd:documentation>Singapore Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SHP">
+        <xsd:annotation>
+          <xsd:documentation>Saint Helena Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SLL">
+        <xsd:annotation>
+          <xsd:documentation>Leone</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SOS">
+        <xsd:annotation>
+          <xsd:documentation>Somali Shilling</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SRD">
+        <xsd:annotation>
+          <xsd:documentation>Surinam Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SSP">
+        <xsd:annotation>
+          <xsd:documentation>South Sudanese Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="STD">
+        <xsd:annotation>
+          <xsd:documentation>Dobra</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SVC">
+        <xsd:annotation>
+          <xsd:documentation>El Salvador Colon</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SYP">
+        <xsd:annotation>
+          <xsd:documentation>Syrian Pound</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SZL">
+        <xsd:annotation>
+          <xsd:documentation>Lilangeni</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="THB">
+        <xsd:annotation>
+          <xsd:documentation>Baht</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TJS">
+        <xsd:annotation>
+          <xsd:documentation>Somoni</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TMT">
+        <xsd:annotation>
+          <xsd:documentation>New Manat</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TND">
+        <xsd:annotation>
+          <xsd:documentation>Tunisian Dinar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TOP">
+        <xsd:annotation>
+          <xsd:documentation>Pa'anga</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TRY">
+        <xsd:annotation>
+          <xsd:documentation>Turkish Lira</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TTD">
+        <xsd:annotation>
+          <xsd:documentation>Trinidad and Tobago Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TWD">
+        <xsd:annotation>
+          <xsd:documentation>New Taiwan Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TZS">
+        <xsd:annotation>
+          <xsd:documentation>Tanzanian Shilling</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UAH">
+        <xsd:annotation>
+          <xsd:documentation>Hryvnia</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UGX">
+        <xsd:annotation>
+          <xsd:documentation>Uganda Shilling</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="USD">
+        <xsd:annotation>
+          <xsd:documentation>US Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="USN">
+        <xsd:annotation>
+          <xsd:documentation>US Dollar (Next day)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="USS">
+        <xsd:annotation>
+          <xsd:documentation>US Dollar (Same day)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UYI">
+        <xsd:annotation>
+          <xsd:documentation>Uruguay Peso en Unidades Indexadas (URUIURUI)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UYU">
+        <xsd:annotation>
+          <xsd:documentation>Peso Uruguayo</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UZS">
+        <xsd:annotation>
+          <xsd:documentation>Uzbekistan Sum</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VEF">
+        <xsd:annotation>
+          <xsd:documentation>Bolivar Fuerte</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VND">
+        <xsd:annotation>
+          <xsd:documentation>Dong</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VUV">
+        <xsd:annotation>
+          <xsd:documentation>Vatu</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WST">
+        <xsd:annotation>
+          <xsd:documentation>Tala</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XAF">
+        <xsd:annotation>
+          <xsd:documentation>CFA Franc BEAC</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XAG">
+        <xsd:annotation>
+          <xsd:documentation>Silver</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XAU">
+        <xsd:annotation>
+          <xsd:documentation>Gold</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XUA">
+        <xsd:annotation>
+          <xsd:documentation>ADB Unit of Account</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XBA">
+        <xsd:annotation>
+          <xsd:documentation>Bond Markets Unit European Composite Unit (EURCO)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XBB">
+        <xsd:annotation>
+          <xsd:documentation>Bond Markets Unit European Monetary Unit (E.M.U.-6)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XBC">
+        <xsd:annotation>
+          <xsd:documentation>Bond Markets Unit European Unit of Account 9 (E.U.A.-9)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XBD">
+        <xsd:annotation>
+          <xsd:documentation>Bond Markets Unit European Unit of Account 17 (E.U.A.-17)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XCD">
+        <xsd:annotation>
+          <xsd:documentation>East Caribbean Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XDR">
+        <xsd:annotation>
+          <xsd:documentation>SDR (Special Drawing Right)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XFU">
+        <xsd:annotation>
+          <xsd:documentation>UIC-Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XOF">
+        <xsd:annotation>
+          <xsd:documentation>CFA Franc BCEAO</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XPD">
+        <xsd:annotation>
+          <xsd:documentation>Palladium</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XPF">
+        <xsd:annotation>
+          <xsd:documentation>CFP Franc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XPT">
+        <xsd:annotation>
+          <xsd:documentation>Platinum</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XSU">
+        <xsd:annotation>
+          <xsd:documentation>Sucre</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="YER">
+        <xsd:annotation>
+          <xsd:documentation>Yemeni Rial</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZAR">
+        <xsd:annotation>
+          <xsd:documentation>Rand</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZAR">
+        <xsd:annotation>
+          <xsd:documentation>South African Rand</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZMK">
+        <xsd:annotation>
+          <xsd:documentation>Zambian Kwacha</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZWL">
+        <xsd:annotation>
+          <xsd:documentation>Zimbabwe Dollar</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Projekte\XP_Testtool\workspace\dms-testtool-web\doc\test\wsdl_tc_2.4\IF_XP_DMS_2_4_xp_sending.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://dms.ri.as.daimler.com/DMSService/xp_sending" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xp="http://dms.ri.as.daimler.com/DMSService/xp_sending" xmlns:types="http://dms.ri.as.daimler.com/DMSService/types" xmlns:cur="http://dms.ri.as.daimler.com/DMSService/currencies">
+  <!--Daimler AG Copyright 2016, payload of the XENTRY Portal pro - DMS communication-->
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/types" schemaLocation="IF_XP_DMS_2_4_types.xsd"/>
+  <xsd:import namespace="http://dms.ri.as.daimler.com/DMSService/currencies" schemaLocation="IF_XP_DMS_2_4_currencies.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="DE">XENTRY Portal pro - DMS Interface Messages. Copyright 2016 Daimler AG. All rights reserved.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="GetInvoiceCodesRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Get the invoice that are defined in the DMS</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="GetInvoiceCodesResponseType">
+    <xsd:annotation>
+      <xsd:documentation>List of invoice codes defined in the DMS</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="InvoiceCode" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Invoice code defined in the DMS</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:attribute name="Identifier" type="types:InvoiceCodeType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>Invoice code, may be combined, e. g. base invoice code + Fleetsite invoice code</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+          <xsd:attribute name="Description" use="optional">
+            <xsd:annotation>
+              <xsd:documentation>Invoice code description</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="100"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetLocalOperationsRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Get local operations that are defined in the DMS</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="GetLocalOperationsResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Local operations that are defined in the DMS</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="LocalOperations" minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>List of local operations that are defined in the DMS</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Operation" type="types:WorkItemMasterType" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPricesTechnicalJobRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the GetPricesRequest element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Parts" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Parts list</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Part" type="types:PartWithExInternalIdInvoiceCodeType" minOccurs="1" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Part</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="WorkItems" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Work items list</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="WorkItem" type="types:WorkItemBasicType" minOccurs="1" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Work item</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ServicePackages" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Service packages list</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="ServicePackage" type="types:ServicePackageBasicType" minOccurs="1" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Service package</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="OrderId" type="types:OrderIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Unique DMS Order number, valid for all order states</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="JobId" type="types:JobIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The unique id of the job to identify in XENTRY Portal</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="GetPricesTechnicalJobResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the GetPricesResponse element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Parts" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>List of Parts. Each part of the GetPricesRequest is returned.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element name="Part" type="types:PartWithExInternalIdInvoiceCodeNotificationType" minOccurs="1" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Part</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="WorkItems" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>List of Work items. Each Work item of the GetPricesRequest is returned.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element name="WorkItem" type="types:WorkItemBasicWithPricesAndNotificationType" minOccurs="1" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Work item</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ServicePackages" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>List Service packages. Each Service package of the GetPricesRequest is returned.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element name="ServicePackage" type="types:ServicePackageBasicWithPricesAndNotificationType" minOccurs="1" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Service package</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Notification" type="types:NotificationType" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>General Notification on the the GetPricesRequest</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="JobId" type="types:JobIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The unique id of the job to identify in XENTRY Portal</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="TransferJobToDmsRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the TransferJobToDmsRequest element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Job">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="CustomerConcern" type="types:CustomerConcernWithPricesEskulabDecisionType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Customer concerns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ServiceMeasure" type="types:ServiceMeasureType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>List of Technical campaigns</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Order" type="types:OrderType" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Vehicle" type="types:VehicleType" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Customer" type="types:CustomerOrgType" minOccurs="0" maxOccurs="1"/>
+          </xsd:sequence>
+          <xsd:attributeGroup ref="types:JobAttGroup"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="JobId" type="types:JobIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The unique id of the created job</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="TransferJobToDmsResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the TransferJobToDmsResponse element. Empty element that confirms that the transferJobToDmsRequest has
+				successfully been received by the DMS and that the editing system changed.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="RunVerificationRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the TransferJobToDmsRequest element. Used to test the connection between DMS and Xentry Portal pro. Has no
+				relevant data, just the empty message</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="RunVerificationResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the TransferJobToDmsResponse element. Response to the start of the technical verification sequence and
+				indicates a successful connection between DMS and Xentry Portal pro</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="GetPricesPartsRequestType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the GetPricesRequest element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="PartsSet" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Parts set</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Part" type="types:PartWithIdNameOriginType" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>Flat list of all parts.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="Id" type="types:IdType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>XENTRY Portal pro identifier of the parts set. Set by XENTRY Portal pro. Helps the DMS to merge the parts into
+								the DMS order.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+          <xsd:attribute name="FinOrVin" type="types:FinVinType" use="optional">
+            <xsd:annotation>
+              <xsd:documentation>Either a FIN or a VIN must be given in this field. Exact 17 alphanumerical characters.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+          <xsd:attribute name="ModelCode" type="types:ModelCodeType" use="optional">
+            <xsd:annotation>
+              <xsd:documentation>Vehicle Model Code (Baumuster)</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="PartsListId" type="types:PartsListIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Global unique identifier of the Parts list. Created in XENTRY Portal pro when the Parts list is created.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="OrderId" type="types:OrderIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Unique DMS Order number, valid for all order states</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="GetPricesPartsResponseType">
+    <xsd:annotation>
+      <xsd:documentation>Type of the GetPricesResponse element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="PartsSet" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>Parts sets</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Part" type="types:PartWithIdNameOriginPriceNotificationType">
+              <xsd:annotation>
+                <xsd:documentation>Flat list of all parts.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="Id" type="types:IdType" use="required">
+            <xsd:annotation>
+              <xsd:documentation>XENTRY Portal pro identifier of the parts set. Set by XENTRY Portal pro. Helps the DMS to merge the parts into
+								the DMS order.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Notification" type="types:NotificationType" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>General Notification on the the GetPricesRequest</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="PartsListId" type="types:PartsListIdType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Global unique identifier of the Parts list. Created in XENTRY Portal pro when the Parts list is created.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://localhost/STARCDS/services/ExternalInterface</con:endpoint></con:endpoints><con:operation id="2eb7c0b5-f78e-4322-b033-3ced8f37500d" isOneWay="false" action="GetDataByDescriptor" name="getDataByDescriptor" bindingOperationName="getDataByDescriptor" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="0a579aa7-dd25-4090-a894-4e008da29bac" isOneWay="false" action="GetDataByID" name="getDataByID" bindingOperationName="getDataByID" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="4bfe0e67-58d6-4712-b5c0-75191d1f98a2" isOneWay="false" action="GetDataList" name="getDataList" bindingOperationName="getDataList" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="57c9b5e3-7ffd-4a5f-966c-8fd5c8ba14c4" isOneWay="false" action="GetPossibleInterfaceVersions" name="getPossibleInterfaceVersions" bindingOperationName="getPossibleInterfaceVersions" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="b9706599-7dab-4d45-8182-119a582fe8f2" isOneWay="false" action="SendData" name="sendData" bindingOperationName="sendData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="48fd1a9a-06c9-49f2-bddd-b91f57ade510" isOneWay="false" action="SendSyncData" name="sendSyncData" bindingOperationName="sendSyncData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="e0262ea6-2078-401f-b50a-3b15316a29b0" isOneWay="false" action="SendSyncResponse" name="sendSyncResponse" bindingOperationName="sendSyncResponse" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation><con:operation id="e4bf7c68-3850-4b46-8338-44fa11e25ebc" isOneWay="false" action="SendTestData" name="sendTestData" bindingOperationName="sendTestData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false"><con:settings/></con:operation></con:interface><con:testSuite id="c6dd8f98-8760-491b-9cd1-3036cc701e52" name="Testsuite PartsJob 2.4"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="eef60715-310e-47fb-9161-82479a7db96b" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="1. ConnectPartsListAndOrder" searchProperties="true"><con:settings/><con:testStep type="request" name="1.1 ConnectPartsListAndOrder Request" id="7e1cb961-524a-4d7e-b40c-1ea300308b13"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>ExternalInterfaceSOAP</con:interface><con:operation>sendSyncData</con:operation><con:request name="1.1 ConnectPartsListAndOrder Request" id="087ed7cc-3302-4b41-82fa-70b68e7d369a" outgoingWss="outgoing"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#Project#ServiceEndpointUrl}</con:endpoint><con:request><![CDATA[<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://stc.daimler.com/2009/08/DS/ext ../../../SOAP%20UI/XML-Artefacts/StarConnectDataServerExt.xsd">
+	<env:Header>
+		<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<wsse:UsernameToken>
+				<wsse:Username>TD12345</wsse:Username>
+				<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">xyz</wsse:Password>
+				<wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">yyyyyyyyyyyyyyyy</wsse:Nonce>
+				<wsu:Created xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2014-08-07T08:39:51Z</wsu:Created>
+			</wsse:UsernameToken>
+		</wsse:Security>
+	</env:Header>
+	<env:Body>
+		<ext:sendSyncDataRequest ext:version="1.4" xsi:schemaLocation="http://stc.daimler.com/2009/08/DS/ext file:///C:/Xentry_Portal/Schnittstellen_Spezifikationen/XML-Schema_V_1.4.5/XML-Instanzen-V1.4.5/03_DataServer_Instanzen/XML-Artefacts/XML-Artefacts/StarConnectDataServerExt.xsd" xmlns:ext="http://stc.daimler.com/2009/08/DS/ext" xmlns:ds="http://stc.daimler.com/2009/08/DS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<ext:type>SERVICE_JOB_8</ext:type>
+			<ext:event>UPDATE</ext:event>
+			<ext:operation>ConnectPartsListAndOrder</ext:operation>
+			<ext:data>
+				<ds:structuredData>
+					<env:Message xsi:schemaLocation="http://dms.ri.as.daimler.com/DMSService file:///C:/Users/oertea/Documents/DAG/Stories/SOAP%20UI/XML-Artefacts/IF_XP_DMS_2_3_message_envelope.xsd" xmlns:env="http://dms.ri.as.daimler.com/DMSService">
+						<env:BusinessContext>
+							<env:DmsType>SOAP_UI</env:DmsType>
+							<env:DmsVersion>1.0</env:DmsVersion>
+							<env:ServiceVersion>2.4</env:ServiceVersion>
+							<env:Type>REQUEST</env:Type>
+						</env:BusinessContext>
+						<env:UserContext>
+							<env:DaimlerUserId>DDSUSER</env:DaimlerUserId>
+							<env:DmsUserId>DMSUSER</env:DmsUserId>
+							<env:UserLocale>de_DE</env:UserLocale>
+						</env:UserContext>
+						<env:ProcessContext>
+							<env:Timestamp>2001-12-17T09:30:47Z</env:Timestamp>
+							<env:TrackingId>PJ24_1.1</env:TrackingId>
+						</env:ProcessContext>
+						<env:ServiceMessage>
+							<env:ConnectPartsListAndOrderRequest xmlns:dms="http://dms.ri.as.daimler.com/DMSService/dms_sending" xmlns:types="http://dms.ri.as.daimler.com/DMSService/types" xmlns:cur="http://dms.ri.as.daimler.com/DMSService/currencies">
+								<dms:Order OrderId="TC_1.0"/>
+								<dms:Vehicle FinOrVin="WDD2040221A000658"/>
+							</env:ConnectPartsListAndOrderRequest>
+						</env:ServiceMessage>
+					</env:Message>
+				</ds:structuredData>
+			</ext:data>
+		</ext:sendSyncDataRequest>
+	</env:Body>
+</env:Envelope>
+]]></con:request><con:assertion type="SOAP Response" id="9486d2c5-6970-49e0-9262-10e9ac722c74"/><con:assertion type="Schema Compliance" id="139b3b5c-78be-42ef-9a27-105dc82181c3"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="9e040bbb-5cf7-4fbf-bcc1-75f25cb9e185"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="ee79df01-79cf-41f7-b37f-4e5383c31e00" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="2. GetDetailsFromPartsSearch" searchProperties="true"><con:settings/><con:testStep type="request" name="2.1 GetDetailsFromPartsSearch Request" id="d2e00185-70e9-4ac2-8739-36c4c826ed16"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>ExternalInterfaceSOAP</con:interface><con:operation>sendSyncData</con:operation><con:request name="2.1 GetDetailsFromPartsSearch Request" id="5032ae98-ddaf-43ae-8df2-d7152601ecb1" outgoingWss="outgoing"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#Project#ServiceEndpointUrl}</con:endpoint><con:request><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header>
+		<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<wsse:UsernameToken>
+				<wsse:Username>TD12345</wsse:Username>
+				<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">xyz</wsse:Password>
+				<wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">yyyyyyyyyyyyyyyy</wsse:Nonce>
+				<wsu:Created xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2014-08-07T08:39:51Z</wsu:Created>
+			</wsse:UsernameToken>
+		</wsse:Security>
+	</env:Header>
+	<env:Body>
+		<ext:sendSyncDataRequest ext:version="1.4" xsi:schemaLocation="http://stc.daimler.com/2009/08/DS/ext file:///C:/Xentry_Portal/Schnittstellen_Spezifikationen/XML-Schema_V_1.4.5/XML-Instanzen-V1.4.5/03_DataServer_Instanzen/XML-Artefacts/XML-Artefacts/StarConnectDataServerExt.xsd" xmlns:ext="http://stc.daimler.com/2009/08/DS/ext" xmlns:ds="http://stc.daimler.com/2009/08/DS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<ext:type>SERVICE_JOB_x</ext:type>
+			<ext:event>UPDATE</ext:event>
+			<ext:operation>GetDetailsFromPartsSearch</ext:operation>
+			<ext:data>
+				<ds:structuredData>
+					<env:Message xsi:schemaLocation="http://dms.ri.as.daimler.com/DMSService file:///C:/Users/oertea/Documents/DAG/Stories/SOAP%20UI/XML-Artefacts/IF_XP_DMS_2_3_message_envelope.xsd" xmlns:env="http://dms.ri.as.daimler.com/DMSService">
+						<env:BusinessContext>
+							<env:DmsType>SOAP_UI</env:DmsType>
+							<env:DmsVersion>1.0</env:DmsVersion>
+							<env:ServiceVersion>2.4</env:ServiceVersion>
+							<env:Type>REQUEST</env:Type>
+						</env:BusinessContext>
+						<env:UserContext>
+							<env:DaimlerUserId>DDSUSER</env:DaimlerUserId>
+							<env:DmsUserId>DMSUSER</env:DmsUserId>
+							<env:UserLocale>de_DE</env:UserLocale>
+						</env:UserContext>
+						<env:ProcessContext>
+							<env:Timestamp>2001-12-17T09:30:47Z</env:Timestamp>
+							<env:TrackingId>PJ24_2.1</env:TrackingId>
+						</env:ProcessContext>
+						<env:ServiceMessage>
+							<env:GetDetailsFromPartsSearchRequest PartsListId="2207" xmlns:dms="http://dms.ri.as.daimler.com/DMSService/dms_sending" xmlns:types="http://dms.ri.as.daimler.com/DMSService/types" xmlns:cur="http://dms.ri.as.daimler.com/DMSService/currencies"/>
+						</env:ServiceMessage>
+					</env:Message>
+				</ds:structuredData>
+			</ext:data>
+		</ext:sendSyncDataRequest>
+	</env:Body>
+</env:Envelope>
+
+]]></con:request><con:assertion type="SOAP Response" id="82641ca8-63b1-4238-a22e-139611a8f82c"/><con:assertion type="Schema Compliance" id="39115a86-47f3-4319-82c3-d99564c01e13"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="8325aa9c-ea59-475a-8dbb-d6d9489683e4"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="5c1c0350-d90d-438d-839c-31a36e592b55" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="3. GetPricesParts" searchProperties="true"><con:settings/><con:testStep type="request" name="3.1 GetPricesParts Request" id="dd86b932-fa64-4694-a932-1be2469a7ab0"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>ExternalInterfaceSOAP</con:interface><con:operation>sendSyncResponse</con:operation><con:request name="3.1 GetPricesParts Request" id="02163961-f24e-43d0-aed3-91387af961ef" outgoingWss="outgoing"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#Project#ServiceEndpointUrl}</con:endpoint><con:request><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+    <soapenv:Header>
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>TD11111</wsse:Username>
+                <wsse:Password>xxxxxxxxxx</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </soapenv:Header>
+    <soapenv:Body>
+<dsext:sendSyncResponseRequest xmlns:dsext="http://stc.daimler.com/2009/08/DS/ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://stc.daimler.com/2009/08/DS/ext file:///C:/Users/oertea/Documents/DAG/DMS%20SST%20Spec/SRS%20DS%20XSDs/StarConnectDataServerExt.xsd" xmlns:ext="http://stc.daimler.com/2009/08/DS/ext" xmlns:ds="http://stc.daimler.com/2009/08/DS">
+	<dsext:requestID>2147483647</dsext:requestID>
+	<dsext:data>
+		<ds:structuredData>
+			<env:Message xmlns:env="http://dms.ri.as.daimler.com/DMSService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://dms.ri.as.daimler.com/DMSService file:///C:/Users/oertea/Documents/DAG/DMS%20SST%20Spec/2.3%20XSDs/IF_XP_DMS_2_3_message_envelope.xsd">
+				<env:BusinessContext>
+					<env:DmsType>!</env:DmsType>
+					<env:ServiceVersion/>
+					<env:Type>RESPONSE</env:Type>
+				</env:BusinessContext>
+				<env:ProcessContext>
+					<env:Timestamp>2001-12-17T09:30:47Z</env:Timestamp>
+					<env:TrackingId>PJ24_3.1</env:TrackingId>
+				</env:ProcessContext>
+				<env:ServiceMessage>
+					<env:GetPricesPartsResponse PartsListId="!">
+						<xp:PartsSet Id="!" xmlns:xp="http://dms.ri.as.daimler.com/DMSService/xp_sending">
+							<xp:Part PartNumber="!" Quantity="0" Id="!" Name="!" Origin="Central"/>
+						</xp:PartsSet>
+					</env:GetPricesPartsResponse>
+				</env:ServiceMessage>
+			</env:Message>
+		</ds:structuredData>
+	</dsext:data>
+</dsext:sendSyncResponseRequest>
+    </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="578f0d34-5415-40ca-b155-84569d8f2d95"/><con:assertion type="Schema Compliance" id="d88f8bca-7101-4226-9f4c-84fce2792265"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="06c1374a-8bd2-4a7f-992a-53506fd47327"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties><con:property><con:name>ServiceEndpointUrl</con:name><con:value>http://192.166.58.228/dmstt/rest/xpSimulator/2_4</con:value></con:property></con:properties><con:wssContainer><con:outgoing><con:name>outgoing</con:name><con:entry type="Username" username="TDsoapUIuser" password="TDsoapUI2x0y1-4"><con:configuration><addCreated>false</addCreated><addNonce>false</addNonce><passwordType>PasswordText</passwordType></con:configuration></con:entry></con:outgoing></con:wssContainer><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

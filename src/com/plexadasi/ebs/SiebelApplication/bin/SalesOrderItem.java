@@ -1,16 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelBusComp
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.data.SiebelException
+ *  com.siebel.data.SiebelPropertySet
+ *  com.siebel.eai.SiebelBusinessServiceException
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
-import com.plexadasi.Helper.DataConverter;
+import com.plexadasi.helper.DataConverter;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.SiebelServiceClone;
-import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
+import com.plexadasi.ebs.SiebelApplication.lang.enu.Columns;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Impl;
+import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.ebs.model.BackOrder;
+import com.plexadasi.ebs.model.Order;
 import com.plexadasi.ebs.services.SalesOrderService;
 import com.siebel.data.SiebelBusComp;
 import com.siebel.data.SiebelDataBean;
@@ -19,150 +26,177 @@ import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-/**
- *
- * @author SAP Training
- */
-public class SalesOrderItem extends Product implements Impl
-{
-
+public class SalesOrderItem
+extends Product
+implements Impl {
     protected Integer soldToOrgId;
-    protected String field;
     private static final String BUS_OBJ = "Order Entry (Sales)";
     private static final String BUS_COMP = "Order Entry - Line Items";
+    private static final String PART_NUMBER = Columns.Order.PART_NUMBER;
+    Order salesOrder;
+    Boolean checkAtpStatus = true;
     
-    public SalesOrderItem(SiebelDataBean CONN)
-    {
+
+    public SalesOrderItem(SiebelDataBean CONN) {
         super(CONN);
-        this.busComp = BUS_COMP;
-        this.busObj = BUS_OBJ;
-        field = Product.FIELD_ORDER_NUMBER;
+        this.busComp = "Order Entry - Line Items";
+        this.busObj = "Order Entry (Sales)";
     }
-    
-    com.plexadasi.ebs.model.Order salesOrder;
-    
-    public List<Map<String, String>> inventoryItems(Connection ebsConn) throws SiebelException
-    {
+
+    public List<Map<String, String>> inventoryItems(Connection ebsConn) throws SiebelException {
         SiebelServiceClone s = new SiebelServiceClone(CONN);
         SiebelPropertySet values = CONN.newPropertySet();
-        set = CONN.newPropertySet();
-        set.setProperty(Product.PLX_LOT_ID, Product.PLX_LOT_ID);
-        set.setProperty(Product.FIELD_QUANTITY, Product.FIELD_QUANTITY);
-        set.setProperty(Product.PLX_PART_NUMBER, Product.PLX_PART_NUMBER);
-        set.setProperty(Product.PLX_ITEM_PRICE, Product.PLX_ITEM_PRICE);
-        // Pass the properties to siebel class
+        this.set = CONN.newPropertySet();
+        this.set.setProperty("Source Inventory Loc Integration Id", "Source Inventory Loc Integration Id");
+        this.set.setProperty("Quantity", "Quantity");
+        this.set.setProperty(PART_NUMBER, PART_NUMBER);
+        this.set.setProperty("Order Header Id", "Order Header Id");
+        this.set.setProperty("Item Price", "Item Price");
         s.setSField(this.set);
         SiebelBusComp sbBC = s.fields(this.busObj, this.busComp, this).getBusComp();
         Boolean isRecord = sbBC.firstRecord();
-        List<Map<String, String>> item = new ArrayList();
-        while(isRecord){
+        ArrayList<Map<String, String>> item = new ArrayList<Map<String, String>>();
+        while (isRecord) {
             sbBC.getMultipleFieldValues(this.set, values);
-            Map<String, String> items = new HashMap();
-            final Enumeration<String> e = set.getPropertyNames();
-            while (e.hasMoreElements()){
-                String value = e.nextElement();
-                items.put(set.getProperty(value), values.getProperty(value));
+            HashMap<String, String> items = new HashMap<String, String>();
+            Enumeration e = this.set.getPropertyNames();
+            while (e.hasMoreElements()) {
+                String value = (String)e.nextElement();
+                items.put(this.set.getProperty(value), values.getProperty(value));
             }
             item.add(items);
             isRecord = sbBC.nextRecord();
         }
         return item;
     }
-    
-    public void onHandQuantities(Connection ebsConn, String type) throws SiebelBusinessServiceException, SiebelException, SQLException
-    {
+
+    public void onHandQuantities(Connection ebsConn, String type) 
+            throws SiebelBusinessServiceException, SiebelException, SQLException {
         SiebelServiceClone s = new SiebelServiceClone(CONN);
         SalesOrderService sos = new SalesOrderService(ebsConn);
-        this.salesOrder = new com.plexadasi.ebs.model.Order();
+        checkAtpStatus = false;
+        this.salesOrder = new Order();
         SiebelPropertySet values = CONN.newPropertySet();
-        // Set properties
-        this.set.setProperty(this.field, this.field);
-        this.set.setProperty(Product.PLX_PART_NUMBER, Product.PLX_PART_NUMBER);
-        this.set.setProperty(Product.PLX_LOT_ID, Product.PLX_LOT_ID);
-        // Pass the properties to siebel class
+        this.set.setProperty("Order Number", "Order Number");
+        this.set.setProperty(PART_NUMBER, PART_NUMBER);
+        this.set.setProperty("Source Inventory Loc Integration Id", "Source Inventory Loc Integration Id");
         s.setSField(this.set);
         SiebelBusComp sbBC = s.fields(this.busObj, this.busComp, this).getBusComp();
         Boolean isRecord = sbBC.firstRecord();
-        // Loop through record if it contains data
-        while (isRecord)
-        {
+        while (isRecord) {
             sbBC.getMultipleFieldValues(this.set, values);
-            salesOrder.setOrderNumber(values.getProperty(this.field));
-            this.salesOrder.setPartNumber(values.getProperty(Product.PLX_PART_NUMBER));
-            this.salesOrder.setWarehouseId(Integer.parseInt(values.getProperty(Product.PLX_LOT_ID)));
-            com.plexadasi.ebs.model.Order salesOrderService = sos.findOnHandQuantity(this.salesOrder, type);
-            // Write field value to siebel business component
-            try{
-                this.salesOrder.setQuantity(salesOrderService.getQuantity());
-                sbBC.setFieldValue(Product.PLX_QUANTITY_AVAILABLE, String.valueOf(this.salesOrder.getQuantity()));
+            
+            String orderNumber = values.getProperty("Order Number");
+            String partNumber = values.getProperty(PART_NUMBER);
+            String warehouse = values.getProperty("Source Inventory Loc Integration Id");
+            
+            if("".equals(warehouse)){
+                warehouse = String.valueOf(this.soldToOrgId);
+            }
+            
+            this.salesOrder.setOrderNumber(orderNumber);
+            this.salesOrder.setPartNumber(partNumber);
+            this.salesOrder.setWarehouseId(DataConverter.toInt(warehouse));
+            
+            Order salesOrderService = sos.findOnHandQuantity(this.salesOrder, type);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            if(salesOrderService.getQuantity() != null) {
+                Integer quantity = salesOrderService.getQuantity();
+                this.salesOrder.setQuantity(quantity);
+                String status = "Out Of Stock";
+                String date = "";
+                if(quantity > 0){
+                    status = "Available";
+                    date = String.valueOf(dateFormat.format(new Date()));
+                }
+                sbBC.setFieldValue("Available Date", date);
+                sbBC.setFieldValue("Available Quantity", String.valueOf(quantity));
+                sbBC.setFieldValue("ATP Status", status);
                 MyLogging.log(Level.INFO, this.salesOrder.toString());
-            }catch(NullPointerException e){}
+            }
+            else {
+                // empty catch block
+                sbBC.setFieldValue("Available Quantity", "0");
+                sbBC.setFieldValue("Available Date", "");
+                //sbBC.setFieldValue("Available Date", String.valueOf(dateFormat.format(new Date())));
+                sbBC.setFieldValue("ATP Status", "Unavailable");
+                MyLogging.log(Level.INFO, this.salesOrder.toString());
+                
+            }
             isRecord = sbBC.nextRecord();
         }
-        // Write record and release object from memory
         sbBC.writeRecord();
         s.release();
     }
-    
-    public void backOrder(Connection ebsConn) throws SiebelBusinessServiceException, SQLException, SiebelException{
+
+    public void backOrder(Connection ebsConn) throws SiebelBusinessServiceException, SQLException, SiebelException {
         SiebelServiceClone s = new SiebelServiceClone(CONN);
         SalesOrderService sos = new SalesOrderService(ebsConn);
-        this.salesOrder = new com.plexadasi.ebs.model.Order();
+        this.salesOrder = new Order();
         SiebelPropertySet values = CONN.newPropertySet();
-        this.set.setProperty(Product.FIELD_ORDER_NUMBER, Product.FIELD_ORDER_NUMBER);
-        this.set.setProperty(Product.PLX_PART_NUMBER, Product.PLX_PART_NUMBER);
-        this.set.setProperty(Product.PLX_PRODUCT, Product.PLX_PRODUCT);
-        this.set.setProperty(Product.PICK_MEANING, Product.PICK_MEANING);
-        this.set.setProperty(Product.RELEASE_STATUS, Product.RELEASE_STATUS);
-        this.set.setProperty(Product.PLX_LOT_ID, Product.PLX_LOT_ID);
+        this.set.setProperty("Order Number", "Order Number");
+        this.set.setProperty(PART_NUMBER, PART_NUMBER);
+        this.set.setProperty("Product", "Product");
+        this.set.setProperty("Source Inventory Loc Integration Id", "Source Inventory Loc Integration Id");
+        this.set.setProperty("PLX Pick Meaning", "PLX Pick Meaning");
+        this.set.setProperty("PLX Release Status", "PLX Release Status");
         this.set.setProperty("Back Order Quantity", "Back Order Quantity");
         s.setSField(this.set);
         SiebelBusComp sbBC = s.fields(this.busObj, this.busComp, this).getBusComp();
         Boolean isRecord = sbBC.firstRecord();
-        while (isRecord)
-        {
+        while (isRecord) {
             sbBC.getMultipleFieldValues(this.set, values);
-            salesOrder.setPartNumber(values.getProperty(Product.PLX_PART_NUMBER));
-            salesOrder.setOrderNumber(values.getProperty(Product.FIELD_ORDER_NUMBER));
-            salesOrder.setWarehouseId(DataConverter.toInt(values.getProperty(Product.PLX_LOT_ID)));
-            salesOrder.setPartName(values.getProperty(Product.PLX_PRODUCT));
-            BackOrder backorder = sos.findBookingLineItemStatus(salesOrder);
-            // Write values to siebel business component
-            try{
-                sbBC.setFieldValue(Product.PICK_MEANING, backorder.getPickMeaning());
-                sbBC.setFieldValue(Product.STATUS, backorder.getItemStatus());
-                sbBC.setFieldValue(Product.RELEASE_STATUS, backorder.getReleaseStatus());
+            
+            
+            String orderNumber = values.getProperty(Columns.Order.ORDER_NUMBER);
+            String partNumber = values.getProperty(PART_NUMBER);
+            Integer warehouseId = DataConverter.toInt(values.getProperty("Source Inventory Loc Integration Id"));
+            warehouseId = warehouseId <= 0 ? soldToOrgId : warehouseId;
+            
+            this.salesOrder.setPartNumber(partNumber);
+            this.salesOrder.setOrderNumber(orderNumber);
+            this.salesOrder.setWarehouseId(warehouseId);
+            this.salesOrder.setPartName(values.getProperty("Product"));
+            BackOrder backorder = sos.findBookingLineItemStatus(this.salesOrder);
+            try {
+                sbBC.setFieldValue("PLX Pick Meaning", backorder.getPickMeaning());
+                sbBC.setFieldValue("Status", backorder.getItemStatus());
+                sbBC.setFieldValue("PLX Release Status", backorder.getReleaseStatus());
                 sbBC.setFieldValue("Back Order Quantity", String.valueOf(backorder.getQuantity()));
                 MyLogging.log(Level.INFO, this.salesOrder.toString() + backorder.toString());
-            }catch(NullPointerException e){}
+            }
+            catch (NullPointerException e) {
+                // empty catch block
+            }
             isRecord = sbBC.nextRecord();
         }
         sbBC.writeRecord();
         s.release();
     }
-    
-    /**
-     * 
-     * @param sbBC
-     * @throws SiebelException 
-     */
+
     @Override
-    public void searchSpec(SiebelBusComp sbBC) throws SiebelException 
-    {
-        sbBC.setSearchSpec(Product.FIELD_ORDER_NUMBER, this.siebelAccountId);  
-        sbBC.setSearchSpec("Product Type", "Equipment");
-        sbBC.setSearchSpec(Product.PLX_LOT_ID, String.valueOf(this.soldToOrgId));
+    public void searchSpec(SiebelBusComp sbBC) throws SiebelException {
+        sbBC.setSearchSpec("Order Number", this.siebelAccountId);
+        sbBC.setSearchSpec("Product Type", "<>'Vehicle'");
+        if(checkAtpStatus){
+            sbBC.setSearchSpec("ATP Status", "<>'Unavailable'");
+        }
+        MyLogging.log(Level.INFO, "Check ATP STATUS: " + checkAtpStatus);
+        //sbBC.setSearchSpec("PLX Lot#", String.valueOf(this.soldToOrgId));
     }
 
     @Override
-    public void getExtraParam(SiebelBusComp sbBC) {}
+    public void getExtraParam(SiebelBusComp sbBC) {
+    }
 
     public void setOrgId(Integer soldToOrgId) {
         this.soldToOrgId = soldToOrgId;
@@ -170,6 +204,7 @@ public class SalesOrderItem extends Product implements Impl
 
     @Override
     public void doTrigger() throws SiebelBusinessServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
+

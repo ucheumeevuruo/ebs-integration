@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		$Id: StarConnectDataServerExt.xsd,v 1.16 2009/10/27 16:50:22 jboenis
+		Exp $
+	-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://stc.daimler.com/2009/08/DS/ext" xmlns:dsext="http://stc.daimler.com/2009/08/DS/ext"
+	xmlns:ds="http://stc.daimler.com/2009/08/DS" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	jaxb:version="1.0" elementFormDefault="qualified" attributeFormDefault="qualified">
+
+	<xsd:annotation>
+		<xsd:documentation>
+			<description>General StarConnect Data Server data types for
+				the external interface.</description>
+			<version major="1" minor="4" fix="1" />
+		</xsd:documentation>
+		<xsd:appinfo>
+			<jaxb:schemaBindings>
+				<jaxb:package name="com.daimler.stc.dataserver.ws.data.ext" />
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:import namespace="http://stc.daimler.com/2009/08/DS"
+		schemaLocation="StarConnectDataServer.xsd" />
+
+	<!-- Complex Data Types -->
+	<!-- ~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="GetDataListRequest">
+		<xsd:sequence>
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="event" type="ds:Event" />
+			<xsd:element name="eventDateFrom" type="ds:EventDate" />
+			<xsd:element name="eventDateTo" type="ds:EventDate" />
+			<xsd:element name="onlyUnfetched" type="xsd:boolean" />
+			<xsd:element name="addressee" type="ds:Addressee" minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="GetDataListResponse">
+		<xsd:sequence>
+			<xsd:element name="dataDescriptor" type="ds:DataDescriptor" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="GetDataByIDRequest">
+		<xsd:sequence minOccurs="1" maxOccurs="50">
+			<xsd:choice>
+				<xsd:element name="dataID" type="ds:ID" />
+				<xsd:element name="dataByID" type="ds:DataById" />
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="GetDataByDescriptorRequest">
+		<xsd:sequence minOccurs="1" maxOccurs="50">
+			<xsd:element name="dataDescriptor" type="ds:GetDataDescriptor" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="GetDataResponse">
+		<xsd:sequence minOccurs="1" maxOccurs="50">
+			<xsd:element name="getDataResult" type="ds:GetDataResult" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendTestDataRequest">
+		<xsd:sequence>
+			<xsd:element name="addressee" type="ds:Addressee"
+				minOccurs="0" />
+			<xsd:choice>
+				<xsd:element name="testData" type="dsext:SendDataRequest" />
+				<xsd:element name="testSyncData" type="dsext:SendSyncTestDataRequest" />
+			</xsd:choice>
+			<xsd:element name="testMode" type="ds:TestMode" />
+			<xsd:element name="userName" type="ds:UserName" />
+			<xsd:element name="password" type="ds:PassWord" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendSyncTestDataRequest">
+		<xsd:sequence>
+			<xsd:element name="addressees" type="ds:Addressees"
+				minOccurs="0" />
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="operation" type="ds:Operation" />
+			<xsd:element name="structuredData" type="ds:StructuredData" />
+			<xsd:element name="dataGram" type="xsd:boolean" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendDataRequest">
+		<xsd:sequence>
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="externalSystemIDs" type="dsext:ExternalSystemIDs"
+				minOccurs="0" />
+			<xsd:element name="addressees" type="ds:Addressees"
+				minOccurs="0" />
+			<xsd:element name="businessID" type="ds:BusinessID" />
+			<xsd:element name="sequenceNo" type="ds:SequenceNo" />
+			<xsd:element name="lastInSequence" type="ds:LastInSequence" />
+			<xsd:element name="assembleSegments" type="ds:AssembleSegments" />
+			<xsd:element name="interfaceVersion" type="ds:InterfaceVersion" />
+			<xsd:element name="businessVersion" type="ds:BusinessVersion" />
+			<xsd:element name="event" type="ds:Event" />
+			<xsd:element name="eventDate" type="ds:EventDate" />
+			<xsd:element name="autoDeleteDate" type="ds:DeleteDate"
+				minOccurs="0" />
+			<xsd:element name="data" type="ds:Data" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendDataResponse">
+		<xsd:sequence>
+			<xsd:element name="dataID" type="ds:ID" minOccurs="0" />
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendTestDataResponse">
+		<xsd:sequence>
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="GetPossibleInterfaceVersionsRequest">
+		<xsd:sequence>
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="interfaceVersion" type="ds:InterfaceVersion" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="GetPossibleInterfaceVersionsResponse">
+		<xsd:sequence>
+			<xsd:element name="PossibleInterfaceVersions" type="ds:PossibleInterfaceVersions" />
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendSyncResponseRequest">
+		<xsd:sequence>
+			<xsd:element name="requestID" type="ds:ID" />
+			<xsd:element name="data" type="ds:Data" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendSyncResponseResponse">
+		<xsd:sequence>
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendSyncDataRequest">
+		<xsd:sequence>
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="event" type="ds:Event" />
+			<xsd:element name="operation" type="ds:Operation" />
+			<xsd:element name="sender" type="ds:Addressee" minOccurs="0" />
+			<xsd:element name="data" type="ds:Data" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="SendSyncDataResponse">
+		<xsd:sequence>
+			<xsd:element name="data" type="ds:Data" minOccurs="0" />
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+		</xsd:sequence>
+		<xsd:attribute name="version" type="ds:Version" use="optional" />
+	</xsd:complexType>
+
+	<!-- Atomic Complex Data Types -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="ExternalSystemIDs">
+		<xsd:sequence minOccurs="1" maxOccurs="1000">
+			<xsd:element name="externalSysID" type="ds:ExternalSysID" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="getDataListRequest" type="dsext:GetDataListRequest" />
+	<xsd:element name="getDataListResponse" type="dsext:GetDataListResponse" />
+	<xsd:element name="getDataByIDRequest" type="dsext:GetDataByIDRequest" />
+	<xsd:element name="getDataByDescriptorRequest" type="dsext:GetDataByDescriptorRequest" />
+	<xsd:element name="getDataResponse" type="dsext:GetDataResponse" />
+	<xsd:element name="sendDataRequest" type="dsext:SendDataRequest" />
+	<xsd:element name="sendDataResponse" type="dsext:SendDataResponse" />
+	<xsd:element name="sendTestDataRequest" type="dsext:SendTestDataRequest" />
+	<xsd:element name="sendTestDataResponse" type="dsext:SendTestDataResponse" />
+	<xsd:element name="getPossibleInterfaceVersionsRequest"
+		type="dsext:GetPossibleInterfaceVersionsRequest" />
+	<xsd:element name="getPossibleInterfaceVersionsResponse"
+		type="dsext:GetPossibleInterfaceVersionsResponse" />
+	<xsd:element name="sendSyncResponseRequest" type="dsext:SendSyncResponseRequest" />
+	<xsd:element name="sendSyncResponseResponse" type="dsext:SendSyncResponseResponse" />
+	<xsd:element name="sendSyncDataRequest" type="dsext:SendSyncDataRequest" />
+	<xsd:element name="sendSyncDataResponse" type="dsext:SendSyncDataResponse" />
+</xsd:schema>

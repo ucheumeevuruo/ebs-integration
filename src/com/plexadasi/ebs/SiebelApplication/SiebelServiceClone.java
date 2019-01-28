@@ -1,51 +1,48 @@
+/*
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelBusComp
+ *  com.siebel.data.SiebelBusObject
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.data.SiebelException
+ *  com.siebel.data.SiebelPropertySet
+ */
 package com.plexadasi.ebs.SiebelApplication;
 
-
+import com.plexadasi.ebs.SiebelApplication.SiebelService;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Impl;
 import com.siebel.data.SiebelBusComp;
+import com.siebel.data.SiebelBusObject;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
+import com.siebel.data.SiebelPropertySet;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Adeyemi
- */
-public class SiebelServiceClone extends SiebelService 
-{ 
-    
+public class SiebelServiceClone
+extends SiebelService {
     public SiebelServiceClone(SiebelDataBean conn) {
         super(conn);
     }
-    
-    public SiebelServiceClone fields(String bO, String bC, Impl qM) throws SiebelException
-    {
-        this.sbBO = sdb.getBusObject(bO); 
+
+    public SiebelServiceClone fields(String bO, String bC, Impl qM) throws SiebelException {
+        this.sbBO = sdb.getBusObject(bO);
         this.sbBC = this.sbBO.getBusComp(bC);
         values = sdb.newPropertySet();
         this.sbBC.setViewMode(3);
         this.sbBC.clearToQuery();
-        // Activate all the fields
         this.sbBC.activateMultipleFields(properties);
-        //Get search specification
-        qM.searchSpec(sbBC);
+        qM.searchSpec(this.sbBC);
         this.sbBC.executeQuery2(true, true);
         return this;
     }
-    
-    public SiebelBusComp getBusComp()
-    {
+
+    public SiebelBusComp getBusComp() {
         return this.sbBC;
     }
-    
-    public void release()
-    {
+
+    public void release() {
         this.sbBC.release();
         this.sbBO.release();
     }
 }
+

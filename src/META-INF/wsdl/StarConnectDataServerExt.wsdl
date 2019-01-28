@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: StarConnectDataServerExt.wsdl,v 1.12 2009/10/15 09:48:06 svgabel Exp $ -->
+<wsdl:definitions name="ExternalInterface"
+	targetNamespace="http://stc.daimler.com/2009/08/DS/ext/wsdl" xmlns:tns="http://stc.daimler.com/2009/08/DS/ext/wsdl"
+	xmlns:dsext="http://stc.daimler.com/2009/08/DS/ext" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<xsd:annotation>
+		<xsd:documentation>
+			<description>
+				Web Service Interface definition for the StarConnect Data Server External Interface
+			</description>
+			<version major="1" minor="4" fix="1" />
+		</xsd:documentation>
+	</xsd:annotation>
+	
+	<jaxws:bindings>
+		<jaxws:package name="com.daimler.stc.dataserver.ws.server" />
+	</jaxws:bindings>
+
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import namespace="http://stc.daimler.com/2009/08/DS/ext"
+				schemaLocation="StarConnectDataServerExt.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="getDataListRequest">
+		<wsdl:part element="dsext:getDataListRequest" name="getDataListRequest" />
+	</wsdl:message>
+	<wsdl:message name="getDataListResponse">
+		<wsdl:part element="dsext:getDataListResponse" name="getDataListResponse" />
+	</wsdl:message>
+	<wsdl:message name="getDataByIDRequest">
+		<wsdl:part element="dsext:getDataByIDRequest" name="getDataByIDRequest" />
+	</wsdl:message>
+	<wsdl:message name="getDataResponse">
+		<wsdl:part element="dsext:getDataResponse" name="getDataResponse" />
+	</wsdl:message>
+	<wsdl:message name="getDataByDescriptorRequest">
+		<wsdl:part element="dsext:getDataByDescriptorRequest" name="getDataByDescriptorRequest" />
+	</wsdl:message>
+	<wsdl:message name="sendDataRequest">
+		<wsdl:part element="dsext:sendDataRequest" name="sendDataRequest" />
+	</wsdl:message>
+	<wsdl:message name="sendDataResponse">
+		<wsdl:part element="dsext:sendDataResponse" name="sendDataResponse" />
+	</wsdl:message>
+	<wsdl:message name="sendTestDataRequest">
+		<wsdl:part element="dsext:sendTestDataRequest" name="sendTestDataRequest" />
+	</wsdl:message>
+	<wsdl:message name="sendTestDataResponse">
+		<wsdl:part element="dsext:sendTestDataResponse" name="sendTestDataResponse" />
+	</wsdl:message>
+	<wsdl:message name="getPossibleInterfaceVersionsRequest">
+		<wsdl:part element="dsext:getPossibleInterfaceVersionsRequest"
+			name="getPossibleInterfaceVersionsRequest" />
+	</wsdl:message>
+	<wsdl:message name="getPossibleInterfaceVersionsResponse">
+		<wsdl:part element="dsext:getPossibleInterfaceVersionsResponse"
+			name="getPossibleInterfaceVersionsResponse" />
+	</wsdl:message>
+	<wsdl:message name="sendSyncResponseRequest">
+		<wsdl:part element="dsext:sendSyncResponseRequest" name="sendSyncResponseRequest" />
+	</wsdl:message>
+	<wsdl:message name="sendSyncResponseResponse">
+		<wsdl:part element="dsext:sendSyncResponseResponse" name="sendSyncResponseResponse" />
+	</wsdl:message>
+	<wsdl:message name="sendSyncDataRequest">
+		<wsdl:part element="dsext:sendSyncDataRequest" name="sendSyncDataRequest" />
+	</wsdl:message>
+	<wsdl:message name="sendSyncDataResponse">
+		<wsdl:part element="dsext:sendSyncDataResponse" name="sendSyncDataResponse" />
+	</wsdl:message>
+
+	<wsdl:portType name="ExternalInterface">
+		<wsdl:operation name="getDataList">
+			<wsdl:input message="tns:getDataListRequest" />
+			<wsdl:output message="tns:getDataListResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getDataByID">
+			<wsdl:input message="tns:getDataByIDRequest" />
+			<wsdl:output message="tns:getDataResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getDataByDescriptor">
+			<wsdl:input message="tns:getDataByDescriptorRequest" />
+			<wsdl:output message="tns:getDataResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="sendData">
+			<wsdl:input message="tns:sendDataRequest" />
+			<wsdl:output message="tns:sendDataResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="sendTestData">
+			<wsdl:input message="tns:sendTestDataRequest" />
+			<wsdl:output message="tns:sendTestDataResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="getPossibleInterfaceVersions">
+			<wsdl:input message="tns:getPossibleInterfaceVersionsRequest" />
+			<wsdl:output message="tns:getPossibleInterfaceVersionsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="sendSyncResponse">
+			<wsdl:input message="tns:sendSyncResponseRequest" />
+			<wsdl:output message="tns:sendSyncResponseResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="sendSyncData">
+			<wsdl:input message="tns:sendSyncDataRequest" />
+			<wsdl:output message="tns:sendSyncDataResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="ExternalInterfaceSOAP" type="tns:ExternalInterface">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getDataList">
+			<soap:operation soapAction="GetDataList" />
+			<wsdl:input>
+				<soap:body parts="getDataListRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="getDataListResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDataByID">
+			<soap:operation soapAction="GetDataByID" />
+			<wsdl:input>
+				<soap:body parts="getDataByIDRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="getDataResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDataByDescriptor">
+			<soap:operation soapAction="GetDataByDescriptor" />
+			<wsdl:input>
+				<soap:body parts="getDataByDescriptorRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="getDataResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sendData">
+			<soap:operation soapAction="SendData" />
+			<wsdl:input>
+				<soap:body parts="sendDataRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="sendDataResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sendTestData">
+			<soap:operation soapAction="SendTestData" />
+			<wsdl:input>
+				<soap:body parts="sendTestDataRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="sendTestDataResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getPossibleInterfaceVersions">
+			<soap:operation soapAction="GetPossibleInterfaceVersions" />
+			<wsdl:input>
+				<soap:body parts="getPossibleInterfaceVersionsRequest"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="getPossibleInterfaceVersionsResponse"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sendSyncResponse">
+			<soap:operation soapAction="SendSyncResponse" />
+			<wsdl:input>
+				<soap:body parts="sendSyncResponseRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="sendSyncResponseResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sendSyncData">
+			<soap:operation soapAction="SendSyncData" />
+			<wsdl:input>
+				<soap:body parts="sendSyncDataRequest" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="sendSyncDataResponse" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	
+	<wsdl:service name="ExternalInterface">
+		<wsdl:port binding="tns:ExternalInterfaceSOAP" name="ExternalInterfaceSOAP">
+			<soap:address location="https://srs-ds-int1.i.daimler.com/STARCDS/services/ExternalInterface" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

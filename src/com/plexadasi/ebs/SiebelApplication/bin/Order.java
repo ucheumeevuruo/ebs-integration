@@ -1,14 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelBusComp
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.data.SiebelException
+ *  com.siebel.data.SiebelPropertySet
+ *  com.siebel.eai.SiebelBusinessServiceException
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.SiebelSearch;
-import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Impl;
+import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.siebel.data.SiebelBusComp;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
@@ -16,64 +21,40 @@ import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.util.logging.Level;
 
-/**
- *
- * @author SAP Training
- */
-public class Order extends Product implements Impl
-{
+public class Order
+extends Product
+implements Impl {
     private SiebelSearch siebelSearch = null;
-    
     private SiebelPropertySet setProp;
-    
-    public Order(SiebelDataBean CONN)
-    {
-        super(CONN);
-        siebelSearch = new SiebelSearch(CONN);
-    }
-    
-    /**
-     * 
-     */
     private static final String BUS_OBJ = "Order Entry";
-    
-    /**
-     * 
-     */
     private static final String BUS_COMP = "Order Entry - Orders";
-    
-    public void setPropertySet(String key, String value)
-    {
-        siebelSearch.setSField(key, value);
-    }
-    /**
-     * 
-     * @throws com.siebel.eai.SiebelBusinessServiceException
-     */
-    @Override
-    public void doTrigger() throws SiebelBusinessServiceException
-    {
-        setProp = siebelSearch.getSField(BUS_OBJ, BUS_COMP, this);
 
-        MyLogging.log(Level.INFO, "Creating Objects: " + setProp);
+    public Order(SiebelDataBean CONN) {
+        super(CONN);
+        this.siebelSearch = new SiebelSearch(CONN);
     }
-    
-    public String getProperty(String property)
-    {
-        return setProp.getProperty(property);
-    }
-    
-    /**
-     * 
-     * @param sbBC
-     * @throws SiebelException 
-     */
-    @Override
-    public void searchSpec(SiebelBusComp sbBC) throws SiebelException 
-    {
-        sbBC.setSearchSpec("Id", this.siebelAccountId);  
+
+    public void setPropertySet(String key, String value) {
+        this.siebelSearch.setSField(key, value);
     }
 
     @Override
-    public void getExtraParam(SiebelBusComp sbBC) {}
+    public void doTrigger() throws SiebelBusinessServiceException {
+        this.setProp = this.siebelSearch.getSField("Order Entry", "Order Entry - Orders", this);
+        MyLogging.log(Level.INFO, "Creating Objects: " + (Object)this.setProp);
+    }
+
+    public String getProperty(String property) {
+        return this.setProp.getProperty(property);
+    }
+
+    @Override
+    public void searchSpec(SiebelBusComp sbBC) throws SiebelException {
+        sbBC.setSearchSpec("Id", this.siebelAccountId);
+    }
+
+    @Override
+    public void getExtraParam(SiebelBusComp sbBC) {
+    }
 }
+

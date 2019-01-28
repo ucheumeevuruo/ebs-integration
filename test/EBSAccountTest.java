@@ -8,7 +8,6 @@ import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
 import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 /*

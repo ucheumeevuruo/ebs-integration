@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelBusComp
+ *  com.siebel.data.SiebelException
+ *  com.siebel.eai.SiebelBusinessServiceException
  */
 package com.plexadasi.ebs.SiebelApplication.objects.Impl;
 
@@ -9,14 +12,11 @@ import com.siebel.data.SiebelBusComp;
 import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
 
-/**
- *
- * @author Adeyemi
- */
 public interface Impl {
-    public void searchSpec(SiebelBusComp sbBC) throws SiebelException;
-    
+    public void searchSpec(SiebelBusComp var1) throws SiebelException;
+
     public void doTrigger() throws SiebelBusinessServiceException;
-  
-    public void getExtraParam(SiebelBusComp sbBC);
+
+    public void getExtraParam(SiebelBusComp var1);
 }
+

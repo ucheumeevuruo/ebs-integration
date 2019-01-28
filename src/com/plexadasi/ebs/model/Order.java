@@ -1,194 +1,171 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
  */
 package com.plexadasi.ebs.model;
 
-/**
- *
- * @author SAP Training
- */
 public class Order {
+    private Integer id;
     private Integer quantity;
     private String orderNumber;
+    private String backOfficeNumber;
     private Integer onhandQuantity;
     private String partNumber;
     private String partName;
     private Integer warehouseId;
+    private String processCode;
+    private String status;
 
-    /**
-     * @return the partNumber
-     */
     public String getPartNumber() {
-        return partNumber;
+        return this.partNumber;
     }
 
-    /**
-     * @return the warehouseId
-     */
     public Integer getWarehouseId() {
-        return warehouseId;
+        return this.warehouseId;
     }
 
-    /**
-     * @param partNumber the partNumber to set
-     */
     public void setPartNumber(String partNumber) {
         this.partNumber = partNumber;
     }
 
-    /**
-     * @param warehouseId the warehouseId to set
-     */
     public void setWarehouseId(Integer warehouseId) {
         this.warehouseId = warehouseId;
     }
 
-    /**
-     * @return the quantity
-     */
     public Integer getQuantity() {
-        return quantity;
+        return this.quantity;
     }
 
-    /**
-     * @return the orderNumber
-     */
     public String getOrderNumber() {
-        return orderNumber;
+        return this.orderNumber;
     }
 
-    /**
-     * @return the onhandQuantity
-     */
     public Integer getOnhandQuantity() {
-        return onhandQuantity;
+        return this.onhandQuantity;
     }
 
-    /**
-     * @return the partName
-     */
     public String getPartName() {
-        return partName;
+        return this.partName;
     }
 
-    /**
-     * @param quantity the quantity to set
-     */
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    /**
-     * @param orderNumber the orderNumber to set
-     */
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
-    /**
-     * @param onhandQuantity the onhandQuantity to set
-     */
     public void setOnhandQuantity(Integer onhandQuantity) {
         this.onhandQuantity = onhandQuantity;
     }
 
-    /**
-     * @param partName the partName to set
-     */
     public void setPartName(String partName) {
         this.partName = partName;
     }
-    
-    public BackOrder getBackOrder(){
-        return new Order.BackOrder();
+
+    public BackOrder getBackOrder() {
+        return new BackOrder();
     }
-    
-    @Override
-    public String toString()
-    {
+
+    public String getProcessCode() {
+        return this.processCode;
+    }
+
+    public void setProcessCode(String processCode) {
+        this.processCode = processCode;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * @return the backOfficeNumber
+     */
+    public String getBackOfficeNumber() {
+        return backOfficeNumber;
+    }
+
+    /**
+     * @param backOfficeNumber the backOfficeNumber to set
+     */
+    public void setBackOfficeNumber(String backOfficeNumber) {
+        this.backOfficeNumber = backOfficeNumber;
+    }
+
+    public String toString() {
         String NEW_LINE = System.getProperty("line.separator");
-        String print = "Number:"+ this.orderNumber +NEW_LINE;
-        print += "OHQ:"+ this.onhandQuantity +NEW_LINE;
-        print += "Part Number:"+ this.partNumber +NEW_LINE;
-        print += "Part Name:"+ this.partName +NEW_LINE;
-        print += "Warehouse:"+this.warehouseId+NEW_LINE;
-        print += "Onhand Quantity:"+ this.quantity +NEW_LINE;
-        return print;
+        String print = "Number:" + this.orderNumber + NEW_LINE;
+        print = print + "Id:" + this.id + NEW_LINE;
+        print = print + "OHQ:" + this.onhandQuantity + NEW_LINE;
+        print = print + "Part Number:" + this.partNumber + NEW_LINE;
+        print = print + "Part Name:" + this.partName + NEW_LINE;
+        print = print + "Warehouse:" + this.warehouseId + NEW_LINE;
+        print = print + "Onhand Quantity:" + this.quantity + NEW_LINE;
+        print = print + "Process Code:" + this.processCode + NEW_LINE;
+        print = print + "Status:" + this.status + NEW_LINE;
+        return this.getClass().getSimpleName() + print;
     }
-    
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public class BackOrder {
         private String pickMeaning;
         private String itemStatus;
         private String releaseStatus;
         private Integer quantity;
 
-        /**
-         * @return the pickMeaning
-         */
         public String getPickMeaning() {
-            return pickMeaning;
+            return this.pickMeaning;
         }
 
-        /**
-         * @param pickMeaning the pickMeaning to set
-         */
         public void setPickMeaning(String pickMeaning) {
             this.pickMeaning = pickMeaning;
         }
 
-        /**
-         * @return the itemStatus
-         */
         public String getItemStatus() {
-            return itemStatus;
+            return this.itemStatus;
         }
 
-        /**
-         * @param itemStatus the itemStatus to set
-         */
         public void setItemStatus(String itemStatus) {
             this.itemStatus = itemStatus;
         }
 
-        /**
-         * @return the releaseStatus
-         */
         public String getReleaseStatus() {
-            return releaseStatus;
+            return this.releaseStatus;
         }
 
-        /**
-         * @param releaseStatus the releaseStatus to set
-         */
         public void setReleaseStatus(String releaseStatus) {
             this.releaseStatus = releaseStatus;
         }
 
-        /**
-         * @return the quantity
-         */
         public Integer getQuantity() {
-            return quantity;
+            return this.quantity;
         }
 
-        /**
-         * @param quantity the quantity to set
-         */
         public void setQuantity(Integer quantity) {
             this.quantity = quantity;
         }
 
-        @Override
-        public String toString()
-        {
+        public String toString() {
             String NEW_LINE = System.getProperty("line.separator");
-            String print = "Pick Meaning:"+ this.pickMeaning +NEW_LINE;
-            print += "Item Status:"+ this.itemStatus +NEW_LINE;
-            print += "Release Status:"+ this.releaseStatus +NEW_LINE;
-            print += "Quantity:"+ this.quantity +NEW_LINE;
+            String print = "Pick Meaning:" + this.pickMeaning + NEW_LINE;
+            print = print + "Item Status:" + this.itemStatus + NEW_LINE;
+            print = print + "Release Status:" + this.releaseStatus + NEW_LINE;
+            print = print + "Quantity:" + this.quantity + NEW_LINE;
             return print;
         }
     }
+
 }
+

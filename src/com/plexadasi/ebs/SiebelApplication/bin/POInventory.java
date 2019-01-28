@@ -1,77 +1,65 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.eai.SiebelBusinessServiceException
+ *  oracle.sql.ARRAY
+ *  oracle.sql.ArrayDescriptor
+ *  oracle.sql.STRUCT
+ *  oracle.sql.StructDescriptor
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
-import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.Helper.HelperAP;
+import com.plexadasi.helper.DataConverter;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.SiebelApplication.bin.Inventory;
+import com.plexadasi.ebs.SiebelApplication.bin.PurchaseOrder;
 import com.plexadasi.order.PurchaseOrderInventory;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.logging.Level;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
+import oracle.sql.STRUCT;
+import oracle.sql.StructDescriptor;
 
-/**
- *
- * @author SAP Training
- */
 public class POInventory {
     private PurchaseOrderInventory poOrder = null;
     private SiebelDataBean siebConn = null;
-    private Connection ebsConn = null;
-    private final String sqlName = "PRODUCT";
-    private String[][] stringArray;
-    private int length = 0;
-    private final int maxLength = 12;
-    
-    public POInventory(SiebelDataBean sb, Connection ebs, PurchaseOrderInventory PO)
-    {
-        siebConn = sb;
-        ebsConn = ebs;
-        poOrder = PO;
+    private Connection connection = null;
+
+    public POInventory(SiebelDataBean sb, Connection ebs, PurchaseOrderInventory PO) {
+        this.siebConn = sb;
+        this.connection = ebs;
+        this.poOrder = PO;
     }
-    
-    /**
-     * @return the inventoryItem
-     * @throws com.siebel.eai.SiebelBusinessServiceException
-     * @throws java.sql.SQLException
-     */
-    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException 
-    {
-        PurchaseOrder po = new PurchaseOrder(siebConn);
-        po.setSiebelAccountId(poOrder.getOrderNumber());
-        po.doTrigger();
-        ArrayDescriptor desc = ArrayDescriptor.createDescriptor(sqlName, ebsConn);
-        length  = po.getList().size();
-        stringArray = new String[length][maxLength];
-        EBSSqlData ebsData = new EBSSqlData(ebsConn);
-        for (int i = 0; i < length; i++)
-        {
-            Map<String, String> map = po.getList().get(i);
-            String[] org = ebsData.getOrgCode(Integer.parseInt(map.get(PurchaseOrder.PLX_LOT_ID)));
-            stringArray[i][0] = map.get(PurchaseOrder.FIELD_LINE_NUMBER);
-            stringArray[i][1] = map.get(PurchaseOrder.SHIPMENT_NUMBER);
-            stringArray[i][2] = HelperAP.getLineType();
-            stringArray[i][3] = map.get(PurchaseOrder.PLX_PART_NUMBER);
-            stringArray[i][4] = map.get(PurchaseOrder.PLX_UNIT_OF_MEASURE);
-            stringArray[i][5] = map.get(PurchaseOrder.FIELD_QUANTITY);
-            stringArray[i][6] = map.get(PurchaseOrder.PLX_UNIT_PRICE);
-            stringArray[i][7] = org[0];
-            stringArray[i][8] = org[1];
-            stringArray[i][9] = org[2];
-            stringArray[i][10] = poOrder.getPromiseDate();
-            stringArray[i][11] = map.get(PurchaseOrder.PLX_QUANTITY_REQUESTED);
-            MyLogging.log(Level.INFO, Arrays.toString(stringArray[i]));
+
+    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException {
+        PurchaseOrder.PartListItems purchaseOrder = new PurchaseOrder(this.siebConn).getPartQuoteItem();
+        purchaseOrder.setSiebelAccountId(this.poOrder.getOrderNumber());
+        //purchaseOrder.setWarehouse(DataConverter.toInt(this.poOrder.getShipToLocation()));
+        List<Inventory> inventory = purchaseOrder.getInventories(this.connection);
+        MyLogging.log(Level.INFO, this.getClass().getSimpleName() + ":" + inventory);
+        return new ARRAY(ArrayDescriptor.createDescriptor((String)"PURCHASE_ORDER_ITEM", (Connection)this.connection), this.connection, (Object)this.createStructArray(inventory, StructDescriptor.createDescriptor((String)"PURCHASE_ORDER_ITEMS", (Connection)this.connection), this.connection));
+    }
+
+    private STRUCT[] createStructArray(List<Inventory> inventory, StructDescriptor structDescriptor, Connection connection) throws SQLException {
+        STRUCT[] structArray = new STRUCT[inventory.size()];
+        Integer index = 0;
+        for (Inventory inventories : inventory) {
+            STRUCT genericStruct;
+            Object[] structObj = new Object[]{inventories.getPart_number(), inventories.getOrg_id(), inventories.getQuantity(), inventories.getAmount(), inventories.getLine_type(), this.poOrder.getPromiseDate()};
+            genericStruct = new STRUCT(structDescriptor, connection, structObj);
+            structArray[index] = genericStruct;
+            index = index + 1;
+            //Integer n2 = index = index + 1;
         }
-        return new ARRAY(desc, ebsConn, stringArray);
+        return structArray;
     }
 }
+

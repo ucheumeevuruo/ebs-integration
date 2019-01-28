@@ -1,35 +1,27 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.eai.SiebelBusinessServiceException
  */
 package com.plexadasi.order;
 
+import com.plexadasi.helper.DataConverter;
 import com.plexadasi.build.EBSSqlData;
-import com.plexadasi.Helper.DataConverter;
-import com.plexadasi.ebs.SiebelApplication.MyLogging;
 import com.plexadasi.ebs.SiebelApplication.bin.Order;
 import com.plexadasi.ebs.SiebelApplication.bin.POInventory;
 import com.plexadasi.ebs.SiebelApplication.bin.PurchaseOrderIndividual;
 import com.plexadasi.ebs.SiebelApplication.bin.PurchaseOrderOrganization;
 import com.plexadasi.ebs.SiebelApplication.objects.Impl.Account;
-import com.plexadasi.ebs.SiebelApplication.objects.Impl.Product;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.eai.SiebelBusinessServiceException;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
-
-/**
- *
- * @author SAP Training
- */
-public class PurchaseOrderInventory 
-{
+public class PurchaseOrderInventory {
     private final StringWriter errors = new StringWriter();
     private static SiebelDataBean siebConn = null;
     private static EBSSqlData ebsData = null;
@@ -39,214 +31,160 @@ public class PurchaseOrderInventory
     private String siebelOrderId;
     private String siebelAccountId;
     private String accountType;
-    private String[] organization = new String[]{};
+    private String[] organization = new String[0];
     private Array inventoryItem;
     private Integer sourceId;
     private String returnString;
-    
-    public void setSiebelOrderId(String orderId) 
-    {
-        siebelOrderId = orderId;
+
+    public void setSiebelOrderId(String orderId) {
+        this.siebelOrderId = orderId;
     }
 
-    /**
-     * @param accountId the siebelAccountId to set
-     */
     public void setSiebelAccountId(String accountId) {
-        siebelAccountId = accountId;
+        this.siebelAccountId = accountId;
     }
 
     public void setSourceId(int string) {
-        sourceId = string;
+        this.sourceId = string;
     }
 
-    /**
-     * @param inventoryItem the inventoryItem to set
-     */
-    public void setInventoryItem(Array inventoryItem)
-    {
+    public void setInventoryItem(Array inventoryItem) {
         this.inventoryItem = inventoryItem;
     }
 
-    /**
-     * @param type the type to set
-     */
-    public void setAccountType(String type) 
-    {
-        accountType = type;
+    public void setAccountType(String type) {
+        this.accountType = type;
     }
 
-    /**
-     * @return the siebelAccountId
-     */
     public String getSiebelAccountId() {
-        return siebelAccountId;
-    }
-    
-    public String getSiebelOrderId()
-    {
-        return siebelOrderId;
-    }
-    
-    public String getOrderNumber()
-    {
-        return order.getProperty(Product.FIELD_ORDER_NUMBER);
+        return this.siebelAccountId;
     }
 
-    /**
-     * @return the inventoryItem
-     * @throws com.siebel.eai.SiebelBusinessServiceException
-     * @throws java.sql.SQLException
-     */
-    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException 
-    {
-        return inventoryItem;
-    }
-    
-    /**
-     * @return the accountType
-     */
-    public String getAccountType() 
-    {
-        return accountType;
+    public String getSiebelOrderId() {
+        return this.siebelOrderId;
     }
 
-    public Integer getSourceId() 
-    {
-        return sourceId;
+    public String getOrderNumber() {
+        return order.getProperty("Order Number");
     }
-    
-    public String getShipToLocation() 
-    {
-        return order.getProperty(Product.PLX_WAREHOUSE_ID);
+
+    public Array getInventoryItem() throws SiebelBusinessServiceException, SQLException {
+        return this.inventoryItem;
     }
-    
-    public String getPromiseDate()
-    {
-        return order.getProperty(Product.PLX_DUE_DATE);
+
+    public String getAccountType() {
+        return this.accountType;
     }
-    
-    public String getShipToCity()
-    {
-        return acc.getProperty(Account.ACC_SHIP_TO_PRI_CITY_FIELD);
+
+    public Integer getSourceId() {
+        return this.sourceId;
     }
-    
-    public String getShipToState()
-    {
-        return acc.getProperty(Account.ACC_BILL_TO_PRI_STATE_FIELD);
+
+    public String getShipToLocation() {
+        return order.getProperty("PLX Warehouse Id");
     }
-    
-    public String getShipToCountry()
-    {
-        return acc.getProperty(Account.ACC_SHIP_TO_PRI_COUNTRY_FIELD);
+
+    public String getPromiseDate() {
+        return order.getProperty("Requested Ship Date");
     }
-    
-    public String getBillToLocation()
-    {
-        return acc.getProperty(Account.ACC_PRI_BILL_TO_ADDR);
+
+    public String getShipToCity() {
+        return acc.getProperty("Primary Ship To City");
     }
-    
-    public String getBillToCity()
-    {
-        return acc.getProperty(Account.ACC_BILL_TO_PRI_CITY_FIELD);
+
+    public String getShipToState() {
+        return acc.getProperty("Primary Bill To State");
     }
-    
-    public String getBillToState()
-    {
-        return acc.getProperty(Account.ACC_BILL_TO_PRI_STATE_FIELD);
+
+    public String getShipToCountry() {
+        return acc.getProperty("Primary Ship To Country");
     }
-    
-    public String getBillToCountry()
-    {
-        return acc.getProperty(Account.ACC_BILL_TO_PRI_COUNTRY_FIELD);
+
+    public String getBillToLocation() {
+        return acc.getProperty("Primary Bill To Street Address");
     }
-    
-    public String getCurrencyCode()
-    {
-        return acc.getProperty(Account.ACC_CURRENCY_CODE);
+
+    public String getBillToCity() {
+        return acc.getProperty("Primary Bill To City");
     }
-    
-    public Integer getAgentCode()
-    {
-        return DataConverter.toInt(order.getProperty(Product.PLX_AGENT_ID));
+
+    public String getBillToState() {
+        return acc.getProperty("Primary Bill To State");
     }
-    
-    public String getEbsId()
-    {
-        return acc.getProperty(Account.ACC_EBS_ID);
+
+    public String getBillToCountry() {
+        return acc.getProperty("Primary Bill To Country");
     }
-    
-    public String getOrganizationId() 
-    {
-        return organization[0];
+
+    public String getCurrencyCode() {
+        return acc.getProperty("Currency Code");
     }
-    
-    public String getOrganizationCode()
-    {
-        return organization[0];
+
+    public Integer getAgentCode() {
+        return DataConverter.toInt(order.getProperty("PLX Agent Id"));
     }
-    
-    public String getOrganizationName()
-    {
-        return organization[0];
+
+    public String getEbsId() {
+        return acc.getProperty("EBS Id");
     }
-    
-    public String getShipToAccount() throws SiebelBusinessServiceException
-    {
-        return ebsData.shipToAccount(DataConverter.toInt(getEbsId()));
+
+    public String getOrganizationId() {
+        return this.organization[0];
     }
-    
-    public POInventory inventory(SiebelDataBean sb, Connection ebs)
-    {
+
+    public String getOrganizationCode() {
+        return this.organization[0];
+    }
+
+    public String getOrganizationName() {
+        return this.organization[0];
+    }
+
+    public String getShipToAccount() throws SiebelBusinessServiceException {
+        return ebsData.shipToAccount(DataConverter.toInt(this.getEbsId()));
+    }
+
+    public POInventory inventory(SiebelDataBean sb, Connection ebs) {
         return new POInventory(sb, ebs, this);
     }
-    
-    private void triggerOrder() throws SiebelBusinessServiceException
-    {
+
+    private void triggerOrder() throws SiebelBusinessServiceException {
         order = new Order(siebConn);
-        order.setPropertySet(Product.FIELD_ORDER_NUMBER, Product.FIELD_ORDER_NUMBER);
-        order.setPropertySet(Product.PLX_AGENT_ID, Product.PLX_AGENT_ID);
-        order.setPropertySet(Product.PLX_WAREHOUSE_ID, Product.PLX_WAREHOUSE_ID);
-        order.setPropertySet(Product.PLX_DUE_DATE, Product.PLX_DUE_DATE);
-        order.setSiebelAccountId(siebelOrderId);
+        order.setPropertySet("Order Number", "Order Number");
+        order.setPropertySet("PLX Agent Id", "PLX Agent Id");
+        order.setPropertySet("PLX Warehouse Id", "PLX Warehouse Id");
+        order.setPropertySet("Requested Ship Date", "Requested Ship Date");
+        order.setSiebelAccountId(this.siebelOrderId);
         order.doTrigger();
     }
-    
-    private void triggetOrderAccount() throws SiebelBusinessServiceException
-    {
-        if(accountType.equalsIgnoreCase("individual"))
-        {
+
+    private void triggetOrderAccount() throws SiebelBusinessServiceException {
+        if (this.accountType.equalsIgnoreCase("individual")) {
             acc = new PurchaseOrderIndividual(siebConn);
-        }
-        else if (accountType.equalsIgnoreCase("organization"))
-        {
+        } else if (this.accountType.equalsIgnoreCase("organization")) {
             acc = new PurchaseOrderOrganization(siebConn);
         }
-        acc.setSiebelAccountId(siebelAccountId);
+        acc.setSiebelAccountId(this.siebelAccountId);
         acc.doTrigger();
     }
-    
-    public PurchaseOrderInventory triggers(SiebelDataBean sb, EBSSqlData ed) throws SiebelBusinessServiceException
-    {
+
+    public PurchaseOrderInventory triggers(SiebelDataBean sb, EBSSqlData ed) throws SiebelBusinessServiceException {
         siebConn = sb;
         ebsData = ed;
-        triggetOrderAccount();
-        triggerOrder();
+        this.triggetOrderAccount();
+        this.triggerOrder();
         return this;
     }
-    
-    @Override
-    public String toString() 
-    {
-        returnString = "";
-        returnString += "\t\t[Siebel order number=" + siebelOrderNumber + "\n";
-        returnString += "\t\t[Siebel order id=" + siebelOrderId + "\n";
-        returnString += "\t\t[Siebel account id=" + siebelAccountId + "\n";
-        returnString += "\t\t[Account type=" + accountType + "\n";
-        returnString += "\t\t[Ebs id=" + getEbsId()+ "\n";
-        //returnString += "\t\t[Organization id=" + organization[0] + "\n";
-        //returnString += "\t\t[Organization code=" + organization[1] + "\n";
-        returnString += "\t\t[Source id=" + String.valueOf(sourceId) + "\n";
-        return getClass().getSimpleName() + "\n[Details\n\t[\n" + returnString + "\t]\n";
+
+    public String toString() {
+        this.returnString = "";
+        this.returnString = this.returnString + "\t\t[Siebel order number=" + this.siebelOrderNumber + "\n";
+        this.returnString = this.returnString + "\t\t[Siebel order id=" + this.siebelOrderId + "\n";
+        this.returnString = this.returnString + "\t\t[Siebel account id=" + this.siebelAccountId + "\n";
+        this.returnString = this.returnString + "\t\t[Account type=" + this.accountType + "\n";
+        this.returnString = this.returnString + "\t\t[Ebs id=" + this.getEbsId() + "\n";
+        this.returnString = this.returnString + "\t\t[Source id=" + String.valueOf(this.sourceId) + "\n";
+        return this.getClass().getSimpleName() + "\n[Details\n\t[\n" + this.returnString + "\t]\n";
     }
 }
+

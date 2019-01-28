@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/C:/Users/SAP%20Training/Downloads/Xentry2.4/03_DataServer_Documentation/XML-Artefacts/XML-Artefacts/StarConnectDataServerExt.wsdl" uri="xml-resources/web-service-references/StarConnectDataServerExt/wsdl/StarConnectDataServerExt.wsdl"/>
+    <system systemId="file:/C:/Users/SAP%20Training/Downloads/Xentry2.4/03_DataServer_Documentation/XML-Artefacts/XML-Artefacts/StarConnectDataServerExt.xsd" uri="xml-resources/web-service-references/StarConnectDataServerExt/wsdl/StarConnectDataServerExt.xsd"/>
+    <system systemId="file:/C:/Users/SAP%20Training/Downloads/Xentry2.4/03_DataServer_Documentation/XML-Artefacts/XML-Artefacts/StarConnectDataServer.xsd" uri="xml-resources/web-service-references/StarConnectDataServerExt/wsdl/StarConnectDataServer.xsd"/>
+    <system systemId="file:/C:/Users/SAP%20Training/Downloads/Xentry2.4/03_DataServer_Documentation/XML-Artefacts/XML-Artefacts/swaref.xsd" uri="xml-resources/web-service-references/StarConnectDataServerExt/wsdl/swaref.xsd"/>
+    <system systemId="file:/C:/Users/SAP%20Training/Downloads/Xentry2.4/DMSTT-PartsJob-V2-4-v1-0-soapui-project.xml" uri="xml-resources/web-service-references/DMSTT-PartsJob-V2-4-v1-0-soapui-project/wsdl/DMSTT-PartsJob-V2-4-v1-0-soapui-project.xml"/>
+</catalog>

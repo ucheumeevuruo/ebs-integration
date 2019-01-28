@@ -1,7 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelBusComp
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.data.SiebelException
+ *  com.siebel.data.SiebelPropertySet
+ *  com.siebel.eai.SiebelBusinessServiceException
  */
 package com.plexadasi.ebs.SiebelApplication.bin;
 
@@ -12,78 +17,45 @@ import com.plexadasi.ebs.SiebelApplication.objects.Impl.Impl;
 import com.siebel.data.SiebelBusComp;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
+import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
 import java.util.logging.Level;
 
-/**
- *
- * @author SAP Training
- */
-public class PurchaseOrderIndividual extends Account implements Impl
-{
-    public PurchaseOrderIndividual(SiebelDataBean CONN)
-    {
+public class PurchaseOrderIndividual
+extends Account
+implements Impl {
+    private static final String BUS_COMP = "Contact";
+    private static final String BUS_OBJ = "Contact";
+
+    public PurchaseOrderIndividual(SiebelDataBean CONN) {
         super(CONN);
     }
-    
-    /**
-     * 
-     */
-    private static final String BUS_COMP = "Contact";
-    
-    /**
-     * 
-     */
-    private static final String BUS_OBJ = "Contact";
-    
-    
-    /**
-     * 
-     * @throws com.siebel.eai.SiebelBusinessServiceException
-     */
+
     @Override
-    public void doTrigger() throws SiebelBusinessServiceException
-    {
+    public void doTrigger() throws SiebelBusinessServiceException {
         SiebelSearch s = new SiebelSearch(CONN);
-        
-        s.setSField(ACC_CURRENCY_CODE, BLANK);
-        
-        s.setSField(ACC_PRI_SHIP_TO_ADDR, BLANK);
-        
-        s.setSField(ACC_PRI_BILL_TO_ADDR, BLANK);
-        
-        s.setSField(ACC_EBS_ID, BLANK);
-        
-        s.setSField(ACC_BILL_TO_PRI_CITY_FIELD, BLANK);
-        
-        s.setSField(ACC_BILL_TO_PRI_STATE_FIELD, BLANK);
-        
-        s.setSField(ACC_BILL_TO_PRI_COUNTRY_FIELD, BLANK);
-        
-        s.setSField(ACC_SHIP_TO_PRI_CITY_FIELD, BLANK);
-        
-        s.setSField(ACC_SHIP_TO_PRI_STATE_FIELD, BLANK);
-        
-        s.setSField(ACC_SHIP_TO_PRI_COUNTRY_FIELD, BLANK);
-        
-        set = s.getSField(BUS_OBJ, BUS_COMP, this);
-        
-        MyLogging.log(Level.INFO, set.toString());
+        s.setSField("Currency Code", "");
+        s.setSField("Primary Ship To Street Address", "");
+        s.setSField("Primary Bill To Street Address", "");
+        s.setSField("EBS Id", "");
+        s.setSField("Primary Bill To City", "");
+        s.setSField("Primary Bill To State", "");
+        s.setSField("Primary Bill To Country", "");
+        s.setSField("Primary Ship To City", "");
+        s.setSField("Primary Ship To State", "");
+        s.setSField("Primary Ship To Country", "");
+        this.set = s.getSField("Contact", "Contact", this);
+        MyLogging.log(Level.INFO, this.set.toString());
     }
-    
-    /**
-     * 
-     * @param sbBC
-     * @throws SiebelException 
-     */
+
     @Override
-    public void searchSpec(SiebelBusComp sbBC) throws SiebelException 
-    {
-        sbBC.setSearchSpec("Id", this.siebelAccountId);  
+    public void searchSpec(SiebelBusComp sbBC) throws SiebelException {
+        sbBC.setSearchSpec("Id", this.siebelAccountId);
     }
 
     @Override
     public void getExtraParam(SiebelBusComp sbBC) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
+

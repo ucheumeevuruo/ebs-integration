@@ -1,7 +1,7 @@
 
 import com.plexadasi.ebs.SiebelApplication.ApplicationsConnection_old;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
-import item.Items;
+import com.plexadasi.item.Items;
 import com.siebel.data.SiebelDataBean;
 import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;

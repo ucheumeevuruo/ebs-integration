@@ -1,88 +1,53 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
  */
 package com.plexadasi.ebs.model;
 
-/**
- *
- * @author SAP Training
- */
 public class Product {
     private Integer Id;
     private String partNumber;
     private String description;
     private Integer organizationId;
     private String organizationCode;
-    
-    /**
-     * @return the Id
-     */
+
     public Integer getId() {
-        return Id;
+        return this.Id;
     }
 
-    /**
-     * @return the partNumber
-     */
     public String getPartNumber() {
-        return partNumber;
+        return this.partNumber;
     }
 
-    /**
-     * @return the organizationId
-     */
     public Integer getOrganizationId() {
-        return organizationId;
+        return this.organizationId;
     }
 
-    /**
-     * @param Id the Id to set
-     */
-    public void setId(Integer Id) {
-        this.Id = Id;
+    public void setId(Integer Id2) {
+        this.Id = Id2;
     }
 
-    /**
-     * @param partNumber the partNumber to set
-     */
     public void setPartNumber(String partNumber) {
         this.partNumber = partNumber;
     }
 
-    /**
-     * @param organizationId the organizationId to set
-     */
     public void setOrganizationId(Integer organizationId) {
         this.organizationId = organizationId;
     }
 
-    /**
-     * @return the description
-     */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
-    /**
-     * @param description the description to set
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * @return the organizationCode
-     */
     public String getOrganizationCode() {
-        return organizationCode;
+        return this.organizationCode;
     }
 
-    /**
-     * @param organizationCode the organizationCode to set
-     */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
     }
 }
+

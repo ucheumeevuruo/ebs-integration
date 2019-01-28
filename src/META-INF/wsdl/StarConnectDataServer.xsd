@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: StarConnectDataServer.xsd,v 1.20 2009/10/19 15:22:22 jboenis Exp $ -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://stc.daimler.com/2009/08/DS"
+	xmlns:ds="http://stc.daimler.com/2009/08/DS" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime" elementFormDefault="qualified"  attributeFormDefault="qualified"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="1.0">
+
+	<xsd:annotation>
+		<xsd:documentation>
+			<description>
+				General StarConnect Data Server data types for the internal and external
+				interface.
+			</description>
+			<version major="1" minor="4" fix="1"/>
+		</xsd:documentation>
+		<xsd:appinfo>
+			<jaxb:schemaBindings>
+				<jaxb:package name="com.daimler.stc.dataserver.ws.data" />
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:import namespace="http://ws-i.org/profiles/basic/1.1/xsd" schemaLocation="swaref.xsd" />
+	
+	<!-- Atomic Complex Data Types -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<xsd:complexType name="DataDescriptor">
+		<xsd:sequence>
+			<xsd:element name="dataID" type="ds:ID" />
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="businessID" type="ds:BusinessID" />
+			<xsd:element name="sequenceNo" type="ds:SequenceNo" />
+			<xsd:element name="interfaceVersion" type="ds:InterfaceVersion" />
+			<xsd:element name="businessVersion" type="ds:BusinessVersion" />
+			<xsd:element name="incomingDate" type="ds:IncomingDate" />
+			<xsd:element name="event" type="ds:Event" />
+			<xsd:element name="eventDate" type="ds:EventDate" />
+			<xsd:element name="deleted" type="xsd:boolean" />
+			<xsd:element name="addressees" type="ds:Addressees" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="GetDataDescriptor">
+		<xsd:sequence>
+			<xsd:element name="type" type="ds:Type" />
+			<xsd:element name="businessID" type="ds:BusinessID" />
+			<xsd:element name="sequenceNo" type="ds:SequenceNo" />
+			<xsd:element name="interfaceVersion" type="ds:InterfaceVersion" />
+			<xsd:element name="addressee" type="ds:Addressee" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="GetDataResult">
+		<xsd:sequence>
+			<xsd:element name="data" type="ds:Data" minOccurs="0"/>
+			<xsd:element name="responseCode" type="ds:ResponseCode" />
+			<xsd:element name="dataDescriptor" type="ds:GetDataDescriptor"  minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="PossibleInterfaceVersions">
+		<xsd:sequence minOccurs="0" maxOccurs="10">
+			<xsd:element name="interfaceVersion" type="ds:InterfaceVersion" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Data">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="1">
+				<xsd:element name="structuredData" type="ds:StructuredData" minOccurs="1" maxOccurs="1" />
+				<xsd:element name="compressedData" type="ds:CompressedData" minOccurs="1" maxOccurs="1" />
+			</xsd:choice>
+			<xsd:element name="binaryData" type="wsi:swaRef" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="StructuredData">
+		<xsd:sequence minOccurs="0" maxOccurs="1">
+			<xsd:any namespace="##any" processContents="lax" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="CompressedData">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="compression" type="ds:Compression" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DataById">
+		<xsd:sequence minOccurs="1">
+			<xsd:element name="dataID" type="ds:ID" minOccurs="1"/>
+			<xsd:element name="addressee" type="ds:Addressee" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Addressee">
+		<xsd:sequence>
+			<xsd:element name="gssn" type="ds:ExternalSysID" minOccurs="0" />
+			<xsd:element name="coFiCo" type="ds:CoFiCo" minOccurs="0" />
+			<xsd:element name="vbet" type="ds:VBET" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Addressees">
+		<xsd:sequence minOccurs="1" maxOccurs="1000">
+			<xsd:element name="addressee" type="ds:Addressee" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Atomic Simple Data Types -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="ResponseCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z]{4,8}[0-9]{6}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="5" />
+			<xsd:maxLength value="30" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	
+	
+	<xsd:simpleType name="Operation">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="5" />
+			<xsd:maxLength value="30" />
+		</xsd:restriction>
+	</xsd:simpleType>	
+
+	<xsd:simpleType name="InterfaceVersion">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="5" />
+			<xsd:fractionDigits value="2" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Version">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="5" />
+			<xsd:fractionDigits value="3" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="BusinessVersion">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="5" />
+			<xsd:fractionDigits value="2" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Event">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CREATE" />
+			<xsd:enumeration value="READ" />
+			<xsd:enumeration value="UPDATE" />
+			<xsd:enumeration value="DELETE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="TestMode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SEND" />
+			<xsd:enumeration value="SEND_SYNC" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="EventDate">
+		<xsd:restriction base="xsd:dateTime">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="IncomingDate">
+		<xsd:restriction base="xsd:dateTime">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="FetchDate">
+		<xsd:restriction base="xsd:dateTime">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="DeleteDate">
+		<xsd:restriction base="xsd:dateTime">
+		</xsd:restriction>
+	</xsd:simpleType>	
+
+	<xsd:simpleType name="BusinessID">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+			<xsd:maxLength value="40" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="SequenceNo">
+		<xsd:restriction base="xsd:int">
+			<xsd:minInclusive value="1" />
+			<xsd:maxInclusive value="1000" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="LastInSequence">
+		<xsd:restriction base="xsd:boolean">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="AssembleSegments">
+		<xsd:restriction base="xsd:boolean">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="ID">
+		<xsd:restriction base="xsd:long">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="ExternalSysID">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+			<xsd:maxLength value="20" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="CoFiCo">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+			<xsd:maxLength value="20" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="VBET">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+			<xsd:maxLength value="20" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="Compression">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="GZIP" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="MemberID">
+		<xsd:restriction base="xsd:long">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="UserName">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="PassWord">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="RFTSFileNamePattern">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="RFTSSourceFileName">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="RFTSSourceDirectory">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	
+	
+	<xsd:simpleType name="SyncDataRequestType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="REQUEST" />
+			<xsd:enumeration value="DATAGRAM" />
+			<xsd:enumeration value="NOTIFICATION_REQUEST" />
+			<xsd:enumeration value="NOTIFICATION_DATAGRAM" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>	

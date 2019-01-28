@@ -1,115 +1,88 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Decompiled with CFR 0_123.
+ * 
+ * Could not load the following classes:
+ *  com.siebel.data.SiebelDataBean
+ *  com.siebel.data.SiebelException
+ *  com.siebel.eai.SiebelBusinessServiceException
  */
 package com.plexadasi.order;
 
-import com.plexadasi.build.EBSSql;
 import com.plexadasi.build.EBSSqlData;
 import com.plexadasi.ebs.SiebelApplication.MyLogging;
+import com.plexadasi.ebs.model.Order;
+import com.plexadasi.ebs.services.PurchaseOrderService;
+import com.plexadasi.order.PurchaseOrderInventory;
 import com.siebel.data.SiebelDataBean;
+import com.siebel.data.SiebelException;
 import com.siebel.eai.SiebelBusinessServiceException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.Map;
 import java.util.logging.Level;
 
-/**
- *
- * @author SAP Training
- */
 public class PurchaseOrder {
     private Connection EBS_CONN = null;
     private SiebelDataBean SIEBEL_CONN = new SiebelDataBean();
-    private static final StringWriter ERROR = new StringWriter();
-    private Integer integerOutput;
-    private String stringOutput;
-    private final List<String> hList = new ArrayList();
-    private String statusCode;
-    private String orderNumber;
-    private EBSSql e = null;
-    
-    public void doInvoke(PurchaseOrderInventory poInventory, SiebelDataBean sb, Connection ebs) throws SiebelBusinessServiceException
-    {
-        SIEBEL_CONN = sb;
-        EBS_CONN = ebs;
-        if(SIEBEL_CONN == null)
-        {
-            MyLogging.log(Level.SEVERE, "Connection to siebel cannot be established.");
-            throw new SiebelBusinessServiceException("NULL_DEF", "Connection to siebel cannot be established.");
-        }
-        else if(EBS_CONN == null)
-        {
-            MyLogging.log(Level.SEVERE, "Connection to ebs cannot be established.");
-            throw new SiebelBusinessServiceException("NULL_DEF", "Connection to ebs cannot be established.");
-        }
-        if(e == null)
-        {
-            e = new EBSSql(EBS_CONN);
-        }
-        poInventory.triggers(SIEBEL_CONN, new EBSSqlData(EBS_CONN));
-        Boolean IsProcessed = this.processIsNotNull(EBS_CONN, poInventory.getOrderNumber());
-        if(IsProcessed) {
-        } else {
-            e.createPurchaseOrder(SIEBEL_CONN, poInventory);
+    StringWriter errors = new StringWriter();
+
+    public void doInvoke(PurchaseOrderInventory poInventory, SiebelDataBean sb, Connection ebs) throws SiebelBusinessServiceException {
+        this.SIEBEL_CONN = sb;
+        this.EBS_CONN = ebs;
+        poInventory.triggers(this.SIEBEL_CONN, new EBSSqlData(this.EBS_CONN));
+        Boolean IsProcessed = this.processIsNotNull(this.EBS_CONN, poInventory.getOrderNumber());
+        if (!IsProcessed) {
+            PurchaseOrderService purchaseOrderService = new PurchaseOrderService(ebs);
+            try {
+                purchaseOrderService.createPurchaseOrder(sb, poInventory);
+            }
+            catch (SQLException ex) {
+                ex.printStackTrace(new PrintWriter(this.errors));
+                throw new SiebelBusinessServiceException("SQL", "Caught Sql Exception:" + this.errors.toString());
+            }
+            catch (SiebelException ex) {
+                ex.printStackTrace(new PrintWriter(this.errors));
+                MyLogging.log(Level.SEVERE, "Caught Siebel Exception:" + this.errors.toString());
+            }
         }
     }
-    
-    private Boolean isPurchaseOrderProcessed(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
-    {
-        String stat = new EBSSqlData(ebsConn).getOrderBookingStatus(
-            "PROCESS_CODE", 
-            "PO_HEADERS_INTERFACE", 
-            "REFERENCE_NUM", 
-            order_num
-        );
-        return (!stat.equalsIgnoreCase(""));
+
+    private Order getBookingStatus(Connection ebsConn, String order_num) {
+        try {
+            PurchaseOrderService purchaseOrderService = new PurchaseOrderService(ebsConn);
+            return purchaseOrderService.getBookingStatus(order_num);
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace(new PrintWriter(this.errors));
+            MyLogging.log(Level.SEVERE, "Caught Siebel Exception:" + this.errors.toString());
+            return new Order();
+        }
     }
-    
-    private Boolean processIsNotNull(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
-    {
-        String stat = new EBSSqlData(ebsConn).getOrderBookingStatus(
-            "PROCESS_CODE", 
-            "PO_HEADERS_INTERFACE", 
-            "REFERENCE_NUM", 
-            order_num
-        );
-        return (!stat.equalsIgnoreCase(""));
+
+    private Boolean isPurchaseOrderProcessed(Connection ebsConn, String order_num) throws SiebelBusinessServiceException {
+        return this.getBookingStatus(ebsConn, order_num).getProcessCode() != null;
     }
-    
-    public String getPONumber(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
-    {
-        return new EBSSqlData(ebsConn).getOrderBookingStatus(
-            "SEGMENT1", 
-            "PO_HEADERS_ALL", 
-            "PO_HEADER_ID", 
-            getPurchaseOrderNumber(ebsConn, order_num)
-        );
+
+    private Boolean processIsNotNull(Connection ebsConn, String order_num) throws SiebelBusinessServiceException {
+        return this.getBookingStatus(ebsConn, order_num).getProcessCode() != null;
     }
-    
-    public String getPurchaseOrderNumber(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
-    {
-        return new EBSSqlData(ebsConn).getOrderBookingStatus(
-            "PO_HEADER_ID", 
-            "PO_HEADERS_INTERFACE", 
-            "REFERENCE_NUM", 
-            order_num
-        );
+
+    public String getPONumber(Connection ebsConn, String order_num) throws SiebelBusinessServiceException {
+        return this.getBookingStatus(ebsConn, order_num).getOrderNumber();
     }
-    
-    public String getPurchaseOrderBookingStatus(Connection ebsConn, String order_num) throws SiebelBusinessServiceException
-    {
-        if(isPurchaseOrderProcessed(ebsConn, order_num))
-        {
-            return new EBSSqlData(ebsConn).getOrderBookingStatus(
-                "AUTHORIZATION_STATUS", 
-                "PO_HEADERS_ALL", 
-                "PO_HEADER_ID", 
-                getPurchaseOrderNumber(ebsConn, order_num)
-            );
+
+    public String getPurchaseOrderNumber(Connection ebsConn, String order_num) throws SiebelBusinessServiceException {
+        return String.valueOf(this.getBookingStatus(ebsConn, order_num).getId());
+    }
+
+    public String getPurchaseOrderBookingStatus(Connection ebsConn, String order_num) throws SiebelBusinessServiceException {
+        if (this.isPurchaseOrderProcessed(ebsConn, order_num).booleanValue()) {
+            return this.getBookingStatus(ebsConn, order_num).getStatus();
         }
         return "";
     }
 }
+
